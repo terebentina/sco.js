@@ -1,6 +1,6 @@
 /* ==========================================================
  * sco.tab.js
- * http://code.google.com/p/scojs/
+ * http://github.com/terebentina/sco.js
  * ==========================================================
  * Copyright 2012 Dan Caragea.
  *
