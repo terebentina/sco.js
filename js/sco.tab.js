@@ -1,6 +1,6 @@
 /* ==========================================================
  * sco.tab.js
- * http://github.com/terebentina/sco.js
+ * http://code.google.com/p/scojs/
  * ==========================================================
  * Copyright 2012 Dan Caragea.
  *
@@ -86,6 +86,9 @@
 						,$my_li = $this.parents('li')
 						,my_index = $my_li.index()
 						,map = {active: my_index};
+
+					// we need this to prevent the browser jumping to a matching DOM element
+					e.preventDefault();
 
 					// @todo not working
 					if ($this.attr('href').indexOf('#') !== 0) {
