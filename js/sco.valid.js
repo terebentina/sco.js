@@ -13,9 +13,9 @@
 }(function($) {
 	"use strict";
 
-	$.ctvalid = function( $form, options ) {
+	$.scovalid = function( $form, options ) {
 		this.$form = $form;
-		this.options = $.extend({}, $.ctvalid.defaults, options);
+		this.options = $.extend({}, $.scovalid.defaults, options);
 		this.allowed_rules = [];
 		var that = this;
 		$.each(this.methods, function(k,v) {
@@ -23,7 +23,7 @@
 		});
 	};
 
-	$.extend($.ctvalid, {
+	$.extend($.scovalid, {
 		defaults: {
 			// the tag that wraps the field and possibly the label and which defines a "row" of the form
 			wrapper: 'label'
@@ -41,42 +41,57 @@
 					,that = this
 					,form_fields = this.$form.serializeArray();
 
-				$.each(form_fields, function(idx, field) {
+				$.each(that.options.rules, function(field_name, rules) {
+					var field = null;
+					// find the field in the form
+					$.each(form_fields, function(k, v) {
+						if (v.name === field_name) {
+							field = v;
+							return false;
+						}
+					});
+					// if field was not found, it could mean 2 things: mispelled field name in the rules or the field is not a successful control
+					// either way, we build a fake field and it should fail one of the assigned rules later on.
+					if (field === null) {
+						field = {name: field_name, value: null};
+					}
+
 					// remove any possible errors from previous runs
-					var $input = that.$form.find('[name='+field.name+']');
+					var $input = that.$form.find('[name='+field_name+']');
 					if ($input.siblings('span').length > 0) {
 						$input.siblings('span').html('');
 					}
-					$input.parents('label').removeClass('error');
-
-					//console.log('idx', idx, value);
-					if (typeof that.options.rules[field.name] !== 'undefined') {
-						var rules = that.options.rules[field.name]
-							,result;
-						$.each(rules, function(rule_idx, rule_value) {
-							var fn_name, fn_args;
-							// only string and objects are allowed
-							if ($.type(rule_value) == 'string') {
-								fn_name = rule_value;
-							} else {
-								// if not string then we assume it's a {key: val} object. Only 1 key is allowed
-								$.each(rule_value, function(k, v) {
-									fn_name = k;
-									fn_args = v;
-									return false;
-								});
-							}
-							if ($.inArray(fn_name, that.allowed_rules) !== -1) {
-								result = that.methods[fn_name].call(that, field.name, field.value, fn_args);
-								if (result !== true) {
-									errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
-								}
-							}
-						});
+					if (that.options.wrapper !== null) {
+						$input.parents(that.options.wrapper).removeClass('error');
 					}
+
+					$.each(rules, function(rule_idx, rule_value) {
+						// determine the method to call and its args
+						var fn_name, fn_args, result;
+						// only string and objects are allowed
+						if ($.type(rule_value) == 'string') {
+							fn_name = rule_value;
+						} else {
+							// if not string then we assume it's a {key: val} object. Only 1 key is allowed
+							$.each(rule_value, function(k, v) {
+								fn_name = k;
+								fn_args = v;
+								return false;
+							});
+						}
+
+						// make sure the requested method actually exists.
+						if ($.inArray(fn_name, that.allowed_rules) !== -1) {
+							// call the method with the requested args
+							result = that.methods[fn_name].call(that, field_name, field.value, fn_args);
+							if (result !== true) {
+								errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
+							}
+						}
+					});
 				});
 
-				if (errors !== {}) {
+				if (!$.isEmptyObject(errors)) {
 					$.each(errors, function(k, v) {
 						var $input = that.$form.find('[name='+k+']')
 							,$span = $input.siblings('span');
@@ -98,7 +113,7 @@
 
 			,methods: {
 				not_empty: function(field, value) {
-					return $.trim(value).length > 0;
+					return value !== null && $.trim(value).length > 0;
 				}
 
 				,min_length: function(field, value, min_len) {
@@ -257,12 +272,12 @@
 
 
 
-	$.fn.ctvalid = function ( options ) {
+	$.fn.scovalid = function ( options ) {
 		var $this = this.eq(0)
-			,validator = $this.data('ctvalid');
+			,validator = $this.data('scovalid');
 		if (!validator) {
-			validator = new $.ctvalid($this, options);
-			$this.data("ctvalid", validator);
+			validator = new $.scovalid($this, options);
+			$this.data("scovalid", validator);
 		}
 
 		var result = validator.validate();
