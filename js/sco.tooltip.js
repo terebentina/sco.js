@@ -186,7 +186,12 @@
 				on_close: function() {}
 			};
 			self.leave_timeout = null;
-			self.$target = $trigger;
+			if (typeof options.target !== 'undefined') {
+				self.$target = $(options.target);
+				delete options.target;
+			} else {
+				self.$target = $trigger;
+			}
 			if (typeof options.content_elem != 'undefined' && options.content_elem !== null) {
 				options.content = $(options.content_elem).html();
 				delete options.content_elem;
@@ -194,10 +199,6 @@
 			if (typeof options.content_attr != 'undefined' && options.content_attr !== null) {
 				options.content = $trigger.attr(options.content_attr);
 				delete options.content_attr;
-			}
-			if (typeof options.target !== 'undefined') {
-				self.$target = $(options.target);
-				delete options.target;
 			}
 			self.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo('body');
 			self.data = $.extend(true, {}, $.fn.scotip.defaults, options);

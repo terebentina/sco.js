@@ -1,29 +1,21 @@
-/* ==========================================================
- * sco.valid.js
- * http://github.com/terebentina/sco.js
- * ==========================================================
- * Copyright 2012 Dan Caragea.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================== */
-
-!function($) {
+(function (factory) {
 	"use strict";
 
-	$.scovalid = function( $form, options ) {
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define([
+            'jquery',
+        ], factory);
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function($) {
+	"use strict";
+
+	$.ctvalid = function( $form, options ) {
 		this.$form = $form;
-		this.options = $.extend({}, $.scovalid.defaults, options);
-		this.form_fields = this.$form.serializeArray();
+		this.options = $.extend({}, $.ctvalid.defaults, options);
 		this.allowed_rules = [];
 		var that = this;
 		$.each(this.methods, function(k,v) {
@@ -31,19 +23,32 @@
 		});
 	};
 
-	$.extend($.scovalid, {
+	$.extend($.ctvalid, {
 		defaults: {
-			debug: false
+			// the tag that wraps the field and possibly the label and which defines a "row" of the form
+			wrapper: 'label'
+			// array of rules to check the form against. Each value should be either a string with the name of the method to use as rule or a hash like {method: <method params>}
 			,rules: {}
+			// custom error messages like {username: {not_empty: 'hey you forgot to enter your username', min_length: 'come on, more than 2 chars, ok?'}, password: {....}}
 			,messages: {}
 		}
 
+
 		,prototype: {
-			// this is the main function - it returns either true if the validation passed or an object like {field1: 'error text', field2: 'error text', ...}
+			// this is the main function - it returns either true if the validation passed or a hash like {field1: 'error text', field2: 'error text', ...}
 			validate: function() {
 				var errors = {}
-					,that = this;
-				$.each(this.form_fields, function(idx, field) {
+					,that = this
+					,form_fields = this.$form.serializeArray();
+
+				$.each(form_fields, function(idx, field) {
+					// remove any possible errors from previous runs
+					var $input = that.$form.find('[name='+field.name+']');
+					if ($input.siblings('span').length > 0) {
+						$input.siblings('span').html('');
+					}
+					$input.parents('label').removeClass('error');
+
 					//console.log('idx', idx, value);
 					if (typeof that.options.rules[field.name] !== 'undefined') {
 						var rules = that.options.rules[field.name]
@@ -72,7 +77,19 @@
 				});
 
 				if (errors !== {}) {
-					return errors;
+					$.each(errors, function(k, v) {
+						var $input = that.$form.find('[name='+k+']')
+							,$span = $input.siblings('span');
+						if (that.options.wrapper !== null) {
+							$input.parents(that.options.wrapper).addClass('error');
+						}
+						if ($span.length == 0) {
+							$span = $('<span/>');
+							$input.after($span);
+						}
+						$span.html(v);
+					});
+					return false;
 				} else {
 					return true;
 				}
@@ -186,7 +203,7 @@
 				}
 
 				,matches: function(field, value, param) {
-					return value === this.$form.find(param).val();
+					return value === this.$form.find('[name='+param+']').val();
 				}
 			}
 
@@ -210,7 +227,7 @@
 				,range: 'Please enter a value between {min} and {max}.'
 				,decimal: 'Please enter a decimal number.'
 				,color: ''
-				,matches: ''
+				,matches: 'Must match the previous value.'
 			}
 
 			/**
@@ -240,15 +257,16 @@
 
 
 
-	$.fn.scovalid = function ( options ) {
+	$.fn.ctvalid = function ( options ) {
 		var $this = this.eq(0)
-			,validator = $this.data('scovalid');
+			,validator = $this.data('ctvalid');
 		if (!validator) {
-			validator = new $.scovalid($this, options);
-			$this.data("scovalid", validator);
+			validator = new $.ctvalid($this, options);
+			$this.data("ctvalid", validator);
 		}
 
-		return validator.validate();
+		var result = validator.validate();
+		return result;
 	}
 
-}(window.jQuery);
+}));
