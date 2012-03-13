@@ -17,6 +17,7 @@
 		this.$form = $form;
 		this.options = $.extend({}, $.scovalid.defaults, options);
 		this.allowed_rules = [];
+		this.errors = {};
 		var that = this;
 		$.each(this.methods, function(k,v) {
 			that.allowed_rules.push(k);
@@ -37,9 +38,18 @@
 		,prototype: {
 			// this is the main function - it returns either true if the validation passed or a hash like {field1: 'error text', field2: 'error text', ...}
 			validate: function() {
-				var errors = {}
-					,that = this
+				var that = this
 					,form_fields = this.$form.serializeArray();
+
+				// remove any possible displayed errors from previous runs
+				$.each(this.errors, function(field_name, error) {
+					var $input = that.$form.find('[name='+field_name+']');
+					$input.siblings('span').html('');
+					if (that.options.wrapper !== null) {
+						$input.parents(that.options.wrapper).removeClass('error');
+					}
+				});
+				this.errors = {};
 
 				$.each(that.options.rules, function(field_name, rules) {
 					var field = null;
@@ -54,15 +64,6 @@
 					// either way, we build a fake field and it should fail one of the assigned rules later on.
 					if (field === null) {
 						field = {name: field_name, value: null};
-					}
-
-					// remove any possible errors from previous runs
-					var $input = that.$form.find('[name='+field_name+']');
-					if ($input.siblings('span').length > 0) {
-						$input.siblings('span').html('');
-					}
-					if (that.options.wrapper !== null) {
-						$input.parents(that.options.wrapper).removeClass('error');
 					}
 
 					$.each(rules, function(rule_idx, rule_value) {
@@ -85,29 +86,35 @@
 							// call the method with the requested args
 							result = that.methods[fn_name].call(that, field_name, field.value, fn_args);
 							if (result !== true) {
-								errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
+								that.errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
 							}
 						}
 					});
 				});
 
-				if (!$.isEmptyObject(errors)) {
-					$.each(errors, function(k, v) {
-						var $input = that.$form.find('[name='+k+']')
-							,$span = $input.siblings('span');
-						if (that.options.wrapper !== null) {
-							$input.parents(that.options.wrapper).addClass('error');
-						}
-						if ($span.length == 0) {
-							$span = $('<span/>');
-							$input.after($span);
-						}
-						$span.html(v);
-					});
+				if (!$.isEmptyObject(this.errors)) {
+					this.show(this.errors);
 					return false;
 				} else {
 					return true;
 				}
+			}
+
+
+			,show: function(errors) {
+				var that = this;
+				$.each(errors, function(k, v) {
+					var $input = that.$form.find('[name='+k+']')
+						,$span = $input.siblings('span');
+					if (that.options.wrapper !== null) {
+						$input.parents(that.options.wrapper).addClass('error');
+					}
+					if ($span.length == 0) {
+						$span = $('<span/>');
+						$input.after($span);
+					}
+					$span.html(v);
+				});
 			}
 
 
@@ -223,14 +230,14 @@
 			}
 
 
-			,errors: {
+			,messages: {
 				not_empty: 'This field is required.'
-				,min_length: 'Please enter at least {value} characters.'
-				,max_length: 'Please enter no more than {value} characters.'
+				,min_length: 'Please enter at least :value characters.'
+				,max_length: 'Please enter no more than :value characters.'
 				,regex: ''
 				,email: 'Please enter a valid email address.'
 				,url: 'Please enter a valid URL.'
-				,exact_length: 'Please enter exactly {value} characters.'
+				,exact_length: 'Please enter exactly :value characters.'
 				,equals: ''
 				,ip: ''
 				,credit_card: 'Please enter a valid credit card number.'
@@ -239,21 +246,21 @@
 				,alpha_dash: ''
 				,digit: 'Please enter only digits.'
 				,numeric: 'Please enter a valid number.'
-				,range: 'Please enter a value between {min} and {max}.'
+				,range: 'Please enter a value between :min and :max.'
 				,decimal: 'Please enter a decimal number.'
 				,color: ''
 				,matches: 'Must match the previous value.'
 			}
 
 			/**
-			 * finds the most specific error message string and replaces any "{value}" substring with the actual value
+			 * finds the most specific error message string and replaces any ":value" substring with the actual value
 			 */
 			,format: function(field_name, rule, params) {
 				var message;
 				if (typeof this.options.messages[field_name] !== 'undefined' && typeof this.options.messages[field_name][rule] !== 'undefined') {
 					message = this.options.messages[field_name][rule];
 				} else {
-					message = this.errors[rule];
+					message = this.messages[rule];
 				}
 
 				if ($.type(params) !== 'undefined') {
@@ -261,7 +268,7 @@
 						params = {value: params};
 					}
 					$.each(params, function(k, v) {
-						message = message.replace(new RegExp('\\{'+k+'\\}', 'ig'), v);
+						message = message.replace(new RegExp(':'+k, 'ig'), v);
 					});
 				}
 				return message;
@@ -270,18 +277,34 @@
 	});
 
 
-
-
-	$.fn.scovalid = function ( options ) {
+	/**
+	 * main function to use on a form (like $('#form).scovalid({...})). Performs validation of the form, sets the error messages on form inputs and returns
+	 * true/false depending on whether the form passed validation or not
+	 *
+	 * @param hash/string options the hash of rules and messages to validate the form against (and messages to show if failed validation) or the string "option"
+	 * @param {string} key the option key to retrieve or set. If the third param of the function is available then act as a setter, otherwise as a getter.
+	 * @param {mixed} value the value to set on the key
+	 */
+	$.fn.scovalid = function ( options, key, value ) {
 		var $this = this.eq(0)
 			,validator = $this.data('scovalid');
-		if (!validator) {
-			validator = new $.scovalid($this, options);
-			$this.data("scovalid", validator);
+		if ($.type(options) === 'object') {
+			if (!validator) {
+				validator = new $.scovalid($this, options);
+				$this.data("scovalid", validator);
+			}
+			return validator.validate();
+		} else if (options === 'option') {
+			if ($.type(value) === 'undefined') {
+				return validator.options[key];
+			} else {
+				validator.options[key] = value;
+				return validator;
+			}
+		} else {
+			return validator;
 		}
 
-		var result = validator.validate();
-		return result;
 	}
 
 }));
