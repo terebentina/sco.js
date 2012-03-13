@@ -4,7 +4,7 @@
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
-            'jquery'
+            'jquery', 'jquery.form.js'
         ], factory);
     } else {
         // Browser globals:
@@ -286,15 +286,34 @@
 	 * @param {string} key the option key to retrieve or set. If the third param of the function is available then act as a setter, otherwise as a getter.
 	 * @param {mixed} value the value to set on the key
 	 */
-	$.fn.scovalid = function ( options, key, value ) {
-		var $this = this.eq(0),
-			validator = $this.data('scovalid');
+	$.fn.scovalid = function( options, key, value ) {
+		var $form = this.eq(0),
+			validator = $form.data('scovalid');
 		if ($.type(options) === 'object') {
 			if (!validator) {
-				validator = new $.scovalid($this, options);
-				$this.data("scovalid", validator);
+				validator = new $.scovalid($form, options);
+				$form.data("scovalid", validator);
 			}
-			return validator.validate();
+			$form.ajaxForm({
+				beforeSubmit: function(arr, $form, options) {
+					return validator.validate();
+				}
+				,dataType: 'json'
+				,success: function(response, status, xhr, $form) {
+					if (response.status == 'fail') {
+						$form.scovalid().show(response.data.errors);
+					} else if (response.status == 'error') {
+						$.scomessage(response.message);
+					} else if (response.status == 'success') {
+						if (response.data.next) {
+							window.location.href = response.data.next;
+						} else if (response.data.message) {
+							$.scomessage(response.data.message, $.scomessage.TYPE_OK);
+						}
+					}
+					console.log('response', response);
+				}
+			});
 		} else if (options === 'option') {
 			if ($.type(value) === 'undefined') {
 				return validator.options[key];
