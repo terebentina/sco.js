@@ -4,7 +4,7 @@
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
-            'jquery',
+            'jquery'
         ], factory);
     } else {
         // Browser globals:
@@ -27,19 +27,19 @@
 	$.extend($.scovalid, {
 		defaults: {
 			// the tag that wraps the field and possibly the label and which defines a "row" of the form
-			wrapper: 'label'
+			wrapper: 'label',
 			// array of rules to check the form against. Each value should be either a string with the name of the method to use as rule or a hash like {method: <method params>}
-			,rules: {}
+			rules: {},
 			// custom error messages like {username: {not_empty: 'hey you forgot to enter your username', min_length: 'come on, more than 2 chars, ok?'}, password: {....}}
-			,messages: {}
-		}
+			messages: {}
+		},
 
 
-		,prototype: {
+		prototype: {
 			// this is the main function - it returns either true if the validation passed or a hash like {field1: 'error text', field2: 'error text', ...}
 			validate: function() {
-				var that = this
-					,form_fields = this.$form.serializeArray();
+				var that = this,
+					form_fields = this.$form.serializeArray();
 
 				// remove any possible displayed errors from previous runs
 				$.each(this.errors, function(field_name, error) {
@@ -70,7 +70,7 @@
 						// determine the method to call and its args
 						var fn_name, fn_args, result;
 						// only string and objects are allowed
-						if ($.type(rule_value) == 'string') {
+						if ($.type(rule_value) === 'string') {
 							fn_name = rule_value;
 						} else {
 							// if not string then we assume it's a {key: val} object. Only 1 key is allowed
@@ -98,69 +98,69 @@
 				} else {
 					return true;
 				}
-			}
+			},
 
 
-			,show: function(errors) {
+			show: function(errors) {
 				var that = this;
 				$.each(errors, function(k, v) {
-					var $input = that.$form.find('[name='+k+']')
-						,$span = $input.siblings('span');
+					var $input = that.$form.find('[name='+k+']'),
+						$span = $input.siblings('span');
 					if (that.options.wrapper !== null) {
 						$input.parents(that.options.wrapper).addClass('error');
 					}
-					if ($span.length == 0) {
+					if ($span.length === 0) {
 						$span = $('<span/>');
 						$input.after($span);
 					}
 					$span.html(v);
 				});
-			}
+			},
 
 
-			,methods: {
+			methods: {
 				not_empty: function(field, value) {
 					return value !== null && $.trim(value).length > 0;
-				}
+				},
 
-				,min_length: function(field, value, min_len) {
+				min_length: function(field, value, min_len) {
 					return $.trim(value).length >= min_len;
-				}
+				},
 
-				,max_length: function(field, value, max_len) {
+				max_length: function(field, value, max_len) {
 					return $.trim(value).length <= max_len;
-				}
+				},
 
-				,regex: function(field, value, regexp) {
+				regex: function(field, value, regexp) {
 					return regexp.test(value);
-				}
+				},
 
-				,email: function(field, value) {
+				email: function(field, value) {
 					// by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
 					var regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
 					return regex.test($.trim(value));
-				}
+				},
 
-				,url: function(field, value, params) {
+				url: function(field, value, params) {
 					// by Scott Gonzalez: http://projects.scottsplayground.com/iri/
 					var regex = /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
 					return regex.test(value);
-				}
+				},
 
-				,exact_length: function(field, value, exact_length) {
-					return $.trim(value).length == exact_length;
-				}
+				exact_length: function(field, value, exact_length) {
+					return $.trim(value).length === exact_length;
+				},
 
-				,equals: function(field, value, target) {
+				equals: function(field, value, target) {
 					return value === target;
-				}
+				},
 
-				,ip: function(field, value) {
+				ip: function(field, value) {
 					var regex = /^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$/i;
 					return regex.test($.trim(value));
-				}
+				},
 
-				,credit_card: function(field, value, params) {
+				credit_card: function(field, value, params) {
 					// accept only spaces, digits and dashes
 					if (/[^0-9 \-]+/.test(value)) {
 						return false;
@@ -184,78 +184,79 @@
 					}
 
 					return (nCheck % 10) === 0;
-				}
+				},
 
-				,alpha: function(field, value) {
-			        var regex = /^[a-z]+$/i;
+				alpha: function(field, value) {
+					var regex = /^[a-z]+$/i;
 					return regex.test(value);
-				}
+				},
 
-				,alpha_numeric: function(field, value) {
-			        var regex = /^[a-z0-9]+$/i;
+				alpha_numeric: function(field, value) {
+					var regex = /^[a-z0-9]+$/i;
 					return regex.test(value);
-				}
+				},
 
-				,alpha_dash: function(field, value) {
-			        var regex = /^[a-z0-9_-]+$/i;
+				alpha_dash: function(field, value) {
+					var regex = /^[a-z0-9_\-]+$/i;
 					return regex.test(value);
-				}
+				},
 
-				,digit: function(field, value) {
-			        var regex = /^\d+$/;
+				digit: function(field, value) {
+					var regex = /^\d+$/;
 					return regex.test(value);
-				}
+				},
 
-				,numeric: function(field, value, params) {
-			        var regex = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
+				numeric: function(field, value, params) {
+					var regex = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
 					return regex.test(value);
-				}
+				},
 
-				,range: function(field, value, params) {
+				range: function(field, value, params) {
 
-				}
+				},
 
-				,decimal: function(field, value, params) {
-			        var regex = /^\-?[0-9]*\.?[0-9]+$/;
+				decimal: function(field, value, params) {
+					var regex = /^\-?[0-9]*\.?[0-9]+$/;
 					return regex.test(value);
-				}
+				},
 
-				,color: function(field, value, params) {
+				color: function(field, value, params) {
 
-				}
+				},
 
-				,matches: function(field, value, param) {
+				matches: function(field, value, param) {
 					return value === this.$form.find('[name='+param+']').val();
 				}
-			}
+			},
 
 
-			,messages: {
-				not_empty: 'This field is required.'
-				,min_length: 'Please enter at least :value characters.'
-				,max_length: 'Please enter no more than :value characters.'
-				,regex: ''
-				,email: 'Please enter a valid email address.'
-				,url: 'Please enter a valid URL.'
-				,exact_length: 'Please enter exactly :value characters.'
-				,equals: ''
-				,ip: ''
-				,credit_card: 'Please enter a valid credit card number.'
-				,alpha: ''
-				,alpha_numeric: ''
-				,alpha_dash: ''
-				,digit: 'Please enter only digits.'
-				,numeric: 'Please enter a valid number.'
-				,range: 'Please enter a value between :min and :max.'
-				,decimal: 'Please enter a decimal number.'
-				,color: ''
-				,matches: 'Must match the previous value.'
-			}
+			messages: {
+				not_empty: 'This field is required.',
+				min_length: 'Please enter at least :value characters.',
+				max_length: 'Please enter no more than :value characters.',
+				regex: '',
+				email: 'Please enter a valid email address.',
+				url: 'Please enter a valid URL.',
+				exact_length: 'Please enter exactly :value characters.',
+				equals: '',
+				ip: '',
+				credit_card: 'Please enter a valid credit card number.',
+				alpha: '',
+				alpha_numeric: '',
+				alpha_dash: '',
+				digit: 'Please enter only digits.',
+				numeric: 'Please enter a valid number.',
+				range: 'Please enter a value between :min and :max.',
+				decimal: 'Please enter a decimal number.',
+				color: '',
+				matches: 'Must match the previous value.'
+			},
+
 
 			/**
 			 * finds the most specific error message string and replaces any ":value" substring with the actual value
 			 */
-			,format: function(field_name, rule, params) {
+			format: function(field_name, rule, params) {
 				var message;
 				if (typeof this.options.messages[field_name] !== 'undefined' && typeof this.options.messages[field_name][rule] !== 'undefined') {
 					message = this.options.messages[field_name][rule];
@@ -286,8 +287,8 @@
 	 * @param {mixed} value the value to set on the key
 	 */
 	$.fn.scovalid = function ( options, key, value ) {
-		var $this = this.eq(0)
-			,validator = $this.data('scovalid');
+		var $this = this.eq(0),
+			validator = $this.data('scovalid');
 		if ($.type(options) === 'object') {
 			if (!validator) {
 				validator = new $.scovalid($this, options);
@@ -304,7 +305,5 @@
 		} else {
 			return validator;
 		}
-
-	}
-
+	};
 }));
