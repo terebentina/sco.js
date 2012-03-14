@@ -204,7 +204,7 @@
 			self.data = $.extend(true, {}, $.fn.scotip.defaults, options);
 			apply_data(self.data);
 			self.$tooltip.bind('mouseenter', on_mouseenter)
-						 .bind('mouseleave', on_mouse_leave);
+						 .bind('mouseleave', function() {on_mouse_leave()});
 		}
 
 		if (e !== null) {

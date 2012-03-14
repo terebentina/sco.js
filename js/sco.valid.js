@@ -317,9 +317,10 @@
 							}
 						}
 					}
-					console.log('response', response);
 				}
 			});
+			// allow chaining
+			return this;
 		} else if (options === 'option') {
 			if ($.type(value) === 'undefined') {
 				return validator.options[key];
