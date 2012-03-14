@@ -293,6 +293,7 @@
 			if (!validator) {
 				validator = new $.scovalid($form, options);
 				$form.data("scovalid", validator);
+				$form.prop('novalidate', true);
 			}
 			$form.ajaxForm({
 				beforeSubmit: function(arr, $form, options) {
@@ -305,10 +306,15 @@
 					} else if (response.status == 'error') {
 						$.scomessage(response.message);
 					} else if (response.status == 'success') {
-						if (response.data.next) {
-							window.location.href = response.data.next;
-						} else if (response.data.message) {
+						if (response.data.message) {
 							$.scomessage(response.data.message, $.scomessage.TYPE_OK);
+						}
+						if (response.data.next) {
+							if (response.data.next === '.') {
+								window.location.href = window.location.href;
+							} else {
+								window.location.href = response.data.next;
+							}
 						}
 					}
 					console.log('response', response);
