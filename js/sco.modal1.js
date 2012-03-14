@@ -27,25 +27,22 @@ Sco.popup = function(data) {
 
 	if (typeof data.css !== 'undefined') {
 		$target.addClass(data.css);
-	} else {
-		var width = 500
-			,height = 'auto'
-			,top = $(document).scrollTop() + 100;
+	}
 
-		if (typeof data.width !== 'undefined') {
-			width = data.width;
-		}
-		if (typeof data.height !== 'undefined') {
-			height = data.height;
-		}
-		var left = Math.round(($(document).width() - width) / 2);
-		if (height !== 'auto') {
-			top = Math.round(($(document).height() - height) / 2);
-		}
-		if (typeof data.top !== 'undefined') {
-			top = data.top;
-		}
-		$target.height(height).width(width).css({'top': top, 'left': left});
+	if (typeof data.width !== 'undefined') {
+		$target.width(data.width);
+	}
+
+	if (typeof data.left !== 'undefined') {
+		$target.css({'left': data.left});
+	}
+
+	if (typeof data.height !== 'undefined') {
+		$target.height(data.height);
+	}
+
+	if (typeof data.top !== 'undefined') {
+		$target.css({'top': data.top});
 	}
 
 	if (!$backdrop.length) {
