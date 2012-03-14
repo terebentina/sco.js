@@ -292,8 +292,7 @@
 		if ($.type(options) === 'object') {
 			if (!validator) {
 				validator = new $.scovalid($form, options);
-				$form.data("scovalid", validator);
-				$form.prop('novalidate', true);
+				$form.data("scovalid", validator).attr('novalidate', 'novalidate');
 			}
 			$form.ajaxForm({
 				beforeSubmit: function(arr, $form, options) {
