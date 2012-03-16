@@ -34,7 +34,7 @@
 
 	$(document).on('click.scoajax', '[data-trigger="ajax"]', function(e) {
 		var $this = $(this);
-		$($this.data('target')).load($this);
+		$($this.data('target')).load($this.attr('href'));
 		return false;
 	});
 }));
