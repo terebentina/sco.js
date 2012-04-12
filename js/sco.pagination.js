@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
 /*global define:true, _:true */
 
 (function(factory) {
@@ -37,44 +37,54 @@
 }(function($) {
 	"use strict";
 
-	$('[data-trigger="pagination"]').scotab({
+	$.fn.scopagination = function(options) {
+		var $this = $(this)
+			,data = $this.data()
+			,tpldata;
+
+		data = $.extend({}, $.fn.scopagination.defaults, data, options);
+
+		if (typeof data.content === 'undefined') {
+			return;
+		}
+
+		var pagination_template = _.template(
+				'<ul data-content="'+data.content+'">' +
+				'	<% console.log(obj);' +
+				'for (var i=0; i<obj[\'total_pages\']; i++) {' +
+				'		var cssclass = "";' +
+				'		if (i == current_page) {' +
+				'			cssclass += "active";' +
+				'		};' +
+				'		print(\'<li class="\'+cssclass+\'"><a href="#\'+i+\'">\'+(i+1)+\'</a></li>\');' +
+				'	} %>' +
+				'</ul>'
+			);
+
+		tpldata = {
+			current_page: data.active
+			,cssclass: data.cssclass
+			,total_pages: $(data.content).children().length
+		};
+
+		if (!data.autohide || data.total_pages > 1) {
+			$this.html(pagination_template(tpldata));
+		}
+		$this.find('ul').scotab({
+			auto_hide: true
+			,count_in: 3
+			,count_out: 3
+			,cssclass: ''
+			,onSelect: function() {
+
+			}
+		});
+	};
+
+	$.fn.scopagination.defaults = {
 		auto_hide: true
 		,count_in: 3
 		,count_out: 3
 		,cssclass: ''
-		,onInit: function(options) {
-			var pagination_template = _.template(
-					'<ul>' +
-					'	<li class="prev <%= current_page === 0 ? "disabled" : "" %>">' +
-					'		<a href="#">&larr; Previous</a>' +
-					'	</li>' +
-					'	<% for (var i=0; i<total_pages; i++) {' +
-					'		var cssclass = "";' +
-					'		if (i == current_page) {' +
-					'			cssclass += "active";' +
-					'		}' +
-					//'		if (content == "&hellip;") {' +
-					//'			cssclass += " disabled";' +
-					//'		}' +
-					'		print("<li class=\""+cssclass+"\"><a href=\"#"+i+"\">"+(i+1)+"</a></li>");' +
-					'	} %>' +
-					'	<li class="next <%= next_page === false ? "disabled" : "" %>">' +
-					'		<a href="#">Next &rarr;</a>' +
-					'	</li>' +
-					'</ul>'
-				)
-				,data = {
-					current_page: options.active
-					,cssclass: options.cssclass
-					,total_pages: 0
-				};
-			data.total_pages = this.$content.length;
-			if (data.total_pages > 1) {
-				this.$tabs.html(pagination_template(data));
-			}
-		}
-		,onSelect: function() {
-
-		}
-	});
+	};
 }));
