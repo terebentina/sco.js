@@ -50,8 +50,7 @@
 
 		var pagination_template = _.template(
 				'<ul data-content="'+data.content+'">' +
-				'	<% console.log(obj);' +
-				'for (var i=0; i<obj[\'total_pages\']; i++) {' +
+				'	<% for (var i=0; i<obj[\'total_pages\']; i++) {' +
 				'		var cssclass = "";' +
 				'		if (i == current_page) {' +
 				'			cssclass += "active";' +
@@ -67,18 +66,18 @@
 			,total_pages: $(data.content).children().length
 		};
 
-		if (!data.autohide || data.total_pages > 1) {
+		if (!data.auto_hide || tpldata.total_pages > 1) {
 			$this.html(pagination_template(tpldata));
-		}
-		$this.find('ul').scotab({
-			auto_hide: true
-			,count_in: 3
-			,count_out: 3
-			,cssclass: ''
-			,onSelect: function() {
+			$this.find('ul').scotab({
+				auto_hide: true
+				,count_in: 3
+				,count_out: 3
+				,cssclass: ''
+				,onSelect: function() {
 
-			}
-		});
+				}
+			});
+		}
 	};
 
 	$.fn.scopagination.defaults = {
