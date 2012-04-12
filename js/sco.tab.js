@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
 /*global define:true */
 
 (function(factory) {
@@ -40,12 +40,8 @@
 
 		$.extend(self, {
 			options: {
-				auto_advance: false	// false or milliseconds to wait till advancing
-				,easing: null
-				,active: -1
-				,href: ''
+				onSelect: function(val, x) {console.log('onselect ', val, x);}
 			},
-
 			$tabs: null,
 			$content: null,
 
@@ -61,63 +57,70 @@
 				if (typeof save === 'undefined') {
 					save = true;
 				}
-				for (var p in map) {
-					if (map.hasOwnProperty(p)) {
-						if (typeof self.options[p] !== 'undefined') {
-							if (p === 'active') {
-								// if
-								if (map[p] !== self.get('active')) {
-									var $header_children = self.$tabs.children();
-									// remove the .active class from all tab headers and add .active to selected tab header
-									$header_children.removeClass('active').eq(map[p]).addClass('active');
-									// hide all tab content and show only the selected one
-									self.$content.hide().removeClass('active').eq(map[p]).addClass('active').fadeIn();
-								}
-							} else if (p === 'href' && map[p] != '') {
-								// @todo not working
-								self.$content.find('.active').load(map[p]);
-							}
-
-							if (save) {
-								self.options[p] = map[p];
-							}
+				$.each(map, function(k, v) {
+					if (k === 'active') {
+						if (v !== self.get('active')) {
+							self.options.onSelect.call(self, v);
+							var $header_children = self.$tabs.children();
+							// remove the .active class from all tab headers and add .active to selected tab header
+							$header_children.removeClass('active').eq(v).addClass('active');
+							// hide all tab content and show only the selected one
+							self.$content.hide().removeClass('active').eq(v).addClass('active').fadeIn();
 						}
+					//} else if (k === 'href' && v !== '') {
+					//	// @todo not working
+					//	self.$content.find('.active').load(v);
 					}
-				}
+
+					if (save) {
+						self.options[k] = v;
+					}
+				});
 				return self;
 			},
 
 			_init: function() {
 				self.$tabs = $tabs;
 				var data = self.$tabs.data();
-				self.$content = $(data.content).children();
-				if (typeof data.active === 'undefined') {
-					data.active = 0;
+				if (typeof data.content === 'undefined') {
+					return;
 				}
+				self.$content = $(data.content).children();
 
-				self.$tab_links = self.$tabs.find('a');
-				self.$tab_links.unbind('.scotab').bind('click.scotab', function(e) {
+				data = $.extend({}, $.fn.scotab.defaults, data, options);
+
+				self.$tabs.on('click.scotab', 'a', function(e) {
 					var $this = $(this)
 						,$my_li = $this.parents('li')
 						,my_index = $my_li.index()
 						,map = {active: my_index};
 
 					// @todo not working
-					if ($this.attr('href').indexOf('#') !== 0) {
-						e.preventDefault();
-						map.href = $this.attr('href');
-					}
+					//if ($this.attr('href').indexOf('#') !== 0) {
+					//	e.preventDefault();
+					//	map.href = $this.attr('href');
+					//}
 
 					self.set(map);
 				});
 
-				data = $.extend(true, {}, self.options, data, options);
+				// allow plugins to add their own custom init code. Note that self.$tabs and self.$content is available in onInit()
+				if (typeof data.onInit === 'function') {
+					data.onInit.call(self, data);
+					delete data.onInit;
+				}
+				if (typeof data.onSelect === 'function') {
+					self.options.onSelect = data.onSelect;
+					delete data.onSelect;
+				}
+
+				// finally, set the initial values
 				self.set(data);
 
 				if ($.address) {
 					$.address.externalChange(function(e) {
 						var hash = '#' + e.value.slice(1);
-						self.$tab_links.each(function(i) {
+						self.$tabs.find('a').each(function(i) {
 							if ($(this).attr('href') === hash) {
 								self.set({active: i});
 								return false;
@@ -144,5 +147,12 @@
 
 		return this;
 	};
-}));
 
+
+	$.fn.scotab.defaults = {
+		active: 0
+		//,auto_advance: false	// false or milliseconds to wait till advancing
+		//,easing: null
+		//,href: ''
+	};
+}));
