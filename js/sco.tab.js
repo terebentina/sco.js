@@ -17,7 +17,22 @@
  * limitations under the License.
  * ========================================================== */
 
-!function($) {
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*global define:true */
+
+(function(factory) {
+	"use strict";
+
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define([
+            'jquery'
+        ], factory);
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function($) {
 	"use strict";
 
 	function Tab($tabs, options) {
@@ -129,4 +144,5 @@
 
 		return this;
 	};
-}(window.jQuery);
+}));
+

@@ -17,7 +17,10 @@
  * limitations under the License.
  * ========================================================== */
 
-(function (factory) {
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*global define:true */
+
+(function(factory) {
 	"use strict";
 
     if (typeof define === 'function' && define.amd) {

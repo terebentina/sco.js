@@ -17,6 +17,9 @@
  * limitations under the License.
  * ========================================================== */
 
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*global define:true */
+
 (function (factory) {
 	"use strict";
 

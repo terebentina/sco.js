@@ -17,68 +17,87 @@
  * limitations under the License.
  * ========================================================== */
 
-var Sco = Sco || {};
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*global define:true */
 
-Sco.popup = function(data) {
-	var $target = $(data.target).attr('class', 'modal fade in')
-		,$backdrop = $('.modal-backdrop');
+(function(factory) {
+	"use strict";
 
-	$target.find('.modal-header h3').html(data.title);
+    if (typeof define === 'function' && define.amd) {
+        // Register as an anonymous AMD module:
+        define([
+            'jquery'
+        ], factory);
+    } else {
+        // Browser globals:
+        factory(window.jQuery);
+    }
+}(function($) {
+	"use strict";
 
-	if (typeof data.css !== 'undefined') {
-		$target.addClass(data.css);
-	}
+	var Sco = Sco || {};
 
-	if (typeof data.width !== 'undefined') {
-		$target.width(data.width);
-	}
+	Sco.popup = function(data) {
+		var $target = $(data.target).attr('class', 'modal fade in')
+			,$backdrop = $('.modal-backdrop');
 
-	if (typeof data.left !== 'undefined') {
-		$target.css({'left': data.left});
-	}
+		$target.find('.modal-header h3').html(data.title);
 
-	if (typeof data.height !== 'undefined') {
-		$target.height(data.height);
-	}
+		if (typeof data.css !== 'undefined') {
+			$target.addClass(data.css);
+		}
 
-	if (typeof data.top !== 'undefined') {
-		$target.css({'top': data.top});
-	}
+		if (typeof data.width !== 'undefined') {
+			$target.width(data.width);
+		}
 
-	if (!$backdrop.length) {
-		$backdrop = $('<div class="modal-backdrop fade" />').appendTo(document.body);
-		$backdrop[0].offsetWidth; // force reflow
-		$backdrop.addClass('in');
-	}
+		if (typeof data.left !== 'undefined') {
+			$target.css({'left': data.left});
+		}
 
-	$target.show();
-	if (typeof data.href !== 'undefined') {
-		$target.find('.modal_loading').show();
+		if (typeof data.height !== 'undefined') {
+			$target.height(data.height);
+		}
 
-		$('.inner', $target).load(data.href, function() {
-			$('.modal_loading', $target).hide();
-		});
-	}
-};
+		if (typeof data.top !== 'undefined') {
+			$target.css({'top': data.top});
+		}
 
-$(document).on('click.scomodal', '[data-trigger="modal"]', function(e) {
-	e.preventDefault();
-	var $me = $(e.currentTarget)
-		,data = $me.data()
-		,defaults = {
-			title: '&nbsp;'
-			,target: '#modal'
-		};
+		if (!$backdrop.length) {
+			$backdrop = $('<div class="modal-backdrop fade" />').appendTo(document.body);
+			$backdrop[0].offsetWidth; // force reflow
+			$backdrop.addClass('in');
+		}
 
-	data.href = $me.prop('href');
-	data = $.extend({}, defaults, data);
-	Sco.popup(data);
-});
+		$target.show();
+		if (typeof data.href !== 'undefined') {
+			$target.find('.modal_loading').show();
 
-$('.modal').live('close', function() {
-	$(this).hide().find('.inner').html('');
-	$('.modal-backdrop').remove();
-}).find('[data-dismiss="modal"]').live('click', function(e) {
-	e.preventDefault();
-	$(this).parents('.modal').trigger('close');
-});
+			$('.inner', $target).load(data.href, function() {
+				$('.modal_loading', $target).hide();
+			});
+		}
+	};
+
+	$(document).on('click.scomodal', '[data-trigger="modal"]', function(e) {
+		e.preventDefault();
+		var $me = $(e.currentTarget)
+			,data = $me.data()
+			,defaults = {
+				title: '&nbsp;'
+				,target: '#modal'
+			};
+
+		data.href = $me.prop('href');
+		data = $.extend({}, defaults, data);
+		Sco.popup(data);
+	});
+
+	$('.modal').live('close', function() {
+		$(this).hide().find('.inner').html('');
+		$('.modal-backdrop').remove();
+	}).find('[data-dismiss="modal"]').live('click', function(e) {
+		e.preventDefault();
+		$(this).parents('.modal').trigger('close');
+	});
+}));
