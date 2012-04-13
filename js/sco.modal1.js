@@ -17,8 +17,8 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
-/*global define:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
+/*global define:true, Spinner:true */
 
 (function(factory) {
 	"use strict";
@@ -26,7 +26,8 @@
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
-            'jquery'
+            'jquery',
+			'../spin.js'
         ], factory);
     } else {
         // Browser globals:
@@ -71,10 +72,10 @@
 
 		$target.show();
 		if (typeof data.href !== 'undefined') {
-			$target.find('.modal_loading').show();
+			var spinner = new Spinner({color: '#3d9bce'}).spin($target[0]);
 
 			$('.inner', $target).load(data.href, function() {
-				$('.modal_loading', $target).hide();
+				spinner.stop();
 			});
 		}
 	};
