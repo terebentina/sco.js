@@ -18,7 +18,7 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true */
-/*global define:true */
+/*global define:true, Spinner:true */
 
 (function(factory) {
 	"use strict";
@@ -27,6 +27,7 @@
         // Register as an anonymous AMD module:
         define([
             'jquery'
+			,'../spin.js'
         ], factory);
     } else {
         // Browser globals:
@@ -36,8 +37,15 @@
 	"use strict";
 
 	$(document).on('click.scoajax', '[data-trigger="ajax"]', function(e) {
-		var $this = $(this);
-		$($this.data('target')).load($this.attr('href'));
-		return false;
+		var $this = $(this)
+			,data = $this.data()
+			;
+		if (typeof data['target'] != 'undefined') {
+			var spinner = new Spinner({color: '#3d9bce'}).spin(data['target']);
+			$(data['target']).load($this.attr('href'), function() {
+				spinner.stop();
+			});
+			return false;
+		}
 	});
 }));
