@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, smarttabs:true */
 /*global define:true */
 
 (function (factory) {
@@ -327,15 +327,20 @@
 					} else if (response.status == 'error') {
 						$.scomessage(response.message);
 					} else if (response.status == 'success') {
-						if (response.data.message) {
-							$.scomessage(response.data.message, $.scomessage.TYPE_OK);
+						if (typeof response.data.run === 'function') {
+							response.data.run.call(this, $form);
 						}
 						if (response.data.next) {
-							if (response.data.next === '.') {
+							if (response.data.next === '.') {			// refresh current page
 								window.location.href = window.location.href;
+							} else if (response.data.next === 'x') {	// close the parent modal
+								$form.parents('.modal').trigger('close');
 							} else {
 								window.location.href = response.data.next;
 							}
+						}
+						if (response.data.message) {
+							$.scomessage(response.data.message, $.scomessage.TYPE_OK);
 						}
 					}
 				}
