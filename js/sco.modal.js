@@ -72,6 +72,9 @@
 		$modal.on('close', function() {
 			$(this).hide().find('.inner').html('');
 			$('.modal-backdrop').remove();
+			if (typeof options.onClose === 'function') {
+				options.onClose.call(this, options);
+			}
 		}).show().addClass('in');
 		if (typeof options.href !== 'undefined') {
 			var spinner = new Spinner({color: '#3d9bce'}).spin($modal[0]);
@@ -92,9 +95,7 @@
 				options.href = $this.attr('href');
 			}
 			delete options.scomodal;
-			if (typeof data.scomodal != 'undefined') {
-				$this.data('scomodal', new Modal(options));
-			}
+			$this.data('scomodal', new Modal(options));
 		});
 	};
 
@@ -107,9 +108,11 @@
 		,target: '#modal'	// the modal id
 	};
 
-	$(document).on('click.scomodal', ['data-trigger="modal"'], function(e) {
+	$(document).on('click.scomodal', '[data-trigger="modal"]', function(e) {
 		$(this).scomodal();
-		//return false;
+		if ($(this).is('a')) {
+			return false;
+		}
 	}).on('click.scomodal', '[data-dismiss="modal"]', function(e) {
 		e.preventDefault();
 		$(this).parents('.modal').trigger('close');
