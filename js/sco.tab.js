@@ -40,7 +40,7 @@
 
 		$.extend(self, {
 			options: {
-				onSelect: function(val, x) {console.log('onselect ', val, x);}
+				onSelect: function(val) {}
 			},
 			$tabs: null,
 			$content: null,

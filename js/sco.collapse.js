@@ -38,9 +38,13 @@
 	function Collapse($trigger, options) {
 		this.options = $.extend({}, $.fn.scollapse.defaults, options);
 		this.$trigger = $trigger;
-		this.$target = $(this.options.target);
+		if (this.options.target !== null) {
+			this.$target = $(this.options.target);
+		} else {
+			this.$target = this.$trigger[this.options.mode](this.options.collapseSelector);
+		}
 		if (this.options.parent !== null) {
-			this.$parent = $(this.options.parent);
+			this.$parent = this.$trigger.parents(this.options.parent);
 		}
 	}
 
@@ -60,8 +64,8 @@
 
 			self.$target.toggleClass(self.options.activeTargetClass);
 			if (self.$parent && self.$trigger.hasClass(self.options.activeTriggerClass)) {
-console.log('da', self.$parent, self.$parent.find('.collapse.' + self.options.activeTargetClass));
-				self.$parent.find('.collapse.' + self.options.activeTargetClass).not(self.$target).removeClass(self.options.activeTargetClass);
+				// since we know for sure all triggers are inited in an accordion
+				self.$parent.find(self.options.triggerSelector + '.' + self.options.activeTriggerClass).not(self.$trigger).scollapse();
 			}
 		}
 	});
@@ -70,7 +74,7 @@ console.log('da', self.$parent, self.$parent.find('.collapse.' + self.options.ac
 		return this.each(function() {
 			var $this = $(this)
 				,data = $this.data()
-				,options = $.extend({}, data, opts)
+				,options = $.extend({}, $.fn.scollapse.defaults, data, opts)
 				;
 			delete options.scollapse;
 			if (!data.scollapse) {
@@ -82,15 +86,18 @@ console.log('da', self.$parent, self.$parent.find('.collapse.' + self.options.ac
 
 	$.fn.scollapse.defaults = {
 		parent: null						// having a parent activates the accordion mode behaviour
-		,target: '.collapse'				// the element to show/hide
+		,target: null						// the element to show/hide. If null, the target is chosen based on the "mode" selector
 		,activeTriggerClass: 'active'		// class to add to the trigger in active (on) state
 		,activeTargetClass: 'in'			// class to add to the target in active (on) state
 		,triggerHtml: null					// if not null, this should be a hash like {off: 'more', on: 'less'}. This text is set on the trigger.
+		,mode: 'next'						// "next" means target is after trigger, "prev" means target is before trigger
+		,collapseSelector: '.collapse'		// used in accordion to find out what to collapse when the current target expands or if the target is null
+		,triggerSelector: '[data-trigger="collapse"]'		// used in accordion to find out all triggers
 	};
 
 	$(document).on('click.sco', '[data-trigger="collapse"]', function(e) {
-		var $this = $(this).scollapse();
-		if ($this.is('a')) {
+		$(this).scollapse({triggerSelector: e.handleObj.selector});
+		if ($(this).is('a')) {
 			return false;
 		}
 	});
