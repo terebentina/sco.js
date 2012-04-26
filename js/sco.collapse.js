@@ -53,9 +53,9 @@
 			var self = this;
 
 			//self.$target.toggleClass(self.options.activeTargetClass);
-			self.$target[$.camelCase(self.options.ease + '-toggle')]();
+			self.$target[$.camelCase(self.options.ease + '-toggle')]().removeClass('open');
 			if (self.$parent && !self.$trigger.hasClass(self.options.activeTriggerClass)) {
-				self.$parent.find(self.options.triggerSelector + '.' + self.options.activeTriggerClass).scollapse();
+				self.$parent.find(self.options.triggerSelector + '.' + self.options.activeTriggerClass).scollapse(self.options);
 			}
 			self.$trigger.toggleClass(self.options.activeTriggerClass);
 			if (self.options.triggerHtml !== null) {
