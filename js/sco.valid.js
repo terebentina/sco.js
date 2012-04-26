@@ -332,7 +332,7 @@
 						}
 						if (response.data.next) {
 							if (response.data.next === '.') {			// refresh current page
-								window.location.href = window.location.href;
+								window.location.href = window.location.href.replace(/#.*$/, '');
 							} else if (response.data.next === 'x') {	// close the parent modal
 								$form.parents('.modal').trigger('close');
 							} else {
