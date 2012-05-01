@@ -50,7 +50,14 @@
 			var $modal = $(data.target);
 			if (!$modal.length) {
 				$modal = $('<div class="modal" id="'+data.target.substr(1)+'"><div class="modal-body inner"/><div class="modal-footer"><a href="#" class="btn btn-danger" data-action="1">yes</a> <a class="btn" href="#" data-dismiss="modal">cancel</a></div></div>').appendTo('body');
-				$modal.find('[data-action]').attr('href', $this.attr('href'));
+				if (data.onaction) {
+					$modal.find('[data-action]').on('click.sconfirm', function(e) {
+						e.preventDefault();
+						window[data.onaction]();
+					});
+				} else {
+					$modal.find('[data-action]').attr('href', $this.attr('href'));
+				}
 			}
 
 			$.scomodal(data);
