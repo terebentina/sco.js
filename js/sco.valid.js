@@ -153,7 +153,7 @@
 				min_length: function(field, value, min_len, all_rules) {
 					var length = $.trim(value).length
 						,result = (length >= min_len);
-					if (all_rules['not_empty']) {
+					if (!all_rules['not_empty']) {
 						result = result || length === 0;
 					}
 					return result;
@@ -182,7 +182,7 @@
 				exact_length: function(field, value, exact_length, all_rules) {
 					var length = $.trim(value).length
 						,result = (length === exact_length);
-					if (all_rules['not_empty']) {
+					if (!all_rules['not_empty']) {
 						result = result || length === 0;
 					}
 					return result;
