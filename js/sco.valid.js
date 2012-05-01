@@ -74,7 +74,9 @@
 				this.errors = {};
 
 				$.each(that.options.rules, function(field_name, rules) {
-					var field = null;
+					var field = null
+						,normalized_rules
+						;
 					// find the field in the form
 					$.each(form_fields, function(k, v) {
 						if (v.name === field_name) {
@@ -93,23 +95,26 @@
 						var fn_name, fn_args, result;
 						// only string and objects are allowed
 						if ($.type(rule_value) === 'string') {
-							fn_name = rule_value;
+							// make sure the requested method actually exists.
+							if ($.inArray(rule_value, that.allowed_rules) !== -1) {
+								normalized_rules[rule_value] = null;
+							}
 						} else {
 							// if not string then we assume it's a {key: val} object. Only 1 key is allowed
 							$.each(rule_value, function(k, v) {
-								fn_name = k;
-								fn_args = v;
-								return false;
+								// make sure the requested method actually exists.
+								if ($.inArray(k, that.allowed_rules) !== -1) {
+									normalized_rules[k] = v;
+									return false;
+								}
 							});
 						}
+					});
 
-						// make sure the requested method actually exists.
-						if ($.inArray(fn_name, that.allowed_rules) !== -1) {
-							// call the method with the requested args
-							result = that.methods[fn_name].call(that, field_name, field.value, fn_args);
-							if (result !== true) {
-								that.errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
-							}
+					$.each(normalized_rules, function(fn_name, fn_args) {
+						// call the method with the requested args
+						if (that.methods[fn_name].call(that, field.name, field.value, fn_args, normalized_rules) !== true) {
+							that.errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
 						}
 					});
 				});
@@ -145,8 +150,13 @@
 					return value !== null && $.trim(value).length > 0;
 				},
 
-				min_length: function(field, value, min_len) {
-					return $.trim(value).length >= min_len;
+				min_length: function(field, value, min_len, all_rules) {
+					var length = $.trim(value).length
+						,result = (length >= min_len);
+					if (all_rules['not_empty']) {
+						result = result || length === 0;
+					}
+					return result;
 				},
 
 				max_length: function(field, value, max_len) {
@@ -169,8 +179,13 @@
 					return regex.test(value);
 				},
 
-				exact_length: function(field, value, exact_length) {
-					return $.trim(value).length === exact_length;
+				exact_length: function(field, value, exact_length, all_rules) {
+					var length = $.trim(value).length
+						,result = (length === exact_length);
+					if (all_rules['not_empty']) {
+						result = result || length === 0;
+					}
+					return result;
 				},
 
 				equals: function(field, value, target) {
@@ -209,22 +224,22 @@
 				},
 
 				alpha: function(field, value) {
-					var regex = /^[a-z]+$/i;
+					var regex = /^[a-z]*$/i;
 					return regex.test(value);
 				},
 
 				alpha_numeric: function(field, value) {
-					var regex = /^[a-z0-9]+$/i;
+					var regex = /^[a-z0-9]*$/i;
 					return regex.test(value);
 				},
 
 				alpha_dash: function(field, value) {
-					var regex = /^[a-z0-9_\-]+$/i;
+					var regex = /^[a-z0-9_\-]*$/i;
 					return regex.test(value);
 				},
 
 				digit: function(field, value) {
-					var regex = /^\d+$/;
+					var regex = /^\d*$/;
 					return regex.test(value);
 				},
 
