@@ -72,8 +72,6 @@
 
 	$(document).on('click.sconfirm', '[data-trigger="confirm"]', function(e) {
 		$(this).sconfirm();
-		if ($(this).is('a')) {
-			return false;
-		}
+		return false;
 	});
 }));
