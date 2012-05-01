@@ -45,7 +45,7 @@
 			;
 
 		if (!$modal.length) {
-			$modal = $('<div class="modal fade" id="'+options.target+'"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo('body');
+			$modal = $('<div class="modal fade" id="'+options.target.substr(1)+'"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo('body');
 		}
 		$modal.find('.modal-header h3').html(options.title);
 
@@ -114,7 +114,7 @@
 
 	$.fn.scomodal.defaults = {
 		title: '&nbsp;'		// modal title
-		,target: '#modal'	// the modal id
+		,target: '#modal'	// the modal id. MUST be an id for now.
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
 	};
 
