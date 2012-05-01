@@ -75,7 +75,7 @@
 
 				$.each(that.options.rules, function(field_name, rules) {
 					var field = null
-						,normalized_rules
+						,normalized_rules = {}
 						;
 					// find the field in the form
 					$.each(form_fields, function(k, v) {
