@@ -70,8 +70,8 @@
 			$this.html(pagination_template(tpldata));
 			$this.find('ul').scotab({
 				auto_hide: true
-				,count_in: 3
-				,count_out: 3
+				//,count_in: 3
+				//,count_out: 3
 				,cssclass: ''
 				,onSelect: function() {
 
@@ -82,8 +82,8 @@
 
 	$.fn.scopagination.defaults = {
 		auto_hide: true
-		,count_in: 3
-		,count_out: 3
+		//,count_in: 3
+		//,count_out: 3
 		,cssclass: ''
 	};
 }));

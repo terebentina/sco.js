@@ -40,12 +40,17 @@
 		options = $.extend({}, $.fn.scomodal.defaults, options);
 
 		var $modal = $(options.target).attr('class', 'modal fade')
-			,$backdrop = $('.modal-backdrop');
+			,$backdrop = $('.modal-backdrop')
+			,$content_wrapper
+			;
 
+		if (!$modal.length) {
+			$modal = $('<div class="modal fade" id="'+options.target+'"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo('body');
+		}
 		$modal.find('.modal-header h3').html(options.title);
 
-		if (typeof options.css !== 'undefined') {
-			$modal.addClass(options.css);
+		if (typeof options.cssclass !== 'undefined') {
+			$modal.addClass(options.cssclass);
 		}
 
 		if (typeof options.width !== 'undefined') {
@@ -69,8 +74,10 @@
 			$backdrop[0].offsetWidth; // force reflow
 			$backdrop.addClass('in');
 		}
+		$content_wrapper = $modal.find('.inner');
 		$modal.on('close', function() {
-			$(this).hide().find('.inner').html('');
+			$modal.hide();
+			$content_wrapper.html('');
 			$('.modal-backdrop').remove();
 			if (typeof options.onClose === 'function') {
 				options.onClose.call(this, options);
@@ -78,9 +85,11 @@
 		}).show().addClass('in');
 		if (typeof options.href !== 'undefined') {
 			var spinner = new Spinner({color: '#3d9bce'}).spin($modal[0]);
-			$('.inner', $modal).load(options.href, function() {
+			$content_wrapper.load(options.href, function() {
 				spinner.stop();
 			});
+		} else {
+			$content_wrapper.html(options.content);
 		}
 	}
 
@@ -106,6 +115,7 @@
 	$.fn.scomodal.defaults = {
 		title: '&nbsp;'		// modal title
 		,target: '#modal'	// the modal id
+		,content: ''		// the static modal content (in case it's not loaded via ajax)
 	};
 
 	$(document).on('click.scomodal', '[data-trigger="modal"]', function(e) {
