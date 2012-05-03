@@ -84,6 +84,7 @@
 							return false;
 						}
 					});
+
 					// if field was not found, it could mean 2 things: mispelled field name in the rules or the field is not a successful control
 					// either way, we build a fake field and it should fail one of the assigned rules later on.
 					if (field === null) {
@@ -301,7 +302,7 @@
 					message = this.messages[rule];
 				}
 
-				if ($.type(params) !== 'undefined') {
+				if ($.type(params) !== 'undefined' && params !== null) {
 					if ($.type(params) === 'boolean' || $.type(params) === 'string' || $.type(params) === 'number') {
 						params = {value: params};
 					}
