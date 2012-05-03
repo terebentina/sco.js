@@ -87,37 +87,35 @@
 
 					// if field was not found, it could mean 2 things: mispelled field name in the rules or the field is not a successful control
 					// either way, we build a fake field and it should fail one of the assigned rules later on.
-					if (field === null) {
-						field = {name: field_name, value: null};
-					}
-
-					$.each(rules, function(rule_idx, rule_value) {
-						// determine the method to call and its args
-						var fn_name, fn_args, result;
-						// only string and objects are allowed
-						if ($.type(rule_value) === 'string') {
-							// make sure the requested method actually exists.
-							if ($.inArray(rule_value, that.allowed_rules) !== -1) {
-								normalized_rules[rule_value] = null;
-							}
-						} else {
-							// if not string then we assume it's a {key: val} object. Only 1 key is allowed
-							$.each(rule_value, function(k, v) {
+					if (field !== null) {
+						$.each(rules, function(rule_idx, rule_value) {
+							// determine the method to call and its args
+							var fn_name, fn_args, result;
+							// only string and objects are allowed
+							if ($.type(rule_value) === 'string') {
 								// make sure the requested method actually exists.
-								if ($.inArray(k, that.allowed_rules) !== -1) {
-									normalized_rules[k] = v;
-									return false;
+								if ($.inArray(rule_value, that.allowed_rules) !== -1) {
+									normalized_rules[rule_value] = null;
 								}
-							});
-						}
-					});
+							} else {
+								// if not string then we assume it's a {key: val} object. Only 1 key is allowed
+								$.each(rule_value, function(k, v) {
+									// make sure the requested method actually exists.
+									if ($.inArray(k, that.allowed_rules) !== -1) {
+										normalized_rules[k] = v;
+										return false;
+									}
+								});
+							}
+						});
 
-					$.each(normalized_rules, function(fn_name, fn_args) {
-						// call the method with the requested args
-						if (that.methods[fn_name].call(that, field.name, field.value, fn_args, normalized_rules) !== true) {
-							that.errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
-						}
-					});
+						$.each(normalized_rules, function(fn_name, fn_args) {
+							// call the method with the requested args
+							if (that.methods[fn_name].call(that, field.name, field.value, fn_args, normalized_rules) !== true) {
+								that.errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
+							}
+						});
+					}
 				});
 
 				if (!$.isEmptyObject(this.errors)) {
