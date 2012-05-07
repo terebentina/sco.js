@@ -39,10 +39,13 @@
 	$(document).on('click.scoajax', '[data-trigger="ajax"]', function(e) {
 		var $this = $(this)
 			,data = $this.data()
+			,$target
+			,spinner
 			;
 		if (typeof data['target'] != 'undefined') {
-			var spinner = new Spinner({color: '#3d9bce'}).spin(data['target']);
-			$(data['target']).load($this.attr('href'), function() {
+			$target = $(data['target']);
+			spinner = new Spinner({color: '#3d9bce'}).spin($target[0]);
+			$target.load($this.attr('href'), function() {
 				spinner.stop();
 			});
 			return false;
