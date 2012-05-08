@@ -73,7 +73,7 @@
 				//,count_in: 3
 				//,count_out: 3
 				,cssclass: ''
-				,onSelect: function() {
+				,onBeforeSelect: function() {
 
 				}
 			});
