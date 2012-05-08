@@ -40,7 +40,8 @@
 
 		$.extend(self, {
 			options: {
-				onSelect: function(val) {}
+				onBeforeSelect: function(val) {}
+				,onAfterSelect: function(val) {}
 			},
 			$tabs: null,
 			$content: null,
@@ -60,12 +61,14 @@
 				$.each(map, function(k, v) {
 					if (k === 'active') {
 						if (v !== self.get('active')) {
-							self.options.onSelect.call(self, v);
+							self.options.onBeforeSelect.call(self, v);
 							var $header_children = self.$tabs.children();
 							// remove the .active class from all tab headers and add .active to selected tab header
 							$header_children.removeClass('active').eq(v).addClass('active');
 							// hide all tab content and show only the selected one
-							self.$content.hide().removeClass('active').eq(v).addClass('active').fadeIn();
+							self.$content.hide().removeClass('active').eq(v).addClass('active').fadeIn(function() {
+								self.options.onAfterSelect.call(self, v);
+							});
 						}
 					//} else if (k === 'href' && v !== '') {
 					//	// @todo not working
@@ -109,9 +112,13 @@
 					data.onInit.call(self, data);
 					delete data.onInit;
 				}
-				if (typeof data.onSelect === 'function') {
-					self.options.onSelect = data.onSelect;
-					delete data.onSelect;
+				if (typeof data.onBeforeSelect === 'function') {
+					self.options.onBeforeSelect = data.onBeforeSelect;
+					delete data.onBeforeSelect;
+				}
+				if (typeof data.onAfterSelect === 'function') {
+					self.options.onAfterSelect = data.onAfterSelect;
+					delete data.onAfterSelect;
 				}
 
 				// finally, set the initial values
