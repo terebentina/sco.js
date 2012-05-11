@@ -60,8 +60,10 @@
 		prototype: {
 			// this is the main function - it returns either true if the validation passed or a hash like {field1: 'error text', field2: 'error text', ...}
 			validate: function() {
-				var that = this,
-					form_fields = this.$form.serializeArray();
+				var that = this
+					,form_fields = this.$form.serializeArray()
+					,all_fields = this.$form.find(':input[name]').map(function() {return this.name;}).get()
+					;
 
 				// remove any possible displayed errors from previous runs
 				$.each(this.errors, function(field_name, error) {
@@ -86,7 +88,14 @@
 					});
 
 					// if field was not found, it could mean 2 things: mispelled field name in the rules or the field is not a successful control
-					// either way, we build a fake field and it should fail one of the assigned rules later on.
+					// even if it's not successful we have to validate it
+					if (field === null) {
+						if ($.inArray(field_name, all_fields) !== -1) {
+							field = {name: field_name, value: that.get_field_value(field_name)};
+						}
+					}
+
+					// if it's still null then it's either mispelled or disabled. We don't care either way
 					if (field !== null) {
 						$.each(rules, function(rule_idx, rule_value) {
 							// determine the method to call and its args
@@ -309,6 +318,19 @@
 					});
 				}
 				return message;
+			},
+
+
+			/**
+			 * get a normalized value for a form field.
+			 */
+			get_field_value: function(field_name) {
+				var $input = this.$form.find('[name=' + field_name + ']');
+				if ($input.is('[type="checkbox"], [type="radio"]')) {
+					return $input.is(':checked') ? $input.val() : null;
+				} else {
+					return $input.val();
+				}
 			}
 		}
 	});
