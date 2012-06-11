@@ -45,7 +45,7 @@
 			;
 
 		if (!$modal.length) {
-			$modal = $('<div class="modal fade" id="'+options.target.substr(1)+'"><div class="modal-header"><a class="close" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo('body');
+			$modal = $('<div class="modal fade" id="'+options.target.substr(1)+'"><div class="modal-header"><a class="close" href="#" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo('body');
 		}
 		$modal.find('.modal-header h3').html(options.title);
 
