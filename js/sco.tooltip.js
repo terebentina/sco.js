@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, smarttabs:true */
 /*global define:true */
 
 (function(factory) {
@@ -219,7 +219,7 @@
 			self.data = $.extend(true, {}, $.fn.scotip.defaults, options);
 			apply_data(self.data);
 			self.$tooltip.bind('mouseenter', on_mouseenter)
-						 .bind('mouseleave', function() {on_mouse_leave()});
+			             .bind('mouseleave', function() {on_mouse_leave();});
 		}
 
 		if (e !== null) {
@@ -237,7 +237,7 @@
 			} else if (e.type === 'mouseleave') {
 				on_mouse_leave(self.data.delay);
 			}
-		} else {
+		} else if (!$.isEmptyObject(options)) {
 			build_tooltip(options);
 			self.close();
 		}
