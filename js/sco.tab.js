@@ -99,6 +99,9 @@
 						,my_index = $my_li.index()
 						,map = {active: my_index};
 
+					if (!$.address) {
+						e.preventDefault();
+					}
 					// @todo not working
 					//if ($this.attr('href').indexOf('#') !== 0) {
 					//	e.preventDefault();
