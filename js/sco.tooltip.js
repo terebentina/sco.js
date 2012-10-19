@@ -61,7 +61,7 @@
 				self.leave_timeout = setTimeout(function() {
 					clearTimeout(self.leave_timeout);
 					self.leave_timeout = null;
-					self.on_close();
+					self.on_close.call(self);
 					self.$tooltip.remove();
 					if (typeof $trigger !== 'undefined') {
 						$trigger.removeData('scotip');
@@ -83,14 +83,24 @@
 							self.$tooltip.addClass(data[p]);
 						} else if (p === 'position') {
 							self.$tooltip.removeClass('pos_w pos_e pos_n pos_s pos_nw pos_ne pos_se pos_sw pos_center').addClass('pos_' + data[p]);
-							var target_box = self.$target.offset(),
+							var target_box,
 								tooltip_box = {left: 0, top: 0, width: Math.floor(self.$tooltip.outerWidth()), height: Math.floor(self.$tooltip.outerHeight())},
 								pointer_box = {left: 0, top: 0, width: Math.floor(self.$tooltip.find('.pointer').outerWidth()), height: Math.floor(self.$tooltip.find('.pointer').outerHeight())},
 								doc_box = {left: $(document).scrollLeft(), top: $(document).scrollTop(), width: $(window).width(), height: $(window).height()};
-							target_box.left = Math.floor(target_box.left);
-							target_box.top = Math.floor(target_box.top);
-							target_box.width = Math.floor(self.$target.outerWidth());
-							target_box.height = Math.floor(self.$target.outerHeight());
+							if (self.$target) {
+								target_box = self.$target.offset();
+								target_box.left = Math.floor(target_box.left);
+								target_box.top = Math.floor(target_box.top);
+								target_box.width = Math.floor(self.$target.outerWidth());
+								target_box.height = Math.floor(self.$target.outerHeight());
+							} else {
+								target_box = {
+									left: Math.floor(($(document).scrollLeft() + $(window).width()) / 2)
+									,top: Math.floor(($(document).scrollTop() + $(window).height()) / 2)
+									,width: 0
+									,height: 0
+								};
+							}
 							if (data[p] === 'w') {
 								tooltip_box.left = target_box.left - tooltip_box.width - pointer_box.width;
 								tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height)/2);
@@ -107,7 +117,7 @@
 								pointer_box.left = Math.floor(tooltip_box.width / 2);
 								pointer_box.top = tooltip_box.height;
 							} else if (data[p] === 's') {
-								tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width)/2);
+								tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width) / 2);
 								tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
 								pointer_box.left = Math.floor(tooltip_box.width / 2);
 								pointer_box.top = -pointer_box.height;
@@ -132,8 +142,8 @@
 								pointer_box.left = tooltip_box.width - pointer_box.width;
 								pointer_box.top = -pointer_box.height;
 							} else if (data[p] === 'center') {
-								tooltip_box.left = target_box.left + Math.floor((target_box.width - tooltip_box.width)/2);
-								tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height)/2);
+								tooltip_box.left = target_box.left + Math.floor((target_box.width - tooltip_box.width) / 2);
+								tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
 								mirror = false;
 								self.$tooltip.find('.pointer').hide();
 							}
@@ -196,20 +206,24 @@
 
 		function build_tooltip(options) {
 			self = {
-				on_mouseenter: on_mouseenter,
-				close: on_mouse_leave,
-				on_close: function() {}
+				on_mouseenter: on_mouseenter
+				,close: on_mouse_leave
+				,on_close: function() {}
 			};
 			self.leave_timeout = null;
 			if (typeof options.target !== 'undefined') {
 				self.$target = $(options.target);
 				delete options.target;
-			} else {
+			} else if ($trigger) {
 				self.$target = $trigger;
 			}
 			if (typeof options.content_elem != 'undefined' && options.content_elem !== null) {
 				options.content = $(options.content_elem).html();
 				delete options.content_elem;
+			}
+			if (typeof options.on_close != 'undefined') {
+				self.on_close = options.on_close;
+				delete options.on_close;
 			}
 			if (typeof options.content_attr != 'undefined' && options.content_attr !== null) {
 				options.content = $trigger.attr(options.content_attr);
@@ -219,7 +233,7 @@
 			self.data = $.extend(true, {}, $.fn.scotip.defaults, options);
 			apply_data(self.data);
 			self.$tooltip.bind('mouseenter', on_mouseenter)
-			             .bind('mouseleave', function() {on_mouse_leave();});
+			             .bind('mouseleave close', function(e, delay, force) {on_mouse_leave(delay, force);});
 		}
 
 		if (e !== null) {
@@ -252,6 +266,11 @@
 	$.scotip = function(options) {
 		return live_tooltip(null, options);
 	};
+
+	$(document).on('click.scotip', '[data-dismiss="tooltip"]', function(e) {
+		e.preventDefault();
+		$(this).parents('.tooltip').trigger('close', [0, true]);
+	});
 
 	$.fn.scotip.defaults = {
 		content_elem: null,
