@@ -232,8 +232,10 @@
 			self.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo('body');
 			self.data = $.extend(true, {}, $.fn.scotip.defaults, options);
 			apply_data(self.data);
-			self.$tooltip.bind('mouseenter', on_mouseenter)
-			             .bind('mouseleave close', function(e, delay, force) {on_mouse_leave(delay, force);});
+			if (self.data.hoverable) {
+				self.$tooltip.bind('mouseenter', on_mouseenter)
+							 .bind('mouseleave close', function(e, delay, force) {on_mouse_leave(delay, force);});
+			}
 		}
 
 		if (e !== null) {
@@ -276,6 +278,7 @@
 		content_elem: null,
 		content_attr: null,
 		content: '',
+		hoverable: true,		// should mouse over tooltip hold the tooltip or not?
 		delay: 0,
 		cssclass: '',
 		// n,s,e,w,ne,nw,se,sw,center
