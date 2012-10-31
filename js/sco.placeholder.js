@@ -42,19 +42,15 @@
 					,msg = $el.attr('placeholder')
 					,origColor = $el.css('color');
 
-				if (!$el.val()) {
-					$el.val(msg).css('color', '#777');
-				}
-
-				$el.on('focus', function() {
+				$el.on('focus.sco', function() {
 					if ($el.val() === msg) {
 						$el.val('').css('color', origColor);
 					}
-				}).on('blur', function() {
+				}).on('blur.sco', function() {
 					if (!$el.val()) {
 						$el.val(msg).css('color', '#777');
 					}
-				});
+				}).trigger('blur.sco');
 			});
 		});
 	}
