@@ -49,7 +49,7 @@
 			data.content = data.content.replace(':title', title);
 			var $modal = $(data.target);
 			if (!$modal.length) {
-				$modal = $('<div class="modal" id="'+data.target.substr(1)+'"><div class="modal-body inner"/><div class="modal-footer"><a class="btn flat" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-primary flat" data-action="1">yes</a></div></div>').appendTo('body');
+				$modal = $('<div class="modal" id="'+data.target.substr(1)+'"><div class="modal-body inner"/><div class="modal-footer"><a class="btn" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-danger" data-action="1">yes</a></div></div>').appendTo('body');
 				if (data.onaction) {
 					$modal.find('[data-action]').on('click.sconfirm', function(e) {
 						e.preventDefault();
