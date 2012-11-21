@@ -67,7 +67,7 @@
 
 				// remove any possible displayed errors from previous runs
 				$.each(this.errors, function(field_name, error) {
-					var $input = that.$form.find('[name='+field_name+']');
+					var $input = that.$form.find('[name="'+field_name+'"]');
 					$input.siblings('span').html('');
 					if (that.options.wrapper !== null) {
 						$input.parents(that.options.wrapper).removeClass('error');
@@ -139,7 +139,7 @@
 			show: function(errors) {
 				var that = this;
 				$.each(errors, function(k, v) {
-					var $input = that.$form.find('[name='+k+']'),
+					var $input = that.$form.find('[name="'+k+'"]'),
 						$span = $input.siblings('span');
 					if (that.options.wrapper !== null) {
 						$input.parents(that.options.wrapper).addClass('error');
@@ -270,7 +270,7 @@
 				},
 
 				matches: function(field, value, param) {
-					return value === this.$form.find('[name='+param+']').val();
+					return value === this.$form.find('[name="'+param+'"]').val();
 				}
 			},
 
@@ -325,7 +325,7 @@
 			 * get a normalized value for a form field.
 			 */
 			get_field_value: function(field_name) {
-				var $input = this.$form.find('[name=' + field_name + ']');
+				var $input = this.$form.find('[name="' + field_name + '"]');
 				if ($input.is('[type="checkbox"], [type="radio"]')) {
 					return $input.is(':checked') ? $input.val() : null;
 				} else {
