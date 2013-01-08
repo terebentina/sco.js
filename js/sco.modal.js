@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true, eqeqeq:false */
 /*global define:true, Spinner:true */
 
 (function(factory) {
@@ -42,12 +42,17 @@
 		var $modal = $(options.target).attr('class', 'modal fade')
 			,$backdrop = $('.modal-backdrop')
 			,$content_wrapper
+			,title
 			;
 
 		if (!$modal.length) {
 			$modal = $('<div class="modal fade" id="'+options.target.substr(1)+'"><div class="modal-header"><a class="close" href="#" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo('body');
 		}
-		$modal.find('.modal-header h3').html(options.title);
+		title = options.title;
+		if (title === '') {
+			title = '&nbsp;';
+		}
+		$modal.find('.modal-header h3').html(title);
 
 		if (typeof options.cssclass !== 'undefined') {
 			$modal.addClass(options.cssclass);
@@ -71,18 +76,19 @@
 
 		if (!$backdrop.length) {
 			$backdrop = $('<div class="modal-backdrop fade" />').appendTo(document.body);
-			$backdrop[0].offsetWidth; // force reflow
+			title = $backdrop[0].offsetWidth; // force reflow. "title = " is not needed but I added it just to avoid jshint warnings
 			$backdrop.addClass('in');
 		}
 		$content_wrapper = $modal.find('.inner');
-		$modal.on('close', function() {
-			$modal.hide();
+		$modal.off('close.scomodal').on('close.scomodal', function() {
+			$modal.hide().off('close.scomodal');
 			$content_wrapper.html('');
 			$('.modal-backdrop').remove();
 			if (typeof options.onClose === 'function') {
 				options.onClose.call(this, options);
 			}
 		}).show().addClass('in');
+
 		if (typeof options.href !== 'undefined') {
 			var spinner = new Spinner({color: '#3d9bce'}).spin($modal[0]);
 			$content_wrapper.load(options.href, function() {
@@ -100,11 +106,10 @@
 				,data = $this.data()
 				,options = $.extend({}, data, opts)
 				;
-			if ($this.attr('href') != '' && $this.attr('href') != '#') {
+			if ($this.attr('href') !== '' && $this.attr('href') != '#') {
 				options.href = $this.attr('href');
 			}
-			delete options.scomodal;
-			$this.data('scomodal', new Modal(options));
+			new Modal(options);
 		});
 	};
 
@@ -118,7 +123,7 @@
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
 	};
 
-	$(document).on('click.scomodal', '[data-trigger="modal"]', function(e) {
+	$(document).on('click.scomodal', '[data-trigger="modal"]', function() {
 		$(this).scomodal();
 		if ($(this).is('a')) {
 			return false;

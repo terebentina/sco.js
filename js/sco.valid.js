@@ -26,7 +26,8 @@
     if (typeof define === 'function' && define.amd) {
         // Register as an anonymous AMD module:
         define([
-            'jquery', 'jquery.form.js'
+            'jquery',
+			'../jquery.form.js'
         ], factory);
     } else {
         // Browser globals:
@@ -35,7 +36,7 @@
 }(function($) {
 	"use strict";
 
-	$.scovalid = function( $form, options ) {
+	$.scovalid = function($form, options) {
 		this.$form = $form;
 		this.options = $.extend({}, $.scovalid.defaults, options);
 		this.allowed_rules = [];
