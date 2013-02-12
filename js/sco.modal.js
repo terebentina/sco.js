@@ -20,116 +20,136 @@
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true, eqeqeq:false */
 /*global define:true, Spinner:true */
 
-(function(factory) {
+;(function($, undefined) {
 	"use strict";
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery'
-			,'../spin.js'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_modal';
 
 	function Modal(options) {
-		options = $.extend({}, $.fn.scomodal.defaults, options);
+		var self = this;
 
-		var $modal = $(options.target).attr('class', 'modal fade')
-			,$backdrop = $('.modal-backdrop')
-			,$content_wrapper
-			,title
-			;
+		var init = function() {
+			self.options = $.extend({}, $.fn.scojs_modal.defaults, options);
+			self.$modal = $(self.options.target).attr('class', 'modal fade').hide();
+			self.$backdrop = $('.modal-backdrop');
 
-		if (!$modal.length) {
-			$modal = $('<div class="modal fade" id="'+options.target.substr(1)+'"><div class="modal-header"><a class="close" href="#" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo('body');
-		}
-		title = options.title;
-		if (title === '') {
-			title = '&nbsp;';
-		}
-		$modal.find('.modal-header h3').html(title);
+			var $content_wrapper
+				,title
+				;
 
-		if (typeof options.cssclass !== 'undefined') {
-			$modal.addClass(options.cssclass);
-		}
-
-		if (typeof options.width !== 'undefined') {
-			$modal.width(options.width);
-		}
-
-		if (typeof options.left !== 'undefined') {
-			$modal.css({'left': options.left});
-		}
-
-		if (typeof options.height !== 'undefined') {
-			$modal.height(options.height);
-		}
-
-		if (typeof options.top !== 'undefined') {
-			$modal.css({'top': options.top});
-		}
-
-		if (!$backdrop.length) {
-			$backdrop = $('<div class="modal-backdrop fade" />').appendTo(document.body);
-			title = $backdrop[0].offsetWidth; // force reflow. "title = " is not needed but I added it just to avoid jshint warnings
-			$backdrop.addClass('in');
-		}
-		$content_wrapper = $modal.find('.inner');
-		$modal.off('close.scomodal').on('close.scomodal', function() {
-			$modal.hide().off('close.scomodal');
-			$content_wrapper.html('');
-			$('.modal-backdrop').remove();
-			if (typeof options.onClose === 'function') {
-				options.onClose.call(this, options);
+			if (!self.$modal.length) {
+				self.$modal = $('<div class="modal fade" id="' + self.options.target.substr(1) + '"><div class="modal-header"><a class="close" href="#" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo(self.options.appendTo).hide();
 			}
-		}).show().addClass('in');
+			title = self.options.title;
+			if (title === '') {
+				title = '&nbsp;';
+			}
+			self.$modal.find('.modal-header h3').html(title);
 
-		if (typeof options.href !== 'undefined') {
-			var spinner = new Spinner({color: '#3d9bce'}).spin($modal[0]);
-			$content_wrapper.load(options.href, function() {
-				spinner.stop();
-			});
-		} else {
-			$content_wrapper.html(options.content);
+			if (self.options.cssclass !== undefined) {
+				self.$modal.addClass(self.options.cssclass);
+			}
+
+			if (self.options.width !== undefined) {
+				self.$modal.width(self.options.width);
+			}
+
+			if (self.options.left !== undefined) {
+				self.$modal.css({'left': self.options.left});
+			}
+
+			if (self.options.height !== undefined) {
+				self.$modal.height(self.options.height);
+			}
+
+			if (self.options.top !== undefined) {
+				self.$modal.css({'top': self.options.top});
+			}
+
+			if (!self.$backdrop.length) {
+				self.$backdrop = $('<div class="modal-backdrop fade" />').appendTo(self.options.appendTo);
+				title = self.$backdrop[0].offsetWidth; // force reflow. "title = " is not needed but I added it just to avoid jshint warnings
+				self.$backdrop.addClass('in');
+			}
+
+			self.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {self.close.call(self)});
+
+			if (self.options.href !== undefined && self.options.href !== '' && self.options.href !== '#') {
+				var spinner = new Spinner({color: '#3d9bce'}).spin(self.$modal[0]);
+				self.$modal.find('.inner').load(self.options.href, function() {
+					spinner.stop();
+					self.$modal.trigger('loaded');
+				});
+			} else {
+				self.$modal.find('.inner').html(self.options.content);
+				self.$modal.trigger('loaded');
+			}
 		}
+
+		init();
 	}
 
 
-	$.fn.scomodal = function(opts) {
-		return this.each(function() {
-			var $this = $(this)
-				,data = $this.data()
-				,options = $.extend({}, data, opts)
-				;
-			if ($this.attr('href') !== '' && $this.attr('href') != '#') {
-				options.href = $this.attr('href');
+	Modal.prototype = $.extend(Modal.prototype, {
+		show: function() {
+			this.$modal.show().addClass('in');
+		}
+
+		,close: function() {
+			this.$modal.hide().off('close.' + pluginName).find('.inner').html('');
+			this.$backdrop.remove();
+			if (typeof this.options.onClose === 'function') {
+				this.options.onClose.call(this, this.options);
 			}
-			new Modal(options);
+		}
+
+		,destroy: function() {
+			this.$modal.remove();
+			this.$backdrop.remove();
+			this.$modal = null;
+			this.$backdrop = null;
+		}
+	});
+
+
+	$.fn.scojs_modal = function(options) {
+		this.each(function() {
+			if (!$.data(this, pluginName)) {
+				var $this = $(this)
+					,data = $this.data()
+					,mod
+					;
+				options = $.extend({}, options, data)
+				if ($this.attr('href') !== '' && $this.attr('href') != '#') {
+					options.href = $this.attr('href');
+				}
+				$.data(this, pluginName, (mod = new Modal(options)));
+				mod.show();
+			}
 		});
+
+		return this;
 	};
 
-	$.scomodal = function(options) {
+	$.scojs_modal = function(options) {
 		return new Modal(options);
 	};
 
-	$.fn.scomodal.defaults = {
+	$.fn.scojs_modal.defaults = {
 		title: '&nbsp;'		// modal title
 		,target: '#modal'	// the modal id. MUST be an id for now.
+		,remote: null		// the url to load
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
+		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 	};
 
-	$(document).on('click.scomodal', '[data-trigger="modal"]', function() {
-		$(this).scomodal();
+	$(document).on('click.' + pluginName, '[data-trigger="modal"]', function() {
+		$(this).scojs_modal();
 		if ($(this).is('a')) {
 			return false;
 		}
-	}).on('click.scomodal', '[data-dismiss="modal"]', function(e) {
+	}).on('click.' + pluginName, '[data-dismiss="modal"]', function(e) {
 		e.preventDefault();
 		$(this).parents('.modal').trigger('close');
 	});
-}));
+})(jQuery);

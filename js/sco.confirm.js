@@ -20,58 +20,80 @@
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
 /*global define:true, _:true */
 
-(function(factory) {
+;(function($, undefined) {
 	"use strict";
+	if (typeof $.fn.scojs === undefined) {
+		$.fn.scojs = {};
+	}
+	if (typeof $.scojs === undefined) {
+		$.scojs = {};
+	}
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery',
-			'sco.modal.js'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_confirm';
 
-	$.fn.sconfirm = function(options) {
-		return this.each(function() {
-			var $this = $(this)
-				,data = $this.data()
-				,title = $this.attr('title');
+	function Confirm(options) {
 
-			data = $.extend({}, $.fn.sconfirm.defaults, data, options);
-			if (!title) {
-				title = 'this';
-			}
-			data.content = data.content.replace(':title', title);
-			var $modal = $(data.target);
+		var init = function() {
+			this.options = $.extend({}, $.fn.scojs.confirm.defaults, options);
+
+			var $modal = $(this.options.target);
 			if (!$modal.length) {
-				$modal = $('<div class="modal" id="'+data.target.substr(1)+'"><div class="modal-body inner"/><div class="modal-footer"><a class="btn" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-danger" data-action="1">yes</a></div></div>').appendTo('body');
-				if (data.onaction) {
+				$modal = $('<div class="modal" id="'+this.options.target.substr(1)+'"><div class="modal-body inner"/><div class="modal-footer"><a class="btn" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-danger" data-action="1">yes</a></div></div>').appendTo('body').hide();
+				if (typeof this.options.action == 'function') {
 					$modal.find('[data-action]').on('click.sconfirm', function(e) {
 						e.preventDefault();
-						window[data.onaction]();
+						window[this.options.onaction]();
 					});
-				} else {
-					$modal.find('[data-action]').attr('href', $this.attr('href'));
+				} else if (this.options.action == 'string') {
+					$modal.find('[data-action]').attr('href', this.options.action_href);
 				}
 			}
 
-			$.scomodal(data);
+			this.scomodal = $.scojs.modal(options);
+			this.show();
+		}
+
+		init();
+	}
+
+	Confirm.prototype.show = function() {
+		this.scomodal.show();
+	}
+
+
+	$.fn.scojs.confirm = function(options) {
+		return this.each(function() {
+			if (!$.data(this, pluginName)) {
+				var $this = $(this)
+					,data = $this.data()
+					,title = $this.attr('title')
+					;
+				options = $.extend({}, options, data);
+				if (!title) {
+					title = 'this';
+				}
+				options.content = options.content.replace(':title', title);
+				if (!options.action) {
+					options.action = $this.attr('href');
+				}
+				$.data(this, pluginName, new Confirm(options));
+			}
 		});
 	};
 
-	$.fn.sconfirm.defaults = {
+	$.scojs.confirm = function(options) {
+		return new Confirm(options);
+	};
+
+	$.fn.scojs.confirm.defaults = {
 		content: 'Are you sure you want to delete :title?'
+		,action: null
 		,cssclass: 'confirm_modal'
 		,target: '#confirm_modal'	// this must be an id. This is a limitation for now, @todo should be fixed
 	};
 
-	$(document).on('click.sconfirm', '[data-trigger="confirm"]', function(e) {
-		$(this).sconfirm();
+	$(document).on('click.' + pluginName, '[data-trigger="confirm"]', function(e) {
+		$(this).scojs.confirm();
 		return false;
 	});
-}));
+})(jQuery);
