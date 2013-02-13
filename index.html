@@ -4,7 +4,7 @@
 	<meta charset='utf-8' />
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Sco.js : A collection of js utlis for the web. Inspired by the twitter bootstrap js components but going beyond" />
+	<meta name="description" content="Sco.js : A collection of js utlis for the web. Inspired by the twitter bootstrap js components, with real world applicability" />
 
 	<link href="assets/css/bootstrap.css" rel="stylesheet">
 	<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -14,21 +14,21 @@
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script src="assets/js/bootstrap-scrollspy.js"></script>
     <script src="assets/js/bootstrap-affix.js"></script>
-	<script src="https://raw.github.com/terebentina/sco.js/master/js/sco.modal.js"></script>
-	<script src="https://raw.github.com/terebentina/sco.js/master/js/sco.confirm.js"></script>
+	<script src="assets/js/sco.modal.js"></script>
+	<script src="assets/js/sco.confirm.js"></script>
 	<script src="assets/js/prettify.js"></script>
 	<script src="assets/js/app.js"></script>
 	<title>Sco.js</title>
 </head>
 
-<body data-spy="scroll" data-target=".bs-docs-sidebar">
+<body data-spy="scroll" data-target=".sidebar">
 
 	<header class="inner">
 		<div class="container">
 			<a id="forkme_banner" href="https://github.com/terebentina/sco.js">View on GitHub</a>
 
 			<h1 id="project_title">Sco.js</h1>
-			<h2 id="project_tagline">A collection of js utlis for the web. Inspired by the twitter bootstrap js components but going beyond</h2>
+			<h2 id="project_tagline">A collection of js utlis for the web. Inspired by the twitter bootstrap js components, with real world applicability</h2>
 
 			<section id="downloads">
 				<a class="zip_download_link" href="https://github.com/terebentina/sco.js/zipball/master">Download this project as a .zip file</a>
@@ -40,10 +40,10 @@
 	<!-- MAIN CONTENT -->
 	<div class="container">
 		<div class="row">
-			<div class="span3">
+			<div class="span3 sidebar">
 				<ul class="nav nav-list sidenav" data-spy="affix" data-offset-top="200">
 					<li><a href="#overview"><i class="icon-chevron-right"></i> Overview</a></li>
-					<li><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+					<li><a href="#modals"><i class="icon-chevron-right"></i> Modal</a></li>
 					<li><a href="#confirm"><i class="icon-chevron-right"></i> Confirm</a></li>
 					<li><a href="#tab"><i class="icon-chevron-right"></i> Tab</a></li>
 					<li><a href="#ajax"><i class="icon-chevron-right"></i> Ajax</a></li>
@@ -78,7 +78,7 @@
 					<p>In most cases the css comes from bootstrap</p>
 				</section>
 
-				<section id="modal">
+				<section id="modals">
 					<div class="page-header">
 						<h1>Modal <small>sco.modal.js</small></h1>
 					</div>
@@ -97,11 +97,11 @@
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<a data-trigger="modal" href="http://c.test.com/plants/write" class="btn btn-primary btn-large">Launch demo modal</a>
+						<a data-trigger="modal" href="lipsum.html" data-title="Remote loaded content" class="btn btn-primary btn-large">Launch demo modal</a>
 					</div>
 <pre class="prettyprint linenums">
 &lt;!-- Button to trigger modal -->
-&lt;a data-trigger="modal" href="http://c.test.com/plants/write" class="btn">Launch demo modal&lt;/a>
+&lt;a data-trigger="modal" href="lipsum.html" data-title="Remote loaded content" class="btn">Launch demo modal&lt;/a>
 </pre>
 
 					<h2>Usage</h2>

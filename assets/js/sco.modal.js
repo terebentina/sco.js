@@ -73,16 +73,18 @@
 			}
 
 			self.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {self.close.call(self)});
-
 			if (self.options.remote !== undefined && self.options.remote != '' && self.options.remote !== '#') {
-				var spinner = new Spinner({color: '#3d9bce'}).spin(self.$modal[0]);
+				var spinner;
+				if (typeof Spinner == 'function') {
+					spinner = new Spinner({color: '#3d9bce'}).spin(self.$modal[0]);
+				}
 				self.$modal.find('.inner').load(self.options.remote, function() {
-					spinner.stop();
-					self.$modal.trigger('loaded');
+					if (spinner) {
+						spinner.stop();
+					}
 				});
 			} else {
 				self.$modal.find('.inner').html(self.options.content);
-				self.$modal.trigger('loaded');
 			}
 		}
 
@@ -114,18 +116,20 @@
 
 	$.fn.scojs_modal = function(options) {
 		return this.each(function() {
+			var mod;
 			if (!$.data(this, pluginName)) {
 				var $this = $(this)
 					,data = $this.data()
-					,mod
 					;
 				options = $.extend({}, options, data)
 				if ($this.attr('href') !== '' && $this.attr('href') != '#') {
 					options.remote = $this.attr('href');
 				}
 				$.data(this, pluginName, (mod = new Modal(options)));
-				mod.show();
+			} else {
+				mod = $.data(this, pluginName);
 			}
+			mod.show();
 		});
 	};
 
