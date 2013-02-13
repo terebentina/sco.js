@@ -74,9 +74,9 @@
 
 			self.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {self.close.call(self)});
 
-			if (self.options.href !== undefined && self.options.href !== '' && self.options.href !== '#') {
+			if (self.options.remote !== undefined && self.options.remote != '' && self.options.remote !== '#') {
 				var spinner = new Spinner({color: '#3d9bce'}).spin(self.$modal[0]);
-				self.$modal.find('.inner').load(self.options.href, function() {
+				self.$modal.find('.inner').load(self.options.remote, function() {
 					spinner.stop();
 					self.$modal.trigger('loaded');
 				});
@@ -121,7 +121,7 @@
 					;
 				options = $.extend({}, options, data)
 				if ($this.attr('href') !== '' && $this.attr('href') != '#') {
-					options.href = $this.attr('href');
+					options.remote = $this.attr('href');
 				}
 				$.data(this, pluginName, (mod = new Modal(options)));
 				mod.show();
@@ -138,7 +138,6 @@
 	$.fn.scojs_modal.defaults = {
 		title: '&nbsp;'		// modal title
 		,target: '#modal'	// the modal id. MUST be an id for now.
-		,remote: null		// the url to load
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
 		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 	};

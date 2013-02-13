@@ -1,6 +1,6 @@
 $(function () {
 
-	module('sco.modal object');
+	module('modal object');
 
 		test('should create html on call', function() {
 			var $modal = $.scojs_modal({
@@ -65,7 +65,7 @@ $(function () {
 
 
 
-	module('sco.modal data-api');
+	module('modal data-api');
 
 		test('should be created on click', function() {
 			var $fixture = $('#qunit-fixture');
