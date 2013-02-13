@@ -1,74 +1,121 @@
 <!DOCTYPE html>
 <html>
+<head>
+	<meta charset='utf-8' />
+	<meta http-equiv="X-UA-Compatible" content="chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Sco.js : A collection of js utlis for the web. Inspired by the twitter bootstrap js components but going beyond" />
 
-  <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Sco.js : A collection of js utlis for the web. Inspired by the twitter bootstrap js components but doing things in a different way and doing more / better :)" />
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+	<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link href="assets/css/prettify.css" rel="stylesheet">
+	<link href="assets/css/styles.css" rel="stylesheet">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script src="assets/js/bootstrap-scrollspy.js"></script>
+    <script src="assets/js/bootstrap-affix.js"></script>
+	<script src="https://raw.github.com/terebentina/sco.js/master/js/sco.modal.js"></script>
+	<script src="https://raw.github.com/terebentina/sco.js/master/js/sco.confirm.js"></script>
+	<script src="assets/js/prettify.js"></script>
+	<script src="assets/js/app.js"></script>
+	<title>Sco.js</title>
+</head>
 
-    <title>Sco.js</title>
-  </head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
 
-  <body>
+	<header class="inner">
+		<div class="container">
+			<a id="forkme_banner" href="https://github.com/terebentina/sco.js">View on GitHub</a>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/terebentina/sco.js">View on GitHub</a>
+			<h1 id="project_title">Sco.js</h1>
+			<h2 id="project_tagline">A collection of js utlis for the web. Inspired by the twitter bootstrap js components but going beyond</h2>
 
-          <h1 id="project_title">Sco.js</h1>
-          <h2 id="project_tagline">A collection of js utlis for the web. Inspired by the twitter bootstrap js components but doing things in a different way and doing more / better :)</h2>
+			<section id="downloads">
+				<a class="zip_download_link" href="https://github.com/terebentina/sco.js/zipball/master">Download this project as a .zip file</a>
+				<a class="tar_download_link" href="https://github.com/terebentina/sco.js/tarball/master">Download this project as a tar.gz file</a>
+			</section>
+		</div>
+	</header>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/terebentina/sco.js/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/terebentina/sco.js/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+	<!-- MAIN CONTENT -->
+	<div class="container">
+		<div class="row">
+			<div class="span3">
+				<ul class="nav nav-list sidenav" data-spy="affix" data-offset-top="200">
+					<li><a href="#overview"><i class="icon-chevron-right"></i> Overview</a></li>
+					<li><a href="#modal"><i class="icon-chevron-right"></i> Modal</a></li>
+					<li><a href="#confirm"><i class="icon-chevron-right"></i> Confirm</a></li>
+					<li><a href="#tab"><i class="icon-chevron-right"></i> Tab</a></li>
+					<li><a href="#ajax"><i class="icon-chevron-right"></i> Ajax</a></li>
+					<li><a href="#collapse"><i class="icon-chevron-right"></i> Collapse</a></li>
+					<li><a href="#countdown"><i class="icon-chevron-right"></i> Countdown</a></li>
+					<li><a href="#message"><i class="icon-chevron-right"></i> Message</a></li>
+					<li><a href="#pagination"><i class="icon-chevron-right"></i> Pagination</a></li>
+					<li><a href="#placeholder"><i class="icon-chevron-right"></i> Placeholder</a></li>
+					<li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
+					<li><a href="#valid"><i class="icon-chevron-right"></i> Valid</a></li>
+				</ul>
+			</div>
+			<div class="span9">
+				<section id="overview">
+					<div class="page-header">
+						<h1>Sco.js overview</h1>
+					</div>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h3>Welcome to GitHub Pages.</h3>
+					<h3>Why?</h3>
+					<p>The reason for creating sco.js was to improve the existing bootstrap js and to provide specific use-cases for the projects I was working on.
+					The bootstrap js plugins are great for general stuff but whenever you want something more in-depth or a specific behaviour, they fall short.
+					Most of the bootstrap js plugins are not very extensible (or they were not when I created my version of the plugins) and where they are, my requirements
+					 were too different to just extend with 1-2 lines of code. This is not to say bootstrap and its js components are bad! It's a really good framework for
+					 rapid development but...1 size doesn't fit all. In my case it almost fit ;)</p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+					<h3>What you get</h3>
+					<p>All plugins in sco.js can be used on a bootstrap-enabled site but they can be used separately as well. Also, sco.js contains plugins that are not available
+					in bootstrap. Plugins are unit tested and in use on production sites. Each plugin can be enabled and configured via <strong>data-attributes</strong> <code>data-trigger="pluginName"</code> or <strong>programatically</strong>
+					<code>var $modal = $.scojs_modal({...})</code>.
+					 Each plugin has a "reason for being" (see below) - what it tries to achieve, what does differently from bootstrap, why I created it in the first place.</p>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
+					<p>In most cases the css comes from bootstrap</p>
+				</section>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+				<section id="modal">
+					<div class="page-header">
+						<h1>Modal <small>sco.modal.js</small></h1>
+					</div>
 
-<h3>Designer Templates</h3>
+					<h3>Why?</h3>
+					<p>Because bootstrap modals don't (didn't?) allow remote content. I didn't want to preload modal contents on a page and keep that hidden until a user clicked
+					 on some link that triggered that modal. Imagine a site with the login and signup links in header. Asuming the login and signup are modals, this means every page
+					 should have a hidden login and signup modal for the case a user might click on the login/signup links. I just didn't want that at all. I didn't want a modal
+					to exist on the page until it was actually needed.</p>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+					<h3>What?</h3>
+					<p>The primary use of the modal is to load remote content (loaded via ajax) and display that in an overlay, on top of the current page.
+					It can also be used to display something without loading it but it's not its primary use case. This second use case was created to allow
+					extensions of the modal to add content.
+					</p>
 
-<h3>Rather Drive Stick?</h3>
+					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<a data-trigger="modal" href="http://c.test.com/plants/write" class="btn btn-primary btn-large">Launch demo modal</a>
+					</div>
+<pre class="prettyprint linenums">
+&lt;!-- Button to trigger modal -->
+&lt;a data-trigger="modal" href="http://c.test.com/plants/write" class="btn">Launch demo modal&lt;/a>
+</pre>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+					<h2>Usage</h2>
+					<h3>Via data attributes</h3>
+				</section>
+			</div>
+		</div>
+	</div>
 
-<h3>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-    </div>
-
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Sco.js maintained by <a href="https://github.com/terebentina">terebentina</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
-      </footer>
-    </div>
-
-    
-
-  </body>
+	<!-- FOOTER  -->
+	<footer class="footer">
+		<div class="container">
+			<p class="copyright">Sco.js maintained by <a href="https://plus.google.com/105747399411005497248?rel=author">Dan Caragea</a></p>
+		</div>
+	</footer>
+</body>
 </html>
