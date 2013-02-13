@@ -113,7 +113,7 @@
 
 
 	$.fn.scojs_modal = function(options) {
-		this.each(function() {
+		return this.each(function() {
 			if (!$.data(this, pluginName)) {
 				var $this = $(this)
 					,data = $this.data()
@@ -127,8 +127,6 @@
 				mod.show();
 			}
 		});
-
-		return this;
 	};
 
 	$.scojs_modal = function(options) {
