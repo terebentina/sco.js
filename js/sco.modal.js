@@ -75,9 +75,14 @@
 			self.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {self.close.call(self)});
 
 			if (self.options.remote !== undefined && self.options.remote != '' && self.options.remote !== '#') {
-				var spinner = new Spinner({color: '#3d9bce'}).spin(self.$modal[0]);
+				var spinner;
+				if (Spinner) {
+					spinner = new Spinner({color: '#3d9bce'}).spin(self.$modal[0]);
+				}
 				self.$modal.find('.inner').load(self.options.remote, function() {
-					spinner.stop();
+					if (spinner) {
+						spinner.stop();
+					}
 					self.$modal.trigger('loaded');
 				});
 			} else {
@@ -142,6 +147,7 @@
 
 	$(document).on('click.' + pluginName, '[data-trigger="modal"]', function() {
 		$(this).scojs_modal();
+		console.log('isa', $(this).is('a'));
 		if ($(this).is('a')) {
 			return false;
 		}
