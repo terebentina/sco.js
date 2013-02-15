@@ -166,7 +166,7 @@
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
 		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 		,cache: false		// should we cache the output of the ajax calls so that next time they're shown from cache?
-		,keyboard: true
+		,keyboard: false
 		,nobackdrop: false
 	};
 
