@@ -98,11 +98,11 @@
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<a data-trigger="modal" href="lipsum.html" data-title="Remotely loaded content" class="btn btn-primary btn-large">Launch demo modal</a>
+						<a data-trigger="modal" href="lipsum.html" data-title="Modal title" class="btn btn-primary btn-large">Launch demo modal</a>
 					</div>
 					<pre class="prettyprint linenums">
 &lt;!-- Button to trigger modal -->
-&lt;a data-trigger="modal" href="lipsum.html" data-title="Remotely loaded content" class="btn">Launch demo modal&lt;/a>
+&lt;a data-trigger="modal" href="lipsum.html" data-title="Modal title" class="btn">Launch demo modal&lt;/a>
 
 &lt;!-- Modal -->
 &lt;div class="modal fade in" id="modal">
@@ -139,6 +139,10 @@
 					<p>This gives you access to the created javascript object. Note that when you launch the modal this way, it's not shown by default. You'll have to call <code>modal.show()</code>
 					at a later time to show the modal.</p>
 
+					<h3>Dependencies</h3>
+					<p>The modal does not depend on other libraries (other than JQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
+					If spin.js is found, a spinning wheel is displayed during the loading of remote content.</p>
+
 					<h2>Options</h2>
 					<p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>, as in <code>data-keyboard="1"</code>.</p>
 					<table class="table table-bordered table-striped">
@@ -154,14 +158,14 @@
 							<tr>
 								<td>title</td>
 								<td>string</td>
-								<td>&nbsp;</td>
+								<td>&amp;nbsp;</td>
 								<td>The title of the modal.</td>
 							</tr>
 							<tr>
 								<td>target</td>
 								<td>string</td>
 								<td>#modal</td>
-								<td>The modal ID. If a HTML element with this ID already exists in the DOM, it will be used, otherwise a standard HTML modal structure will be created
+								<td>The modal ID. If an HTML element with this ID already exists in the DOM, it will be used, otherwise a standard HTML modal structure will be created
 								automatically. The default structure is:
 									<pre class="prettyprint linenums">
 &lt;div class="modal fade" id="modal">
@@ -217,8 +221,84 @@
 								<td>false</td>
 								<td>Does not show the modal-backdrop element if set to true.</td>
 							</tr>
+							<tr>
+								<td>cssclass</td>
+								<td>string</td>
+								<td></td>
+								<td>The css class(es) to add to modal.</td>
+							</tr>
+							<tr>
+								<td>width</td>
+								<td>int</td>
+								<td></td>
+								<td>The modal width. This will be set inline on the .modal element. You should use the cssclass to add css that sets the width instead of this option.</td>
+							</tr>
+							<tr>
+								<td>height</td>
+								<td>int</td>
+								<td></td>
+								<td>The modal height. This will be set inline on the .modal element. You should use the cssclass to add css that sets the height instead of this option.</td>
+							</tr>
+							<tr>
+								<td>left</td>
+								<td>int</td>
+								<td></td>
+								<td>The modal left position. This will be set inline on the .modal element. You shouldn't normally have to use this option as the default css centers the modal on screen.
+								Could be used for some sort of on-page help system/guides.
+								</td>
+							</tr>
+							<tr>
+								<td>top</td>
+								<td>int</td>
+								<td></td>
+								<td>The modal top position. This will be set inline on the .modal element. You shouldn't normally have to use this option as the default css centers the modal on screen.
+								Could be used for some sort of on-page help system/guides.
+								</td>
+							</tr>
+							<tr>
+								<td>onClose</td>
+								<td>function</td>
+								<td></td>
+								<td>If set, this function is called after the modal is closed.
+								</td>
+							</tr>
 						</tbody>
 					</table>
+					<h2>Methods</h2>
+					<h4>.scojs_modal(options)</h4>
+					<pre class="prettyprint linenums">
+$('#trigger').scojs_modal({
+  title: 'Modals are cool',
+  content: "No, they're not"
+});</pre>
+					<p>There are no other methods available in data-api or JQuery mode yet. The following methods are available in javascript mode only:</p>
+					<h4>.show()</h4>
+					<p>Shows the modal.</p>
+					<pre class="prettyprint linenums">
+var modal = $.scojs_modal({
+  keyboard: true
+});
+modal.show();</pre>
+
+					<h4>.close()</h4>
+					<p>Closes the modal.</p>
+					<pre class="prettyprint linenums">
+var modal = $.scojs_modal({
+  keyboard: true
+});
+modal.show();
+modal.close();
+</pre>
+
+					<h4>.destroy()</h4>
+					<p>Closes and destroys the modal, removes all modal HTML and events from the DOM.</p>
+					<pre class="prettyprint linenums">
+var modal = $.scojs_modal({
+  keyboard: true
+});
+modal.show();
+modal.destroy();
+</pre>
 				</section>
 			</div>
 		</div>
