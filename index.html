@@ -93,33 +93,33 @@
 					</p>
 
 					<h3>Why?</h3>
-					<p>Because bootstrap modals didn't allow remote content (they do now tho). Also, because I wanted the modal html to be created by the plugin
+					<p>Because bootstrap modals didn't allow remote content (they do now though). Also, because I wanted the modal HTML to be created by the plugin
 					if it didn't exist in the page already.</p>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<a data-trigger="modal" href="lipsum.html" data-title="Remote loaded content" class="btn btn-primary btn-large">Launch demo modal</a>
+						<a data-trigger="modal" href="lipsum.html" data-title="Remotely loaded content" class="btn btn-primary btn-large">Launch demo modal</a>
 					</div>
 					<pre class="prettyprint linenums">
 &lt;!-- Button to trigger modal -->
-&lt;a data-trigger="modal" href="lipsum.html" data-title="Remote loaded content" class="btn">Launch demo modal&lt;/a>
+&lt;a data-trigger="modal" href="lipsum.html" data-title="Remotely loaded content" class="btn">Launch demo modal&lt;/a>
 
 &lt;!-- Modal -->
 &lt;div class="modal fade in" id="modal">
-	&lt;div class="modal-header">
-		&lt;a class="close" href="#" data-dismiss="modal">×&lt;/a>
-		&lt;h3>Modal header&lt;/h3>
-	&lt;/div>
-	&lt;div class="inner">
-		remote content goes here
-	&lt;/div>
+  &lt;div class="modal-header">
+    &lt;a class="close" href="#" data-dismiss="modal">×&lt;/a>
+    &lt;h3>Modal header&lt;/h3>
+  &lt;/div>
+  &lt;div class="inner">
+    remote content goes here
+  &lt;/div>
 &lt;/div></pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
 					<p>Look ma', no js code:</p>
 					<pre class="prettyprint linenums">&lt;button type="button" data-trigger="modal">Launch modal&lt;/button></pre>
-					<p>All plugin's options are available to use as data attributes. The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
+					<p>All plugin options are available to use as data attributes. The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
 					having a <code>data-trigger="modal"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
 
 					<h3>Via jquery</h3>
@@ -127,11 +127,11 @@
 					or
 					<pre class="prettyprint linenums">$('.modal_triggers').scojs_modal(options);</pre>
 					<p>If the trigger element has <code>data-</code> attributes and you pass options as well, the data attributes overwrite the options with the same name.</p>
-					<p>This part is quite different from bootstrap's implementation. In bootstrap, the selected element should be the modal (meaning the modal html should already exist in the dom).
-					It also means the modal html cannot be reused by other modals (i.e. if you want more modals on the page, each has to have its own id/html code).<br>
+					<p>This part is quite different from bootstrap's implementation. In bootstrap, the selected element should be the modal (meaning the modal HTML should already exist in the dom).
+					It also means the modal HTML cannot be reused by other modals (i.e. if you want more modals on the page, each has to have its own id/html code).<br>
 					In our case, the selected element is the trigger of the modal (what you click on to launch the modal) and the modal is built based on the trigger's options.
-					You definitely have the option to use different modals but, by default, the same modal html is reused by every modal instance on the page.
-					This decision was made because we found out that we never wanted more modals appearing on the page at the same time. So reusing the same modal html for every triggered modal
+					You definitely have the option to use different modals but, by default, the same modal HTML is reused by every modal instance on the page.
+					This decision was made because we found out that we never wanted more modals appearing on the page at the same time. So reusing the same modal HTML for every triggered modal
 					seemed quite logical.</p>
 
 					<h3>Via javascript</h3>
@@ -161,7 +161,7 @@
 								<td>target</td>
 								<td>string</td>
 								<td>#modal</td>
-								<td>The modal ID. If a html element with this ID already exists in the DOM, it will be used, otherwise a standard html modal structure will be created
+								<td>The modal ID. If a HTML element with this ID already exists in the DOM, it will be used, otherwise a standard HTML modal structure will be created
 								automatically. The default structure is:
 									<pre class="prettyprint linenums">
 &lt;div class="modal fade" id="modal">
@@ -184,11 +184,11 @@
 								<td>content</td>
 								<td>string</td>
 								<td>''</td>
-								<td>The content to use instead inside the modal of remote loading. You could use it like
+								<td>Use this to define the modal content when you don't want to load the content remotely. Use either this option or the remote one but not both at once. You could use it like
 									<pre class="prettyprint linenums">$('#trigger').scojs_modal({content: 'Lorem ipsum...'});</pre>
 									or
 									<pre class="prettyprint linenums">$('#trigger').scojs_modal({content: $('#other').html()});</pre>
-									Note that if both the remote and content options are specified, the content is ignored. With the data-api, set the href of the triggering <code>&lt;a&gt;</code> element
+									Note that if both the remote and content options are specified, the content is ignored. With the data-api, set the href
 									to an empty string or '#' to have the remote option ignored.
 								</td>
 							</tr>
@@ -196,7 +196,7 @@
 								<td>appendTo</td>
 								<td>string</td>
 								<td>body</td>
-								<td>By default, the new modal and backdrop html are appended to the body element. Use this option to append them to some other element.</td>
+								<td>By default, the new modal and backdrop HTML are appended to the body element. Use this option to append them to some other element.</td>
 							</tr>
 							<tr>
 								<td>cache</td>
@@ -209,7 +209,7 @@
 								<td>keyboard</td>
 								<td>boolean</td>
 								<td>false</td>
-								<td>Closes the modal when escape key is pressed.</td>
+								<td>Closes the modal when the escape key is pressed.</td>
 							</tr>
 							<tr>
 								<td>nobackdrop</td>
