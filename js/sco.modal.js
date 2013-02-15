@@ -18,7 +18,7 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true, eqeqeq:false */
-/*global define:true, Spinner:true */
+/*global Spinner:true */
 
 ;(function($, undefined) {
 	"use strict";
@@ -29,12 +29,12 @@
 		this.options = $.extend({}, $.fn.scojs_modal.defaults, options);
 		this.$modal = $(this.options.target).attr('class', 'modal fade').hide();
 
-		var self = this;
-		var init = function() {
-			if (self.options.title === '') {
-				self.options.title = '&nbsp;';
-			}
-		}
+		var self = this
+			,init = function() {
+				if (self.options.title === '') {
+					self.options.title = '&nbsp;';
+				}
+			};
 
 		init();
 	}
@@ -74,15 +74,21 @@
 				this.$modal.css({'top': this.options.top});
 			}
 
+			if (this.options.keyboard) {
+				this.escape();
+			}
+
 			if (!this.options.nobackdrop) {
 				if (!$backdrop.length) {
 					$backdrop = $('<div class="modal-backdrop fade" />').appendTo(this.options.appendTo);
 				}
-				var tmp = $backdrop[0].offsetWidth; // force reflow. "tmp = " is not needed but I added it just to avoid jshint warnings
+				$backdrop[0].offsetWidth; // force reflow
 				$backdrop.addClass('in');
 			}
 
-			this.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {self.close.call(self)});
+			this.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {
+				self.close.call(self);
+			});
 			if (this.options.remote !== undefined && this.options.remote != '' && this.options.remote !== '#') {
 				var spinner;
 				if (typeof Spinner == 'function') {
@@ -105,7 +111,8 @@
 		}
 
 		,close: function() {
-			this.$modal.hide().off('close.' + pluginName).find('.inner').html('');
+			this.$modal.hide().off('.' + pluginName).find('.inner').html('');
+			$(document).off('keyup.' + pluginName);
 			$('.modal-backdrop').remove();
 			if (typeof this.options.onClose === 'function') {
 				this.options.onClose.call(this, this.options);
@@ -116,6 +123,15 @@
 			this.$modal.remove();
 			$('.modal-backdrop').remove();
 			this.$modal = null;
+		}
+
+		,escape: function() {
+			var self = this;
+			$(document).on('keyup.' + pluginName, function(e) {
+				if (e.which == 27) {
+					self.close();
+				}
+			});
 		}
 	});
 
@@ -150,7 +166,7 @@
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
 		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 		,cache: false		// should we cache the output of the ajax calls so that next time they're shown from cache?
-		,closeOnEsc: false
+		,keyboard: true
 		,nobackdrop: false
 	};
 
