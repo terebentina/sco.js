@@ -18,7 +18,7 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true, eqeqeq:false */
-/*global define:true, Spinner:true */
+/*global Spinner:true */
 
 ;(function($, undefined) {
 	"use strict";
@@ -26,67 +26,15 @@
 	var pluginName = 'scojs_modal';
 
 	function Modal(options) {
-		var self = this;
+		this.options = $.extend({}, $.fn.scojs_modal.defaults, options);
+		this.$modal = $(this.options.target).attr('class', 'modal fade').hide();
 
-		var init = function() {
-			self.options = $.extend({}, $.fn.scojs_modal.defaults, options);
-			self.$modal = $(self.options.target).attr('class', 'modal fade').hide();
-			self.$backdrop = $('.modal-backdrop');
-
-			var $content_wrapper
-				,title
-				;
-
-			if (!self.$modal.length) {
-				self.$modal = $('<div class="modal fade" id="' + self.options.target.substr(1) + '"><div class="modal-header"><a class="close" href="#" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo(self.options.appendTo).hide();
-			}
-			title = self.options.title;
-			if (title === '') {
-				title = '&nbsp;';
-			}
-			self.$modal.find('.modal-header h3').html(title);
-
-			if (self.options.cssclass !== undefined) {
-				self.$modal.addClass(self.options.cssclass);
-			}
-
-			if (self.options.width !== undefined) {
-				self.$modal.width(self.options.width);
-			}
-
-			if (self.options.left !== undefined) {
-				self.$modal.css({'left': self.options.left});
-			}
-
-			if (self.options.height !== undefined) {
-				self.$modal.height(self.options.height);
-			}
-
-			if (self.options.top !== undefined) {
-				self.$modal.css({'top': self.options.top});
-			}
-
-			if (!self.$backdrop.length) {
-				self.$backdrop = $('<div class="modal-backdrop fade" />').appendTo(self.options.appendTo);
-				title = self.$backdrop[0].offsetWidth; // force reflow. "title = " is not needed but I added it just to avoid jshint warnings
-				self.$backdrop.addClass('in');
-			}
-
-			self.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {self.close.call(self)});
-			if (self.options.remote !== undefined && self.options.remote != '' && self.options.remote !== '#') {
-				var spinner;
-				if (typeof Spinner == 'function') {
-					spinner = new Spinner({color: '#3d9bce'}).spin(self.$modal[0]);
+		var self = this
+			,init = function() {
+				if (self.options.title === '') {
+					self.options.title = '&nbsp;';
 				}
-				self.$modal.find('.inner').load(self.options.remote, function() {
-					if (spinner) {
-						spinner.stop();
-					}
-				});
-			} else {
-				self.$modal.find('.inner').html(self.options.content);
-			}
-		}
+			};
 
 		init();
 	}
@@ -94,12 +42,78 @@
 
 	Modal.prototype = $.extend(Modal.prototype, {
 		show: function() {
+			var self = this
+				,$backdrop;
+
+			if (!this.options.nobackdrop) {
+				$backdrop = $('.modal-backdrop');
+			}
+			if (!this.$modal.length) {
+				this.$modal = $('<div class="modal fade" id="' + this.options.target.substr(1) + '"><div class="modal-header"><a class="close" href="#" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo(this.options.appendTo).hide();
+			}
+
+			this.$modal.find('.modal-header h3').html(this.options.title);
+
+			if (this.options.cssclass !== undefined) {
+				this.$modal.attr('class', 'modal fade ' + this.options.cssclass);
+			}
+
+			if (this.options.width !== undefined) {
+				this.$modal.width(this.options.width);
+			}
+
+			if (this.options.left !== undefined) {
+				this.$modal.css({'left': this.options.left});
+			}
+
+			if (this.options.height !== undefined) {
+				this.$modal.height(this.options.height);
+			}
+
+			if (this.options.top !== undefined) {
+				this.$modal.css({'top': this.options.top});
+			}
+
+			if (this.options.keyboard) {
+				this.escape();
+			}
+
+			if (!this.options.nobackdrop) {
+				if (!$backdrop.length) {
+					$backdrop = $('<div class="modal-backdrop fade" />').appendTo(this.options.appendTo);
+				}
+				$backdrop[0].offsetWidth; // force reflow
+				$backdrop.addClass('in');
+			}
+
+			this.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {
+				self.close.call(self);
+			});
+			if (this.options.remote !== undefined && this.options.remote != '' && this.options.remote !== '#') {
+				var spinner;
+				if (typeof Spinner == 'function') {
+					spinner = new Spinner({color: '#3d9bce'}).spin(this.$modal[0]);
+				}
+				this.$modal.find('.inner').load(this.options.remote, function() {
+					if (spinner) {
+						spinner.stop();
+					}
+					if (self.options.cache) {
+						self.options.content = $(this).html();
+						delete self.options.remote;
+					}
+				});
+			} else {
+				this.$modal.find('.inner').html(this.options.content);
+			}
+
 			this.$modal.show().addClass('in');
 		}
 
 		,close: function() {
-			this.$modal.hide().off('close.' + pluginName).find('.inner').html('');
-			this.$backdrop.remove();
+			this.$modal.hide().off('.' + pluginName).find('.inner').html('');
+			$(document).off('keyup.' + pluginName);
+			$('.modal-backdrop').remove();
 			if (typeof this.options.onClose === 'function') {
 				this.options.onClose.call(this, this.options);
 			}
@@ -107,42 +121,55 @@
 
 		,destroy: function() {
 			this.$modal.remove();
-			this.$backdrop.remove();
+			$('.modal-backdrop').remove();
 			this.$modal = null;
-			this.$backdrop = null;
+		}
+
+		,escape: function() {
+			var self = this;
+			$(document).on('keyup.' + pluginName, function(e) {
+				if (e.which == 27) {
+					self.close();
+				}
+			});
 		}
 	});
 
 
 	$.fn.scojs_modal = function(options) {
 		return this.each(function() {
-			var mod;
-			if (!$.data(this, pluginName)) {
+			var obj;
+			if (!(obj = $.data(this, pluginName))) {
 				var $this = $(this)
 					,data = $this.data()
 					;
-				options = $.extend({}, options, data)
+				options = $.extend({}, options, data);
 				if ($this.attr('href') !== '' && $this.attr('href') != '#') {
 					options.remote = $this.attr('href');
 				}
-				$.data(this, pluginName, (mod = new Modal(options)));
-			} else {
-				mod = $.data(this, pluginName);
+				obj = new Modal(options);
+				$.data(this, pluginName, obj);
 			}
-			mod.show();
+			obj.show();
 		});
 	};
+
 
 	$.scojs_modal = function(options) {
 		return new Modal(options);
 	};
+
 
 	$.fn.scojs_modal.defaults = {
 		title: '&nbsp;'		// modal title
 		,target: '#modal'	// the modal id. MUST be an id for now.
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
 		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
+		,cache: false		// should we cache the output of the ajax calls so that next time they're shown from cache?
+		,keyboard: true
+		,nobackdrop: false
 	};
+
 
 	$(document).on('click.' + pluginName, '[data-trigger="modal"]', function() {
 		$(this).scojs_modal();

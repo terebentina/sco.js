@@ -11,7 +11,7 @@
 	<link href="assets/css/prettify.css" rel="stylesheet">
 	<link href="assets/css/styles.css" rel="stylesheet">
 
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="assets/js/jquery-1.8.3.min.js"></script>
     <script src="assets/js/bootstrap-scrollspy.js"></script>
     <script src="assets/js/bootstrap-affix.js"></script>
 	<script src="assets/js/sco.modal.js"></script>
@@ -75,7 +75,11 @@
 					<code>var $modal = $.scojs_modal({...})</code>.
 					 Each plugin has a "reason for being" (see below) - what it tries to achieve, what does differently from bootstrap, why I created it in the first place.</p>
 
-					<p>In most cases the css comes from bootstrap</p>
+					<p>In most cases the css comes from bootstrap. I also tried to follow the bootstrap docs, formatting and conventions as much as possible so users of bootstrap would feel
+					right at home with sco.js</p>
+
+					<p>When data attributes are available to trigger a specific plugin, the attribute to use is <code>data-trigger="plugin name"</code> to not conflict with bootstrap's <code>data-toggle="plugin name"</code>.
+					This way you can use both bootstrap and sco.js freely and interchangeable.</p>
 				</section>
 
 				<section id="modals">
@@ -83,29 +87,58 @@
 						<h1>Modal <small>sco.modal.js</small></h1>
 					</div>
 
-					<h3>Why?</h3>
-					<p>Because bootstrap modals don't (didn't?) allow remote content. I didn't want to preload modal contents on a page and keep that hidden until a user clicked
-					 on some link that triggered that modal. Imagine a site with the login and signup links in header. Asuming the login and signup are modals, this means every page
-					 should have a hidden login and signup modal for the case a user might click on the login/signup links. I just didn't want that at all. I didn't want a modal
-					to exist on the page until it was actually needed.</p>
-
 					<h3>What?</h3>
 					<p>The primary use of the modal is to load remote content (loaded via ajax) and display that in an overlay, on top of the current page.
-					It can also be used to display something without loading it but it's not its primary use case. This second use case was created to allow
-					extensions of the modal to add content.
+					It can also be used to display something without loading it but it's not its primary use case.
 					</p>
+
+					<h3>Why?</h3>
+					<p>Because bootstrap modals didn't allow remote content (they do now tho). Also, because I wanted the modal html to be created by the plugin
+					if it didn't exist in the page already.</p>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<a data-trigger="modal" href="lipsum.html" data-title="Remote loaded content" class="btn btn-primary btn-large">Launch demo modal</a>
+						<a data-trigger="modal" href="lipsum.html" data-title="Remote loaded content" data-keyboard="1" class="btn btn-primary btn-large">Launch demo modal</a>
 					</div>
-<pre class="prettyprint linenums">
+					<pre class="prettyprint linenums">
 &lt;!-- Button to trigger modal -->
 &lt;a data-trigger="modal" href="lipsum.html" data-title="Remote loaded content" class="btn">Launch demo modal&lt;/a>
-</pre>
+
+&lt;!-- Modal -->
+&lt;div class="modal fade in" id="modal">
+	&lt;div class="modal-header">
+		&lt;a class="close" href="#" data-dismiss="modal">×&lt;/a>
+		&lt;h3>Modal header&lt;/h3>
+	&lt;/div>
+	&lt;div class="inner">
+		remote content goes here
+	&lt;/div>
+&lt;/div></pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes</h3>
+					<p>Look ma', no js code:</p>
+					<pre class="prettyprint linenums">&lt;button type="button" data-trigger="modal">Launch modal&lt;/button></pre>
+					<p>All plugin's options are available to use as data attributes. The data attributes usage is "live" - meaning that you don't have to rebind new elements. Every new element
+					having a <code>data-trigger="modal"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
+
+					<h3>Via jquery</h3>
+					<pre class="prettyprint linenums">$('#trigger').scojs_modal(options);</pre>
+					or
+					<pre class="prettyprint linenums">$('.modal_triggers').scojs_modal(options);</pre>
+					<p>This part is quite different from bootstrap's implementation. In bootstrap, the selected element should be the modal (meaning the modal html should already exist in the dom).
+					It also means the modal html cannot be reused by other modals (i.e. if you want more modals on the page, each has to have its own id/html code).<br>
+					In our case, the selected element is the trigger of the modal (what you click on to launch the modal) and the modal is built based on the trigger's options.
+					You definitely have the option to use different modals but, by default, the same modal html is reused by every modal instance on the page.
+					This decision was made because we found out that we never wanted more modals appearing on the page at the same time. So reusing the same modal html for every triggered modal
+					seemed quite logical.</p>
+
+					<h3>Via javascript</h3>
+					<pre class="prettyprint linenums">var modal = $.scojs_modal(options);</pre>
+					<p>This gives you access to the created javascript object. Note that when you launch the modal this way, it's not shown by default. You'll have to call <code>modal.show()</code>
+					at a later time to show the modal.</p>
+
+					<h2>Options</h2>
 				</section>
 			</div>
 		</div>
@@ -114,7 +147,7 @@
 	<!-- FOOTER  -->
 	<footer class="footer">
 		<div class="container">
-			<p class="copyright">Sco.js maintained by <a href="https://plus.google.com/105747399411005497248?rel=author">Dan Caragea</a></p>
+			<p class="copyright">Sco.js is maintained by <a href="https://plus.google.com/105747399411005497248?rel=author">Dan Caragea</a></p>
 		</div>
 	</footer>
 </body>

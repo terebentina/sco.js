@@ -218,3 +218,8 @@ section {
 .footer-links li:first-child {
   padding-left: 0;
 }
+
+
+.modal .inner .lipsum {
+	padding: 10px 20px;
+}
