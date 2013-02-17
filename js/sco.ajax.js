@@ -20,23 +20,12 @@
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true */
 /*global define:true, Spinner:true */
 
-(function(factory) {
+;(function($, undefined) {
 	"use strict";
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery'
-			,'../spin.js'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_ajax';
 
-	$(document).on('click.scoajax', '[data-trigger="ajax"]', function(e) {
+	$(document).on('click.' + pluginName, '[data-trigger="ajax"]', function(e) {
 		var $this = $(this)
 			,data = $this.data()
 			,$target
@@ -44,11 +33,16 @@
 			;
 		if (typeof data['target'] != 'undefined') {
 			$target = $(data['target']);
-			spinner = new Spinner({color: '#3d9bce'}).spin($target[0]);
+			var spinner;
+			if (typeof Spinner == 'function') {
+				spinner = new Spinner({color: '#3d9bce'}).spin($target[0]);
+			}
 			$target.load($this.attr('href'), function() {
-				spinner.stop();
+				if (spinner) {
+					spinner.stop();
+				}
 			});
 			return false;
 		}
 	});
-}));
+})(jQuery);
