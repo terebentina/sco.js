@@ -66,10 +66,10 @@
 			if (!$.data(this, pluginName)) {
 				var $this = $(this)
 					,data = $this.data()
-					,title = $this.attr('title')
+					,title = $this.attr('title') || data.title
 					,mod
 					;
-				options = $.extend({}, options, data);
+				options = $.extend({}, $.fn.scojs_confirm.defaults, options, data);
 				if (!title) {
 					title = 'this';
 				}

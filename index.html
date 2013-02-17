@@ -143,7 +143,7 @@
 					<p>This gives you access to the created javascript object. Note that when you launch the modal this way, it's not shown by default. You'll have to call <code>modal.show()</code>
 					at a later time to show the modal.</p>
 
-					<h2>Options</h2>
+					<h2 id="modal_options">Options</h2>
 					<p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>, as in <code>data-keyboard="1"</code>.</p>
 					<table class="table table-bordered table-striped">
 						<thead>
@@ -264,7 +264,7 @@
 							</tr>
 						</tbody>
 					</table>
-					<h2>Methods</h2>
+					<h2 id="modal_methods">Methods</h2>
 					<h4>.scojs_modal(options)</h4>
 					<pre class="prettyprint linenums">
 $('#trigger').scojs_modal({
@@ -308,24 +308,118 @@ modal.destroy();
 					</div>
 
 					<h3>What?</h3>
-					<p>coming soon.</p>
+					<p>A specialised modal that has a yes/no button in the footer. The yes is attached to some action, the no dismisses the modal without doing anything else.
+					Basically a glorified alert().</p>
 
 					<h3>Why?</h3>
-					<p>coming soon.</p>
+					<p>We wanted an easy way to make the user confirm some action like deleting something from their profiles.</p>
 
 					<h3>Dependencies</h3>
-					<p>coming soon.</p>
+					<p>The confirm plugin depends on the modal. Make sure you load both when you want to use confirm.</p>
 
 					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<a data-trigger="confirm" href="/delete/me" class="btn btn-primary btn-large">Launch demo confirm</a>
+						<p class="message">(Note that if you click on yes on the confirmation modal, you will be taken to a non-existing page)</p>
+					</div>
+					<pre class="prettyprint linenums">
+&lt;!-- Button to trigger confirm -->
+&lt;a data-trigger="confirm" href="/delete/me" class="btn">Launch demo confirm&lt;/a></pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
+					<pre class="prettyprint linenums">&lt;a href="/link-to-go-to/when-user-presses-yes" data-trigger="confirm">Launch confirm&lt;/button></pre>
+					<p>All modal options are available for confirm as well though some might not make much sense (like loading remote content). There are some
+					extra options available for confirm, see the options below.</p>
+
 					<h3>Via jquery</h3>
+					<pre class="prettyprint linenums">$('#confirm_trigger').scojs_confirm(options);</pre>
+					<p>Like with the modal, you call scojs_confirm() on the trigger, not on the modal element itself. And, if <code>data-</code> attributes exist, they
+					overwrite any general options you pass to the plugin.</p>
+
 					<h3>Via javascript</h3>
+					<pre class="prettyprint linenums">var confirm = $.scojs_confirm(options);</pre>
+					<p>This gives you access to the created javascript object. Note that when you launch the confirm this way, it's not shown by default. You'll have to call <code>confirm.show()</code>
+					at a later time to show the confirm modal.</p>
 
 					<h2>Options</h2>
+					<p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>, as in <code>data-keyboard="1"</code>.</p>
+					<p>All <a href="#modal_options">modal options</a> are available for confirm as well. Note, however, that the default confirm modal doesn't have a title so setting <code>title</code>
+					has no effect. You can, of course, have your own confirm modal with a title in which case this option will work as expected.
+					There are also some modal options that don't make much sense to be set for confirm like <code>remote</code> and <code>cache</code> but you're free to use them if you need them.</p>
+					<p>There are some extra options available for confirm or options that have a different default than the modal. See below:</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>content</td>
+								<td>string</td>
+								<td>Are you sure you want to delete :title?</td>
+								<td>The content of the confirm modal. ":title" is replaced by the <code>title</code> or <code>data-title</code> attribute/option if any of these exist
+								or by the word "this", making the content "Are you sure you want to delete this?" or "Are you sure you want to delete Foo?".
+								</td>
+							</tr>
+							<tr>
+								<td>cssclass</td>
+								<td>string</td>
+								<td>confirm_modal</td>
+								<td>This class is added by default to all confirm modals.</td>
+							</tr>
+							<tr>
+								<td>target</td>
+								<td>string</td>
+								<td>#confirm_modal</td>
+								<td>The confirm modal ID. If an HTML element with this ID already exists in the DOM, it will be used, otherwise a standard HTML confirm modal structure will be created
+								automatically. The default structure is:
+									<pre class="prettyprint linenums">
+&lt;div class="modal fade confirm_modal" id="confirm_modal">
+  &lt;div class="modal-body inner">&lt;/div>
+  &lt;div class="modal-footer">
+    &lt;a class="btn cancel" href="#" data-dismiss="modal">cancel&lt;/a>
+    &lt;a href="#" class="btn btn-danger" data-action="1">yes&lt;/a>
+  &lt;/div>
+&lt;/div></pre>
+								</td>
+							</tr>
+							<tr>
+								<td>action</td>
+								<td>string / function</td>
+								<td></td>
+								<td>This option decides what happens when you click the yes button. In data-api, the action option is set to the href of the trigger element so when you click on yes
+									you will be taken to the original url.
+									<p>For example, clicking on the following link:</p>
+									<pre class="prettyprint linenums">&lt;a data-trigger="confirm" href="/delete/me" class="btn">Delete&lt;/a></pre>
+									would show the confirm modal and when clicking on the yes button there, you'd be taken to /delete/me.
+									<p>When this option is a function, clicking on the yes button would execute that function (in the context of the confirm modal object) and then close the modal.</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 
 					<h2>Methods</h2>
+					<h4>.scojs_confirm(options)</h4>
+					<pre class="prettyprint linenums">
+$('#trigger').scojs_confirm({
+  content: "Ain't that cute?",
+  action: "http://google.com"
+});</pre>
+					<pre class="prettyprint linenums">
+var confirm = $.scojs_confirm({
+  content: "Oh, noes, you really want to delete me?",
+  action: function() {
+    this.close();
+  }
+});
+confirm.show();
+</pre>
+					<p>All <a href="#modal_methods">modal methods</a> are available for the confirm as well.</p>
 				</section>
 
 
