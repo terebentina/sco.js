@@ -63,7 +63,8 @@
 
 	$.fn.scojs_confirm = function(options) {
 		return this.each(function() {
-			if (!$.data(this, pluginName)) {
+			var obj;
+			if (!(obj = $.data(this, pluginName))) {
 				var $this = $(this)
 					,data = $this.data()
 					,title = $this.attr('title') || data.title
@@ -77,9 +78,10 @@
 				if (!options.action) {
 					options.action = $this.attr('href');
 				}
-				$.data(this, pluginName, (mod = new Confirm(options)));
-				mod.show();
+				obj = new Confirm(options);
+				$.data(this, pluginName, obj);
 			}
+			obj.show();
 		});
 	};
 
