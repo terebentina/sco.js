@@ -77,6 +77,8 @@
 				options.content = options.content.replace(':title', title);
 				if (!options.action) {
 					options.action = $this.attr('href');
+				} else if (typeof window[action] == 'function') {
+					window[action]();
 				}
 				obj = new Confirm(options);
 				$.data(this, pluginName, obj);
