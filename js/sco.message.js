@@ -20,48 +20,38 @@
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true */
 /*global define:true */
 
-(function(factory) {
+;(function($, undefined) {
 	"use strict";
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_message';
 
-	$.scomessage = function(message, type) {
-		clearTimeout($.scomessage.timeout);
-		var $selector = $('#' + $.scomessage.defaults.id);
+	$.scojs_message = function(message, type) {
+		clearTimeout($.scojs_message.timeout);
+		var $selector = $('#' + $.scojs_message.options.id);
 		if (!$selector.length) {
-			$selector = $('<div/>', {id: $.scomessage.defaults.id}).prependTo('body');
+			$selector = $('<div/>', {id: $.scojs_message.options.id}).appendTo($.scojs_message.options.appendTo);
 		}
 		$selector.html(message);
-		if (typeof type == 'undefined' || type == $.scomessage.TYPE_ERROR) {
-			$selector.removeClass($.scomessage.defaults.ok_class).addClass($.scomessage.defaults.err_class);
-		} else if (type == $.scomessage.TYPE_OK) {
-			$selector.removeClass($.scomessage.defaults.err_class).addClass($.scomessage.defaults.ok_class);
+		if (type == undefined || type == $.scojs_message.TYPE_ERROR) {
+			$selector.removeClass($.scojs_message.options.ok_class).addClass($.scojs_message.options.err_class);
+		} else if (type == $.scojs_message.TYPE_OK) {
+			$selector.removeClass($.scojs_message.options.err_class).addClass($.scojs_message.options.ok_class);
 		}
-		$selector.slideDown(function() {
-			$.scomessage.timeout = setTimeout(function() { $selector.slideUp(); }, $.scomessage.defaults.delay);
-		});
+		$selector.addClass('in');
+		$.scojs_message.timeout = setTimeout(function() { $selector.removeClass('in'); }, $.scojs_message.options.delay);
 	};
 
 
-	$.extend($.scomessage, {
-		defaults: {
-			id: 'page_message',
-			ok_class: 'page_mess_ok',
-			err_class: 'page_mess_error',
-			delay: 4000
+	$.extend($.scojs_message, {
+		options: {
+			id: 'page_message'
+			,ok_class: 'page_mess_ok'
+			,err_class: 'page_mess_error'
+			,delay: 4000
+			,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 		},
 
 		TYPE_ERROR: 1,
 		TYPE_OK: 2
 	});
-}));
+})(jQuery);
