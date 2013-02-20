@@ -392,11 +392,15 @@ modal.destroy();
 								<td>action</td>
 								<td>string / function</td>
 								<td></td>
-								<td>This option decides what happens when you click the yes button. In data-api, the action option is set to the href of the trigger element so when you click on yes
-									you will be taken to the original url.
-									<p>For example, clicking on the following link:</p>
-									<pre class="prettyprint linenums">&lt;a data-trigger="confirm" href="/delete/me" class="btn">Delete&lt;/a></pre>
-									would show the confirm modal and when clicking on the yes button there, you'd be taken to /delete/me.
+								<td>This option decides what happens when you click the yes button. In data-api, if a <code>data-action="foo"</code> attribute is found, we check if foo is a function
+									and if it is, that function is assigned as the 'yes' function (will be run when clicking on the yes button). If foo is not a function then it is assumed to be an url.
+									If no <code>data-action</code> attribute is found, the action option is set to the href of the trigger so when you click on yes
+									you will be taken to that url.
+									<p>For example, clicking on one of the following:</p>
+									<pre class="prettyprint linenums">&lt;a data-trigger="confirm" href="/delete/me" class="btn">Delete&lt;/a>
+									&lt;button class="btn" data-action="/delete/me" data-trigger="confirm">Delete&lt;/button></pre>
+									would show the confirm modal and when clicking on the yes button there, you'd be taken to <code>/delete/me</code>.
+									<p>Note that when both <code>href</code> and <code>data-action</code> are found, href is ignored.</p>
 									<p>When this option is a function, clicking on the yes button would execute that function (in the context of the confirm modal object) and then close the modal.</p>
 								</td>
 							</tr>
