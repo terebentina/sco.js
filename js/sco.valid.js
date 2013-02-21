@@ -362,7 +362,7 @@
 					if (response.status == 'fail') {
 						$form.scovalid().show(response.data.errors);
 					} else if (response.status == 'error') {
-						$.scomessage(response.message);
+						$.scojs_message(response.message, $.scojs_message.TYPE_ERROR);
 					} else if (response.status == 'success') {
 						if (typeof response.data.run === 'function') {
 							response.data.run.call(this, $form);
@@ -377,7 +377,7 @@
 							}
 						}
 						if (response.data.message) {
-							$.scomessage(response.data.message, $.scomessage.TYPE_OK);
+							$.scojs_message(response.data.message, $.scojs_message.TYPE_OK);
 						}
 					}
 				}
