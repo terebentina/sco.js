@@ -37,8 +37,9 @@
 		} else if (type == $.scojs_message.TYPE_OK) {
 			$selector.removeClass($.scojs_message.options.err_class).addClass($.scojs_message.options.ok_class);
 		}
-		$selector.addClass('in');
-		$.scojs_message.timeout = setTimeout(function() { $selector.removeClass('in'); }, $.scojs_message.options.delay);
+		$selector.slideDown('fast', function() {
+			$.scojs_message.timeout = setTimeout(function() { $selector.slideUp('fast'); }, $.scojs_message.options.delay);
+		});
 	};
 
 
