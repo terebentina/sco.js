@@ -17,6 +17,7 @@
 	<script src="assets/js/sco.modal.js"></script>
 	<script src="assets/js/sco.confirm.js"></script>
 	<script src="assets/js/sco.ajax.js"></script>
+	<script src="assets/js/sco.collapse.js"></script>
 	<script src="assets/js/prettify.js"></script>
 	<script src="assets/js/app.js"></script>
 	<title>Sco.js</title>
@@ -531,6 +532,83 @@ confirm.show();
 					<p>coming soon.</p>
 
 					<h3>Examples</h3>
+					<p>In its most basic form, the collapser plugin is nothing more than a simple on/off toggler for another block element:</p>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<ul class="nav nav-list">
+							<li>
+								<a href="#" data-trigger="collapse" data-target="#test">Click me a couple of times</a>
+								<div id="test" class="hide">
+									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia hendrerit purus, in convallis quam ultricies vel. Sed a dui tellus, ut lacinia felis. Duis eget sapien ut dui congue mattis.
+								</div>
+							</li>
+							<li>
+								<a href="#" data-trigger="collapse" data-target="#test2">Me too</a>
+								<div id="test2" class="hide">
+									The quick brown fox jumps over the lazy dog.
+								</div>
+							</li>
+							<li>
+								<a href="#" data-trigger="collapse" data-target=".hide">Toggle all at once</a>
+							</li>
+						</ul>
+					</div>
+					<pre class="prettyprint linenums">
+&lt;a href="#" data-trigger="collapse" data-target="#test">Click me&lt;/a>
+&lt;div id="test" class="hide">
+  Lorem ipsum dolor sit amet...
+&lt;/div></pre>
+
+					<p>Let's spice things up a bit: the accordion behaviour. In this mode, we need to tell each trigger what html element is the parent for the whole accordion:</p>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<div class="sidenav">
+							<ul class="nav nav-list">
+								<li>
+									<a href="#" data-trigger="collapse" data-parent=".sidenav" class="active">Menu 1</a>
+									<div class="collapsible">
+										The quick brown fox jumps over the lazy dog.
+									</div>
+								</li>
+								<li>
+									<a href="#" data-trigger="collapse" data-parent=".sidenav">Menu 2</a>
+									<div class="collapsible" style="display: none">
+										Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia hendrerit purus, in convallis quam ultricies vel.
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<pre class="prettyprint linenums">
+&lt;div class="sidenav">
+  &lt;a href="#" data-trigger="collapse" data-parent=".sidenav" class="active">Menu 1&lt;/a>
+  &lt;div class="collapsible">
+    The quick brown fox jumps over the lazy dog.
+  &lt;/div>
+  &lt;a href="#" data-trigger="collapse" data-parent=".sidenav">Menu 2&lt;/a>
+  &lt;div class="collapsible" style="display: none">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  &lt;/div>
+&lt;/div></pre>
+
+					<p>We can make this even more interesting by adding a "show more / show less" toggle:</p>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<div>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</div>
+						<div class="collapsible hide">Etiam lacinia hendrerit purus, in convallis quam ultricies vel. Sed a dui tellus, ut lacinia felis. Duis eget sapien ut dui congue mattis.</div>
+						<a href="#" class="show_more_example">show more</a>
+						<div>Q: What does the quick brown fox do?</div>
+						<div class="collapsible hide">A: The quick brown fox jumps over the lazy dog.</div>
+						<a href="#" class="show_more_example">show more</a>
+						<script>
+							$(document).on('click', '.show_more_example', function(e) {
+								$(this).scojs_collapse({
+									triggerHtml: {on: 'show less', off: 'show more'}
+									,mode: 'prev'
+								});
+								return false;
+							});
+						</script>
+					</div>
+					<pre class="prettyprint linenums">
+					</pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>

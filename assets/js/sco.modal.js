@@ -26,7 +26,7 @@
 	var pluginName = 'scojs_modal';
 
 	function Modal(options) {
-		this.options = $.extend({}, $.fn.scojs_modal.defaults, options);
+		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$modal = $(this.options.target).attr('class', 'modal fade').hide();
 
 		var self = this
@@ -136,7 +136,7 @@
 	});
 
 
-	$.fn.scojs_modal = function(options) {
+	$.fn[pluginName] = function(options) {
 		return this.each(function() {
 			var obj;
 			if (!(obj = $.data(this, pluginName))) {
@@ -155,12 +155,12 @@
 	};
 
 
-	$.scojs_modal = function(options) {
+	$[pluginName] = function(options) {
 		return new Modal(options);
 	};
 
 
-	$.fn.scojs_modal.defaults = {
+	$.fn[pluginName].defaults = {
 		title: '&nbsp;'		// modal title
 		,target: '#modal'	// the modal id. MUST be an id for now.
 		,content: ''		// the static modal content (in case it's not loaded via ajax)
@@ -172,7 +172,7 @@
 
 
 	$(document).on('click.' + pluginName, '[data-trigger="modal"]', function() {
-		$(this).scojs_modal();
+		$(this)[pluginName]();
 		if ($(this).is('a')) {
 			return false;
 		}
