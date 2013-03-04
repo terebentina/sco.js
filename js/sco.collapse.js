@@ -18,25 +18,14 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
-/*global define:true, Spinner:true */
 
-(function(factory) {
+;(function($, undefined) {
 	"use strict";
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_collapse';
 
 	function Collapse($trigger, options) {
-		this.options = $.extend({}, $.fn.scollapse.defaults, options);
+		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$trigger = $trigger;
 		if (this.options.target !== null) {
 			this.$target = $(this.options.target);
@@ -55,7 +44,7 @@
 			//self.$target.toggleClass(self.options.activeTargetClass);
 			self.$target[$.camelCase(self.options.ease + '-toggle')]().removeClass('open');
 			if (self.$parent && !self.$trigger.hasClass(self.options.activeTriggerClass)) {
-				self.$parent.find(self.options.triggerSelector + '.' + self.options.activeTriggerClass).scollapse(self.options);
+				self.$parent.find(self.options.triggerSelector + '.' + self.options.activeTriggerClass)[pluginName](self.options);
 			}
 			self.$trigger.toggleClass(self.options.activeTriggerClass);
 			if (self.options.triggerHtml !== null) {
@@ -70,36 +59,45 @@
 		}
 	});
 
-	$.fn.scollapse = function(opts) {
+	$.fn[pluginName] = function(options) {
 		return this.each(function() {
-			var $this = $(this)
-				,data = $this.data()
-				,options = $.extend({}, $.fn.scollapse.defaults, data, opts)
-				;
-			delete options.scollapse;
-			if (!data.scollapse) {
-				$this.data('scollapse', (data.scollapse = new Collapse($this, options)));
+			var obj;
+			if (!(obj = $.data(this, pluginName))) {
+				var $this = $(this)
+					,data = $this.data()
+					;
+				options = $.extend({}, options, data);
+				obj = new Collapse($this, options);
+				$.data(this, pluginName, obj);
 			}
-			data.scollapse.toggle();
+			obj.toggle();
 		});
 	};
 
-	$.fn.scollapse.defaults = {
-		parent: null						// having a parent activates the accordion mode behaviour
-		,target: null						// the element to show/hide. If null, the target is chosen based on the "mode" selector
-		,activeTriggerClass: 'active'		// class to add to the trigger in active (on) state
-		//,activeTargetClass: 'in'			// class to add to the target in active (on) state
-		,triggerHtml: null					// if not null, this should be a hash like {off: 'more', on: 'less'}. This text is set on the trigger.
-		,mode: 'next'						// "next" means target is after trigger, "prev" means target is before trigger
-		,collapseSelector: '.collapse'		// used in accordion to find out what to collapse when the current target expands or if the target is null
-		,triggerSelector: '[data-trigger="collapse"]'		// used in accordion to find out all triggers
-		,ease: 'slide'						// the animation effect to use. Must support toggle (like slideToggle/fadeToggle or even empty string :))
+
+	$[pluginName] = function(trigger, options) {
+		if (typeof trigger === 'string') {
+			trigger = $(trigger);
+		}
+		return new Collapse(trigger, options);
 	};
 
-	$(document).on('click.scollapse', '[data-trigger="collapse"]', function(e) {
-		$(this).scollapse({triggerSelector: e.handleObj.selector});
+	$.fn[pluginName].defaults = {
+		parent: null                        // having a parent activates the accordion mode behaviour
+		,target: null                       // the element to show/hide. If null, the target is chosen based on the "mode" selector
+		,activeTriggerClass: 'active'       // class to add to the trigger in active (on) state
+		//,activeTargetClass: 'in'          // class to add to the target in active (on) state
+		,triggerHtml: null                  // if not null, this should be a hash like {off: 'more', on: 'less'}. This text is set on the trigger.
+		,mode: 'next'                       // "next" means target is after trigger, "prev" means target is before trigger in html source
+		,collapseSelector: '.collapsible'   // used in accordion to find out what to collapse when the current target expands or if the target is null
+		,triggerSelector: '[data-trigger="collapse"]'		// used in accordion to find out all triggers
+		,ease: 'slide'                      // the animation effect to use. Must support toggle (like slideToggle/fadeToggle or even empty string :))
+	};
+
+	$(document).on('click.' + pluginName, '[data-trigger="collapse"]', function(e) {
+		$(this)[pluginName]({triggerSelector: e.handleObj.selector});
 		if ($(this).is('a')) {
 			return false;
 		}
 	});
-}));
+})(jQuery);

@@ -18,7 +18,6 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
-/*global define:true, _:true */
 
 ;(function($, undefined) {
 	"use strict";
@@ -29,7 +28,7 @@
 		var self = this;
 
 		var init = function() {
-			self.options = $.extend({}, $.fn.scojs_confirm.defaults, options);
+			self.options = $.extend({}, $.fn[pluginName].defaults, options);
 
 			var $modal = $(self.options.target);
 			if (!$modal.length) {
@@ -45,7 +44,7 @@
 				}
 			}
 			self.scomodal = $.scojs_modal(self.options);
-		}
+		};
 
 		init();
 	}
@@ -61,16 +60,15 @@
 	});
 
 
-	$.fn.scojs_confirm = function(options) {
+	$.fn[pluginName] = function(options) {
 		return this.each(function() {
 			var obj;
 			if (!(obj = $.data(this, pluginName))) {
 				var $this = $(this)
 					,data = $this.data()
 					,title = $this.attr('title') || data.title
-					,mod
 					;
-				options = $.extend({}, $.fn.scojs_confirm.defaults, options, data);
+				options = $.extend({}, $.fn[pluginName].defaults, options, data);
 				if (!title) {
 					title = 'this';
 				}
@@ -87,11 +85,11 @@
 		});
 	};
 
-	$.scojs_confirm = function(options) {
+	$[pluginName] = function(options) {
 		return new Confirm(options);
 	};
 
-	$.fn.scojs_confirm.defaults = {
+	$.fn[pluginName].defaults = {
 		content: 'Are you sure you want to delete :title?'
 		,cssclass: 'confirm_modal'
 		,target: '#confirm_modal'	// this must be an id. This is a limitation for now, @todo should be fixed
@@ -99,7 +97,7 @@
 	};
 
 	$(document).on('click.' + pluginName, '[data-trigger="confirm"]', function(e) {
-		$(this).scojs_confirm();
+		$(this)[pluginName]();
 		return false;
 	});
 })(jQuery);

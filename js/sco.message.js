@@ -18,32 +18,31 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true */
-/*global define:true */
 
 ;(function($, undefined) {
 	"use strict";
 
 	var pluginName = 'scojs_message';
 
-	$.scojs_message = function(message, type) {
-		clearTimeout($.scojs_message.timeout);
-		var $selector = $('#' + $.scojs_message.options.id);
+	$[pluginName] = function(message, type) {
+		clearTimeout($[pluginName].timeout);
+		var $selector = $('#' + $[pluginName].options.id);
 		if (!$selector.length) {
-			$selector = $('<div/>', {id: $.scojs_message.options.id}).appendTo($.scojs_message.options.appendTo);
+			$selector = $('<div/>', {id: $[pluginName].options.id}).appendTo($[pluginName].options.appendTo);
 		}
 		$selector.html(message);
-		if (type == undefined || type == $.scojs_message.TYPE_ERROR) {
-			$selector.removeClass($.scojs_message.options.ok_class).addClass($.scojs_message.options.err_class);
-		} else if (type == $.scojs_message.TYPE_OK) {
-			$selector.removeClass($.scojs_message.options.err_class).addClass($.scojs_message.options.ok_class);
+		if (type == undefined || type == $[pluginName].TYPE_ERROR) {
+			$selector.removeClass($[pluginName].options.ok_class).addClass($[pluginName].options.err_class);
+		} else if (type == $[pluginName].TYPE_OK) {
+			$selector.removeClass($[pluginName].options.err_class).addClass($[pluginName].options.ok_class);
 		}
 		$selector.slideDown('fast', function() {
-			$.scojs_message.timeout = setTimeout(function() { $selector.slideUp('fast'); }, $.scojs_message.options.delay);
+			$[pluginName].timeout = setTimeout(function() { $selector.slideUp('fast'); }, $[pluginName].options.delay);
 		});
 	};
 
 
-	$.extend($.scojs_message, {
+	$.extend($[pluginName], {
 		options: {
 			id: 'page_message'
 			,ok_class: 'page_mess_ok'
