@@ -64,17 +64,18 @@
 					</div>
 
 					<h3>Why?</h3>
-					<p>The reason for creating sco.js was to improve the existing bootstrap js and to provide specific use-cases for the projects I was working on.
+					<p>The reason for creating sco.js was to improve the existing bootstrap js components and to provide specific use-cases for the projects I was working on.
 					The bootstrap js plugins are great for general stuff but whenever you want something more in-depth or a specific behaviour, they fall short.
 					Most of the bootstrap js plugins are not very extensible (or they were not when I created my version of the plugins) and where they are, my requirements
-					 were too different to just extend with 1-2 lines of code. This is not to say bootstrap and its js components are bad! It's a really good framework for
-					 rapid development but...1 size doesn't fit all. In my case it almost fit ;)</p>
+					were too different to just extend with 1-2 lines of code. This is not to say bootstrap and its js components are bad! It's a really good framework for
+					rapid development but...1 size doesn't fit all. In my case it almost fit ;)</p>
+					<p>Please note that bootstrap is using css transitions where possible and this is a great thing! My js plugins don't yet but I plan to address this problem soon ;)</p>
 
 					<h3>What you get</h3>
 					<p>All plugins in sco.js can be used on a bootstrap-enabled site but they can be used separately as well. Also, sco.js contains plugins that are not available
 					in bootstrap. Plugins are unit tested and in use on production sites. Each plugin can be enabled and configured via <strong>data-attributes</strong> <code>data-trigger="pluginName"</code> or <strong>programatically</strong>
 					<code>var $modal = $.scojs_modal({...})</code>.
-					 Each plugin has a "reason for being" (see below) - what it tries to achieve, what does differently from bootstrap, why I created it in the first place.</p>
+					Each plugin has a "reason for being" (see below) - what it tries to achieve, what does differently from bootstrap, why I created it in the first place.</p>
 
 					<p>In most cases the css comes from bootstrap. I also tried to follow the bootstrap docs, formatting and conventions as much as possible so users of bootstrap would feel
 					right at home with sco.js</p>
@@ -523,13 +524,14 @@ confirm.show();
 					</div>
 
 					<h3>What?</h3>
-					<p>coming soon.</p>
+					<p>Accordions or show/hide togglers.</p>
 
 					<h3>Why?</h3>
-					<p>coming soon.</p>
+					<p>So much markup in bootstrap for their collapse component! And IDs. I hate IDs! While IDs give you a great degree of freedom in what to target (as in I want this button to collapse this far away block across the page),
+					most of the time it's now how an accordion works. You usually want to click on a menu link and expand the block under/above that link. So I made this collapse plugin to address the said issues.</p>
 
 					<h3>Dependencies</h3>
-					<p>coming soon.</p>
+					<p>The collapse does not depend on other libraries (other than JQuery, of course).</p>
 
 					<h3>Examples</h3>
 					<p>In its most basic form, the collapser plugin is nothing more than a simple on/off toggler for another block element:</p>
