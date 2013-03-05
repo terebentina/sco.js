@@ -538,14 +538,14 @@ confirm.show();
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
 						<ul class="nav nav-list">
 							<li>
-								<a href="#" data-trigger="collapse" data-target="#test">Click me a couple of times</a>
-								<div id="test" class="hide">
+								<a href="#" data-trigger="collapse">Click for default behaviour</a>
+								<div class="collapsible hide">
 									Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia hendrerit purus, in convallis quam ultricies vel. Sed a dui tellus, ut lacinia felis. Duis eget sapien ut dui congue mattis.
 								</div>
 							</li>
 							<li>
-								<a href="#" data-trigger="collapse" data-target="#test2">Me too</a>
-								<div id="test2" class="hide">
+								<a href="#" data-trigger="collapse" data-target="#collapse_test">Click me too - I am using an id</a>
+								<div id="collapse_test" class="hide">
 									The quick brown fox jumps over the lazy dog.
 								</div>
 							</li>
@@ -555,9 +555,13 @@ confirm.show();
 						</ul>
 					</div>
 					<pre class="prettyprint linenums">
-&lt;a href="#" data-trigger="collapse" data-target="#test">Click me&lt;/a>
-&lt;div id="test" class="hide">
-  Lorem ipsum dolor sit amet...
+&lt;a href="#" data-trigger="collapse">Click me, I'm not using any id&lt;/a>
+&lt;div class="collapsible hide">
+  Lorem ipsum...
+&lt;/div>
+&lt;a href="#" data-trigger="collapse" data-target="#collapse_test">Click me too - I am using an id&lt;/a>
+&lt;div id="collapse_test" class="hide">
+  The quick...
 &lt;/div></pre>
 
 					<p>Let's spice things up a bit: the accordion behaviour. In this mode, we need to tell each trigger what html element is the parent for the whole accordion:</p>
@@ -610,14 +614,112 @@ confirm.show();
 						</script>
 					</div>
 					<pre class="prettyprint linenums">
-					</pre>
+&lt;div>Lorem ipsum...&lt;/div>
+&lt;div class="collapsible hide">Etiam lacinia...&lt;/div>
+&lt;a href="#" class="show_more_example">show more&lt;/a>
+
+&lt;div>Q: What does the quick brown fox do?&lt;/div>
+&lt;div class="collapsible hide">A: The quick brown fox jumps over the lazy dog.&lt;/div>
+&lt;a href="#" class="show_more_example">show more&lt;/a>
+&lt;script>
+  $(document).on('click', '.show_more_example', function(e) {
+    $(this).scojs_collapse({
+      triggerHtml: {on: 'show less', off: 'show more'}
+      ,mode: 'prev'
+    });
+    return false;
+  });
+&lt;/script></pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
+					<pre class="prettyprint linenums">&lt;button data-trigger="collapse" class="btn">Click me&lt;/button></pre>
+					<p>The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
+					having a <code>data-trigger="collapse"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
+
 					<h3>Via jquery</h3>
+					<pre class="prettyprint linenums">$('#collapse_trigger').scojs_collapse(options);</pre>
+					<p>If <code>data-</code> attributes exist, they overwrite any general options you pass to the plugin.</p>
+					<p>When you call the plugin this way, all it does is toggle the target. To toggle it back you'd call the plugin again. However, it's best used inside a click event (or hover/etc) like this:</p>
+					<pre class="prettyprint linenums">
+&lt;script>
+  $(document).on('click', '.collapse_triggers', function(e) {
+    $(this).scojs_collapse(options);
+    return false;
+  });
+&lt;/script></pre>
+
 					<h3>Via javascript</h3>
+					<pre class="prettyprint linenums">var collapse = $.scojs_collapse(options);</pre>
+					<p>This gives you access to the created javascript object. Note that when you launch the collapse this way, it doesn't toggle the target by default. You'll have to call <code>collapse.toggle()</code>
+					at a later time, as many times as you want, to toggle the target on/off.</p>
 
 					<h2>Options</h2>
+					<p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>, as in <code>data-parent=".foo"</code>.</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>parent</td>
+								<td>string</td>
+								<td></td>
+								<td>Using this option activates the accordion behaviour. It should be a JQuery selector for the element wrapping the accordion.</td>
+							</tr>
+							<tr>
+								<td>target</td>
+								<td>string</td>
+								<td></td>
+								<td>Use this option to specify the target element to collapse. It should be a JQuery selector for the element you want to collapse.
+								Normally it's not needed as the plugin can figure out which element you want to collapse by itself.</td>
+							</tr>
+							<tr>
+								<td>activeTriggerClass</td>
+								<td>string</td>
+								<td>Class to add to the trigger in active state (when the target element is visible).</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>triggerHtml</td>
+								<td>object</td>
+								<td></td>
+								<td>If not null, this should be a hash like <code>{off: 'more', on: 'less'}</code>. This text is set on the trigger.
+								When target is not visible, the <code>off</code> text is shown on the trigger, otherwise the <code>on</code> text is shown.</td>
+							</tr>
+							<tr>
+								<td>mode</td>
+								<td>string</td>
+								<td>next</td>
+								<td>Can be either 'next' or 'prev'. Determines where the element to collapse is to be found in relation to the trigger. Next (usually) means the trigger is on top
+								of the collapsible element while prev means trigger is under the element. The plugin is actually searching for a prev/next sibling of the trigger by using the
+								<a target="_blank" href="http://api.jquery.com/prev">prev()</a>, <a target="_blank" href="http://api.jquery.com/next">next()</a> JQuery functions.</td>
+							</tr>
+							<tr>
+								<td>collapseSelector</td>
+								<td>string</td>
+								<td>.collapsible</td>
+								<td>This is the selector for the target element to be toggled.</td>
+							</tr>
+							<tr>
+								<td>triggerSelector</td>
+								<td>string</td>
+								<td>[data-trigger="collapse"]</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>ease</td>
+								<td>string</td>
+								<td></td>
+								<td></td>
+							</tr>
+						</tbody>
+					</table>
 
 					<h2>Methods</h2>
 				</section>
