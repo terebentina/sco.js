@@ -682,8 +682,8 @@ confirm.show();
 							<tr>
 								<td>activeTriggerClass</td>
 								<td>string</td>
-								<td>Class to add to the trigger in active state (when the target element is visible).</td>
 								<td></td>
+								<td>Class to add to the trigger in active state (when the target element is visible).</td>
 							</tr>
 							<tr>
 								<td>triggerHtml</td>
@@ -696,32 +696,44 @@ confirm.show();
 								<td>mode</td>
 								<td>string</td>
 								<td>next</td>
-								<td>Can be either 'next' or 'prev'. Determines where the element to collapse is to be found in relation to the trigger. Next (usually) means the trigger is on top
-								of the collapsible element while prev means trigger is under the element. The plugin is actually searching for a prev/next sibling of the trigger by using the
+								<td>Can be either <code>next</code> or <code>prev</code>. Determines where the element to collapse is to be found in relation to the trigger. <code>next</code> means the trigger comes before
+								the collapsible element while prev means trigger is after the element. The plugin is actually searching for a prev/next sibling of the trigger by using the
 								<a target="_blank" href="http://api.jquery.com/prev">prev()</a>, <a target="_blank" href="http://api.jquery.com/next">next()</a> JQuery functions.</td>
 							</tr>
 							<tr>
 								<td>collapseSelector</td>
 								<td>string</td>
 								<td>.collapsible</td>
-								<td>This is the selector for the target element to be toggled.</td>
+								<td>The selector for the target element to be toggled.</td>
 							</tr>
 							<tr>
 								<td>triggerSelector</td>
 								<td>string</td>
 								<td>[data-trigger="collapse"]</td>
-								<td></td>
+								<td>This is used by accordion to find all triggers.</td>
 							</tr>
 							<tr>
 								<td>ease</td>
 								<td>string</td>
-								<td></td>
-								<td></td>
+								<td>slide</td>
+								<td>The effect to use to show/hide the target element. Must be an effect that supports the toggle JQuery functions (like toggleSlide(), toggleFade() or simply toggle()).</td>
 							</tr>
 						</tbody>
 					</table>
 
 					<h2>Methods</h2>
+					<h4>.scojs_collapse(options)</h4>
+					<pre class="prettyprint linenums">
+$('#trigger').scojs_collapse({
+  parent: '#sidebar',
+  mode: 'prev'
+});</pre>
+					<p>There are no other methods available in data-api or JQuery mode yet. The following methods are available in javascript mode only:</p>
+					<h4>.toggle()</h4>
+					<p>Toggles the target element.</p>
+					<pre class="prettyprint linenums">
+var collapse = $.scojs_collapse();
+collapse.toggle();</pre>
 				</section>
 
 
