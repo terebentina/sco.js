@@ -32,9 +32,9 @@
 		}
 		$selector.html(message);
 		if (type == undefined || type == $[pluginName].TYPE_ERROR) {
-			$selector.removeClass($[pluginName].options.ok_class).addClass($[pluginName].options.err_class);
+			$selector.removeClass($[pluginName].options.okClass).addClass($[pluginName].options.errClass);
 		} else if (type == $[pluginName].TYPE_OK) {
-			$selector.removeClass($[pluginName].options.err_class).addClass($[pluginName].options.ok_class);
+			$selector.removeClass($[pluginName].options.errClass).addClass($[pluginName].options.okClass);
 		}
 		$selector.slideDown('fast', function() {
 			$[pluginName].timeout = setTimeout(function() { $selector.slideUp('fast'); }, $[pluginName].options.delay);
@@ -45,8 +45,8 @@
 	$.extend($[pluginName], {
 		options: {
 			id: 'page_message'
-			,ok_class: 'page_mess_ok'
-			,err_class: 'page_mess_error'
+			,okClass: 'page_mess_ok'
+			,errClass: 'page_mess_error'
 			,delay: 4000
 			,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 		},

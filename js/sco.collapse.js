@@ -66,7 +66,7 @@
 				var $this = $(this)
 					,data = $this.data()
 					;
-				options = $.extend({}, options, data);
+				options = $.extend({}, $.fn[pluginName].defaults, options, data);
 				obj = new Collapse($this, options);
 				$.data(this, pluginName, obj);
 			}
