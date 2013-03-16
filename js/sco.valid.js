@@ -24,302 +24,290 @@
 
 	var pluginName = 'scojs_valid';
 
-	$[pluginName] = function($form, options) {
+	function Valid($form, options) {
+		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$form = $form;
-		this.options = $.extend({}, $[pluginName].defaults, options);
 		this.allowed_rules = [];
 		this.errors = {};
 		var that = this;
-		$.each(this.methods, function(k,v) {
+		$.each(this.methods, function(k, v) {
 			that.allowed_rules.push(k);
 		});
-	};
+	}
 
-	$.extend($[pluginName], {
-		defaults: {
-			// the tag that wraps the field and possibly the label and which defines a "row" of the form
-			wrapper: 'label',
-			// array of rules to check the form against. Each value should be either a string with the name of the method to use as rule or a hash like {method: <method params>}
-			rules: {},
-			// custom error messages like {username: {not_empty: 'hey you forgot to enter your username', min_length: 'come on, more than 2 chars, ok?'}, password: {....}}
-			messages: {}
+	$.extend(Valid.prototype, {
+		// this is the main function - it returns either true if the validation passed or a hash like {field1: 'error text', field2: 'error text', ...}
+		validate: function() {
+			var that = this
+				,form_fields = this.$form.serializeArray()
+				,all_fields = this.$form.find(':input[name]').map(function() {return this.name;}).get()
+				;
+
+			// remove any possible displayed errors from previous runs
+			$.each(this.errors, function(field_name, error) {
+				var $input = that.$form.find('[name="'+field_name+'"]');
+				$input.siblings('span').html('');
+				if (that.options.wrapper !== null) {
+					$input.parents(that.options.wrapper).removeClass('error');
+				}
+			});
+			this.errors = {};
+
+			$.each(that.options.rules, function(field_name, rules) {
+				var field = null
+					,normalized_rules = {}
+					;
+				// find the field in the form
+				$.each(form_fields, function(k, v) {
+					if (v.name === field_name) {
+						field = v;
+						return false;
+					}
+				});
+
+				// if field was not found, it could mean 2 things: mispelled field name in the rules or the field is not a successful control
+				// even if it's not successful we have to validate it
+				if (field === null) {
+					if ($.inArray(field_name, all_fields) !== -1) {
+						field = {name: field_name, value: that.get_field_value(field_name)};
+					}
+				}
+
+				// if it's still null then it's either mispelled or disabled. We don't care either way
+				if (field !== null) {
+					$.each(rules, function(rule_idx, rule_value) {
+						// determine the method to call and its args
+						var fn_name, fn_args, result;
+						// only string and objects are allowed
+						if ($.type(rule_value) === 'string') {
+							// make sure the requested method actually exists.
+							if ($.inArray(rule_value, that.allowed_rules) !== -1) {
+								normalized_rules[rule_value] = null;
+							}
+						} else {
+							// if not string then we assume it's a {key: val} object. Only 1 key is allowed
+							$.each(rule_value, function(k, v) {
+								// make sure the requested method actually exists.
+								if ($.inArray(k, that.allowed_rules) !== -1) {
+									normalized_rules[k] = v;
+									return false;
+								}
+							});
+						}
+					});
+
+					$.each(normalized_rules, function(fn_name, fn_args) {
+						// call the method with the requested args
+						if (that.methods[fn_name].call(that, field.name, field.value, fn_args, normalized_rules) !== true) {
+							that.errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
+						}
+					});
+				}
+			});
+
+			if (!$.isEmptyObject(this.errors)) {
+				this.show(this.errors);
+				return false;
+			} else {
+				return true;
+			}
 		},
 
 
-		prototype: {
-			// this is the main function - it returns either true if the validation passed or a hash like {field1: 'error text', field2: 'error text', ...}
-			validate: function() {
-				var that = this
-					,form_fields = this.$form.serializeArray()
-					,all_fields = this.$form.find(':input[name]').map(function() {return this.name;}).get()
-					;
+		show: function(errors) {
+			var that = this;
+			$.each(errors, function(k, v) {
+				var $input = that.$form.find('[name="'+k+'"]'),
+					$span = $input.siblings('span');
+				if (that.options.wrapper !== null) {
+					$input.parents(that.options.wrapper).addClass('error');
+				}
+				if ($span.length === 0) {
+					$span = $('<span/>');
+					$input.after($span);
+				}
+				$span.html(v);
+			});
+		},
 
-				// remove any possible displayed errors from previous runs
-				$.each(this.errors, function(field_name, error) {
-					var $input = that.$form.find('[name="'+field_name+'"]');
-					$input.siblings('span').html('');
-					if (that.options.wrapper !== null) {
-						$input.parents(that.options.wrapper).removeClass('error');
-					}
-				});
-				this.errors = {};
 
-				$.each(that.options.rules, function(field_name, rules) {
-					var field = null
-						,normalized_rules = {}
-						;
-					// find the field in the form
-					$.each(form_fields, function(k, v) {
-						if (v.name === field_name) {
-							field = v;
-							return false;
-						}
-					});
+		methods: {
+			not_empty: function(field, value) {
+				return value !== null && $.trim(value).length > 0;
+			},
 
-					// if field was not found, it could mean 2 things: mispelled field name in the rules or the field is not a successful control
-					// even if it's not successful we have to validate it
-					if (field === null) {
-						if ($.inArray(field_name, all_fields) !== -1) {
-							field = {name: field_name, value: that.get_field_value(field_name)};
-						}
-					}
+			min_length: function(field, value, min_len, all_rules) {
+				var length = $.trim(value).length
+					,result = (length >= min_len);
+				if (!all_rules['not_empty']) {
+					result = result || length === 0;
+				}
+				return result;
+			},
 
-					// if it's still null then it's either mispelled or disabled. We don't care either way
-					if (field !== null) {
-						$.each(rules, function(rule_idx, rule_value) {
-							// determine the method to call and its args
-							var fn_name, fn_args, result;
-							// only string and objects are allowed
-							if ($.type(rule_value) === 'string') {
-								// make sure the requested method actually exists.
-								if ($.inArray(rule_value, that.allowed_rules) !== -1) {
-									normalized_rules[rule_value] = null;
-								}
-							} else {
-								// if not string then we assume it's a {key: val} object. Only 1 key is allowed
-								$.each(rule_value, function(k, v) {
-									// make sure the requested method actually exists.
-									if ($.inArray(k, that.allowed_rules) !== -1) {
-										normalized_rules[k] = v;
-										return false;
-									}
-								});
-							}
-						});
+			max_length: function(field, value, max_len) {
+				return $.trim(value).length <= max_len;
+			},
 
-						$.each(normalized_rules, function(fn_name, fn_args) {
-							// call the method with the requested args
-							if (that.methods[fn_name].call(that, field.name, field.value, fn_args, normalized_rules) !== true) {
-								that.errors[field.name] = that.format.call(that, field.name, fn_name, fn_args);
-							}
-						});
-					}
-				});
+			regex: function(field, value, regexp) {
+				return regexp.test(value);
+			},
 
-				if (!$.isEmptyObject(this.errors)) {
-					this.show(this.errors);
+			email: function(field, value) {
+				// by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
+				var regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
+				return regex.test($.trim(value));
+			},
+
+			url: function(field, value, params) {
+				// by Scott Gonzalez: http://projects.scottsplayground.com/iri/
+				var regex = /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
+				return regex.test(value);
+			},
+
+			exact_length: function(field, value, exact_length, all_rules) {
+				var length = $.trim(value).length
+					,result = (length === exact_length);
+				if (!all_rules['not_empty']) {
+					result = result || length === 0;
+				}
+				return result;
+			},
+
+			equals: function(field, value, target) {
+				return value === target;
+			},
+
+			ip: function(field, value) {
+				var regex = /^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$/i;
+				return regex.test($.trim(value));
+			},
+
+			credit_card: function(field, value, params) {
+				// accept only spaces, digits and dashes
+				if (/[^0-9 \-]+/.test(value)) {
 					return false;
-				} else {
-					return true;
 				}
-			},
+				var nCheck = 0,
+					nDigit = 0,
+					bEven = false;
 
+				value = value.replace(/\D/g, "");
 
-			show: function(errors) {
-				var that = this;
-				$.each(errors, function(k, v) {
-					var $input = that.$form.find('[name="'+k+'"]'),
-						$span = $input.siblings('span');
-					if (that.options.wrapper !== null) {
-						$input.parents(that.options.wrapper).addClass('error');
-					}
-					if ($span.length === 0) {
-						$span = $('<span/>');
-						$input.after($span);
-					}
-					$span.html(v);
-				});
-			},
-
-
-			methods: {
-				not_empty: function(field, value) {
-					return value !== null && $.trim(value).length > 0;
-				},
-
-				min_length: function(field, value, min_len, all_rules) {
-					var length = $.trim(value).length
-						,result = (length >= min_len);
-					if (!all_rules['not_empty']) {
-						result = result || length === 0;
-					}
-					return result;
-				},
-
-				max_length: function(field, value, max_len) {
-					return $.trim(value).length <= max_len;
-				},
-
-				regex: function(field, value, regexp) {
-					return regexp.test(value);
-				},
-
-				email: function(field, value) {
-					// by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
-					var regex = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i;
-					return regex.test($.trim(value));
-				},
-
-				url: function(field, value, params) {
-					// by Scott Gonzalez: http://projects.scottsplayground.com/iri/
-					var regex = /^(https?|ftp):\/\/(((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:)*@)?(((\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5])\.(\d|[1-9]\d|1\d\d|2[0-4]\d|25[0-5]))|((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?)(:\d*)?)(\/((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)+(\/(([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)*)*)?)?(\?((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|[\uE000-\uF8FF]|\/|\?)*)?(\#((([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(%[\da-f]{2})|[!\$&'\(\)\*\+,;=]|:|@)|\/|\?)*)?$/i;
-					return regex.test(value);
-				},
-
-				exact_length: function(field, value, exact_length, all_rules) {
-					var length = $.trim(value).length
-						,result = (length === exact_length);
-					if (!all_rules['not_empty']) {
-						result = result || length === 0;
-					}
-					return result;
-				},
-
-				equals: function(field, value, target) {
-					return value === target;
-				},
-
-				ip: function(field, value) {
-					var regex = /^((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){3}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})$/i;
-					return regex.test($.trim(value));
-				},
-
-				credit_card: function(field, value, params) {
-					// accept only spaces, digits and dashes
-					if (/[^0-9 \-]+/.test(value)) {
-						return false;
-					}
-					var nCheck = 0,
-						nDigit = 0,
-						bEven = false;
-
-					value = value.replace(/\D/g, "");
-
-					for (var n = value.length - 1; n >= 0; n--) {
-						var cDigit = value.charAt(n);
-						nDigit = parseInt(cDigit, 10);
-						if (bEven) {
-							if ((nDigit *= 2) > 9) {
-								nDigit -= 9;
-							}
+				for (var n = value.length - 1; n >= 0; n--) {
+					var cDigit = value.charAt(n);
+					nDigit = parseInt(cDigit, 10);
+					if (bEven) {
+						if ((nDigit *= 2) > 9) {
+							nDigit -= 9;
 						}
-						nCheck += nDigit;
-						bEven = !bEven;
 					}
-
-					return (nCheck % 10) === 0;
-				},
-
-				alpha: function(field, value) {
-					var regex = /^[a-z]*$/i;
-					return regex.test(value);
-				},
-
-				alpha_numeric: function(field, value) {
-					var regex = /^[a-z0-9]*$/i;
-					return regex.test(value);
-				},
-
-				alpha_dash: function(field, value) {
-					var regex = /^[a-z0-9_\-]*$/i;
-					return regex.test(value);
-				},
-
-				digit: function(field, value) {
-					var regex = /^\d*$/;
-					return regex.test(value);
-				},
-
-				numeric: function(field, value, params) {
-					var regex = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
-					return regex.test(value);
-				},
-
-				range: function(field, value, params) {
-
-				},
-
-				decimal: function(field, value, params) {
-					var regex = /^\-?[0-9]*\.?[0-9]+$/;
-					return regex.test(value);
-				},
-
-				color: function(field, value, params) {
-
-				},
-
-				matches: function(field, value, param) {
-					return value === this.$form.find('[name="'+param+'"]').val();
+					nCheck += nDigit;
+					bEven = !bEven;
 				}
+
+				return (nCheck % 10) === 0;
 			},
 
-
-			messages: {
-				not_empty: 'This field is required.',
-				min_length: 'Please enter at least :value characters.',
-				max_length: 'Please enter no more than :value characters.',
-				regex: '',
-				email: 'Please enter a valid email address.',
-				url: 'Please enter a valid URL.',
-				exact_length: 'Please enter exactly :value characters.',
-				equals: '',
-				ip: '',
-				credit_card: 'Please enter a valid credit card number.',
-				alpha: '',
-				alpha_numeric: '',
-				alpha_dash: '',
-				digit: 'Please enter only digits.',
-				numeric: 'Please enter a valid number.',
-				range: 'Please enter a value between :min and :max.',
-				decimal: 'Please enter a decimal number.',
-				color: '',
-				matches: 'Must match the previous value.'
+			alpha: function(field, value) {
+				var regex = /^[a-z]*$/i;
+				return regex.test(value);
 			},
 
-
-			/**
-			 * finds the most specific error message string and replaces any ":value" substring with the actual value
-			 */
-			format: function(field_name, rule, params) {
-				var message;
-				if (typeof this.options.messages[field_name] !== 'undefined' && typeof this.options.messages[field_name][rule] !== 'undefined') {
-					message = this.options.messages[field_name][rule];
-				} else {
-					message = this.messages[rule];
-				}
-
-				if ($.type(params) !== 'undefined' && params !== null) {
-					if ($.type(params) === 'boolean' || $.type(params) === 'string' || $.type(params) === 'number') {
-						params = {value: params};
-					}
-					$.each(params, function(k, v) {
-						message = message.replace(new RegExp(':'+k, 'ig'), v);
-					});
-				}
-				return message;
+			alpha_numeric: function(field, value) {
+				var regex = /^[a-z0-9]*$/i;
+				return regex.test(value);
 			},
 
+			alpha_dash: function(field, value) {
+				var regex = /^[a-z0-9_\-]*$/i;
+				return regex.test(value);
+			},
 
-			/**
-			 * get a normalized value for a form field.
-			 */
-			get_field_value: function(field_name) {
-				var $input = this.$form.find('[name="' + field_name + '"]');
-				if ($input.is('[type="checkbox"], [type="radio"]')) {
-					return $input.is(':checked') ? $input.val() : null;
-				} else {
-					return $input.val();
+			digit: function(field, value) {
+				var regex = /^\d*$/;
+				return regex.test(value);
+			},
+
+			numeric: function(field, value, params) {
+				var regex = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
+				return regex.test(value);
+			},
+
+			range: function(field, value, params) {
+
+			},
+
+			decimal: function(field, value, params) {
+				var regex = /^\-?[0-9]*\.?[0-9]+$/;
+				return regex.test(value);
+			},
+
+			color: function(field, value, params) {
+
+			},
+
+			matches: function(field, value, param) {
+				return value === this.$form.find('[name="'+param+'"]').val();
+			}
+		},
+
+
+		messages: {
+			not_empty: 'This field is required.',
+			min_length: 'Please enter at least :value characters.',
+			max_length: 'Please enter no more than :value characters.',
+			regex: '',
+			email: 'Please enter a valid email address.',
+			url: 'Please enter a valid URL.',
+			exact_length: 'Please enter exactly :value characters.',
+			equals: '',
+			ip: '',
+			credit_card: 'Please enter a valid credit card number.',
+			alpha: '',
+			alpha_numeric: '',
+			alpha_dash: '',
+			digit: 'Please enter only digits.',
+			numeric: 'Please enter a valid number.',
+			range: 'Please enter a value between :min and :max.',
+			decimal: 'Please enter a decimal number.',
+			color: '',
+			matches: 'Must match the previous value.'
+		},
+
+
+		/**
+		 * finds the most specific error message string and replaces any ":value" substring with the actual value
+		 */
+		format: function(field_name, rule, params) {
+			var message;
+			if (typeof this.options.messages[field_name] !== 'undefined' && typeof this.options.messages[field_name][rule] !== 'undefined') {
+				message = this.options.messages[field_name][rule];
+			} else {
+				message = this.messages[rule];
+			}
+
+			if ($.type(params) !== 'undefined' && params !== null) {
+				if ($.type(params) === 'boolean' || $.type(params) === 'string' || $.type(params) === 'number') {
+					params = {value: params};
 				}
+				$.each(params, function(k, v) {
+					message = message.replace(new RegExp(':'+k, 'ig'), v);
+				});
+			}
+			return message;
+		},
+
+
+		/**
+		 * get a normalized value for a form field.
+		 */
+		get_field_value: function(field_name) {
+			var $input = this.$form.find('[name="' + field_name + '"]');
+			if ($input.is('[type="checkbox"], [type="radio"]')) {
+				return $input.is(':checked') ? $input.val() : null;
+			} else {
+				return $input.val();
 			}
 		}
 	});
@@ -334,11 +322,12 @@
 	 * @param {mixed} value the value to set on the key
 	 */
 	$.fn[pluginName] = function(options, key, value) {
-		var $form = this.eq(0),
-			validator = $form.data(pluginName);
+		var  $form = this.eq(0)
+			,validator = $form.data(pluginName);
 		if ($.type(options) === 'object') {
 			if (!validator) {
-				validator = new $[pluginName]($form, options);
+				options = $.extend({}, $.fn[pluginName].defaults, options, data);
+				validator = new Valid($form, options);
 				$form.data(pluginName, validator).attr('novalidate', 'novalidate');
 			}
 			$form.ajaxForm({
@@ -347,11 +336,11 @@
 				}
 				,dataType: 'json'
 				,success: function(response, status, xhr, $form) {
-					if (response.status == 'fail') {
-						$form[pluginName]().show(response.data.errors);
-					} else if (response.status == 'error') {
+					if (response.status === 'fail') {
+						validator.show(response.data.errors);
+					} else if (response.status === 'error') {
 						$.scojs_message(response.message, $.scojs_message.TYPE_ERROR);
-					} else if (response.status == 'success') {
+					} else if (response.status === 'success') {
 						if (typeof response.data.run === 'function') {
 							response.data.run.call(this, $form);
 						}
@@ -382,5 +371,20 @@
 		} else {
 			return validator;
 		}
+	};
+
+
+	$[pluginName] = function(form, options) {
+		if (typeof form === 'string') {
+			form = $(form);
+		}
+		return new Valid(form, options);
+	};
+
+
+	$.fn[pluginName].defaults = {
+		wrapper: 'label'	// the html tag that wraps the field and which defines a "row" of the form
+		,rules: {}			// array of rules to check the form against. Each value should be either a string with the name of the method to use as rule or a hash like {method: <method params>}
+		,messages: {}		// custom error messages like {username: {not_empty: 'hey you forgot to enter your username', min_length: 'come on, more than 2 chars, ok?'}, password: {....}}
 	};
 })(jQuery);
