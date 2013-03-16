@@ -18,27 +18,15 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, smarttabs:true */
-/*global define:true */
 
-(function (factory) {
+;(function($, undefined) {
 	"use strict";
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery',
-			'../jquery.form.js'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_valid';
 
-	$.scovalid = function($form, options) {
+	$[pluginName] = function($form, options) {
 		this.$form = $form;
-		this.options = $.extend({}, $.scovalid.defaults, options);
+		this.options = $.extend({}, $[pluginName].defaults, options);
 		this.allowed_rules = [];
 		this.errors = {};
 		var that = this;
@@ -47,7 +35,7 @@
 		});
 	};
 
-	$.extend($.scovalid, {
+	$.extend($[pluginName], {
 		defaults: {
 			// the tag that wraps the field and possibly the label and which defines a "row" of the form
 			wrapper: 'label',
@@ -338,20 +326,20 @@
 
 
 	/**
-	 * main function to use on a form (like $('#form).scovalid({...})). Performs validation of the form, sets the error messages on form inputs and returns
+	 * main function to use on a form (like $('#form).scojs_valid({...})). Performs validation of the form, sets the error messages on form inputs and returns
 	 * true/false depending on whether the form passed validation or not
 	 *
 	 * @param hash/string options the hash of rules and messages to validate the form against (and messages to show if failed validation) or the string "option"
 	 * @param {string} key the option key to retrieve or set. If the third param of the function is available then act as a setter, otherwise as a getter.
 	 * @param {mixed} value the value to set on the key
 	 */
-	$.fn.scovalid = function( options, key, value ) {
+	$.fn[pluginName] = function(options, key, value) {
 		var $form = this.eq(0),
-			validator = $form.data('scovalid');
+			validator = $form.data(pluginName);
 		if ($.type(options) === 'object') {
 			if (!validator) {
-				validator = new $.scovalid($form, options);
-				$form.data("scovalid", validator).attr('novalidate', 'novalidate');
+				validator = new $[pluginName]($form, options);
+				$form.data(pluginName, validator).attr('novalidate', 'novalidate');
 			}
 			$form.ajaxForm({
 				beforeSubmit: function(arr, $form, options) {
@@ -360,7 +348,7 @@
 				,dataType: 'json'
 				,success: function(response, status, xhr, $form) {
 					if (response.status == 'fail') {
-						$form.scovalid().show(response.data.errors);
+						$form[pluginName]().show(response.data.errors);
 					} else if (response.status == 'error') {
 						$.scojs_message(response.message, $.scojs_message.TYPE_ERROR);
 					} else if (response.status == 'success') {
@@ -395,4 +383,4 @@
 			return validator;
 		}
 	};
-}));
+})(jQuery);
