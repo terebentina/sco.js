@@ -59,6 +59,7 @@
 		}
 	});
 
+
 	$.fn[pluginName] = function(options) {
 		return this.each(function() {
 			var obj;
@@ -81,6 +82,7 @@
 		}
 		return new Collapse(trigger, options);
 	};
+
 
 	$.fn[pluginName].defaults = {
 		parent: null                        // having a parent activates the accordion mode behaviour

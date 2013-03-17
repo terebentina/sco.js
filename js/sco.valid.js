@@ -326,7 +326,7 @@
 			,validator = $form.data(pluginName);
 		if ($.type(options) === 'object') {
 			if (!validator) {
-				options = $.extend({}, $.fn[pluginName].defaults, options, data);
+				options = $.extend({}, $.fn[pluginName].defaults, options, $form.data());
 				validator = new Valid($form, options);
 				$form.data(pluginName, validator).attr('novalidate', 'novalidate');
 			}
