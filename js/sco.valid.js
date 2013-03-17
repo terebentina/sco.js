@@ -46,7 +46,7 @@
 			// remove any possible displayed errors from previous runs
 			$.each(this.errors, function(field_name, error) {
 				var $input = that.$form.find('[name="'+field_name+'"]');
-				$input.siblings('span').html('');
+				$input.siblings('span.message').html('');
 				if (that.options.wrapper !== null) {
 					$input.parents(that.options.wrapper).removeClass('error');
 				}
@@ -117,13 +117,13 @@
 		show: function(errors) {
 			var that = this;
 			$.each(errors, function(k, v) {
-				var $input = that.$form.find('[name="'+k+'"]'),
-					$span = $input.siblings('span');
+				var $input = that.$form.find('[name="' + k + '"]'),
+					$span = $input.siblings('.message');
 				if (that.options.wrapper !== null) {
 					$input.parents(that.options.wrapper).addClass('error');
 				}
 				if ($span.length === 0) {
-					$span = $('<span/>');
+					$span = $('<span/>', {'class': 'message'});
 					$input.after($span);
 				}
 				$span.html(v);
