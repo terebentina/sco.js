@@ -2,7 +2,7 @@
  * sco.collapse.js
  * http://github.com/terebentina/sco.js
  * ==========================================================
- * Copyright 2012 Dan Caragea.
+ * Copyright 2013 Dan Caragea.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,6 +59,7 @@
 		}
 	});
 
+
 	$.fn[pluginName] = function(options) {
 		return this.each(function() {
 			var obj;
@@ -66,7 +67,7 @@
 				var $this = $(this)
 					,data = $this.data()
 					;
-				options = $.extend({}, options, data);
+				options = $.extend({}, $.fn[pluginName].defaults, options, data);
 				obj = new Collapse($this, options);
 				$.data(this, pluginName, obj);
 			}
@@ -82,16 +83,17 @@
 		return new Collapse(trigger, options);
 	};
 
+
 	$.fn[pluginName].defaults = {
-		parent: null						// having a parent activates the accordion mode behaviour
-		,target: null						// the element to show/hide. If null, the target is chosen based on the "mode" selector
-		,activeTriggerClass: 'active'		// class to add to the trigger in active (on) state
-		//,activeTargetClass: 'in'			// class to add to the target in active (on) state
-		,triggerHtml: null					// if not null, this should be a hash like {off: 'more', on: 'less'}. This text is set on the trigger.
-		,mode: 'next'						// "next" means target is after trigger, "prev" means target is before trigger in html source
-		,collapseSelector: '.collapsible'	// used in accordion to find out what to collapse when the current target expands or if the target is null
+		parent: null                        // having a parent activates the accordion mode behaviour
+		,target: null                       // the element to show/hide. If null, the target is chosen based on the "mode" selector
+		,activeTriggerClass: 'active'       // class to add to the trigger in active (on) state
+		//,activeTargetClass: 'in'          // class to add to the target in active (on) state
+		,triggerHtml: null                  // if not null, this should be a hash like {off: 'more', on: 'less'}. This text is set on the trigger.
+		,mode: 'next'                       // "next" means target is after trigger, "prev" means target is before trigger in html source
+		,collapseSelector: '.collapsible'   // used in accordion to find out what to collapse when the current target expands or if the target is null
 		,triggerSelector: '[data-trigger="collapse"]'		// used in accordion to find out all triggers
-		,ease: 'slide'						// the animation effect to use. Must support toggle (like slideToggle/fadeToggle or even empty string :))
+		,ease: 'slide'                      // the animation effect to use. Must support toggle (like slideToggle/fadeToggle or even empty string :))
 	};
 
 	$(document).on('click.' + pluginName, '[data-trigger="collapse"]', function(e) {

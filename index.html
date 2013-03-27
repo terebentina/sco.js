@@ -4,7 +4,7 @@
 	<meta charset='utf-8'>
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Sco.js : A collection of js utlis for the web. Inspired by the twitter bootstrap js components, with real world applicability" />
+	<meta name="description" content="Sco.js : a twitter bootstrap javascript extension with sensible defaults">
 
 	<link href="assets/css/bootstrap.css" rel="stylesheet">
 	<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
@@ -18,6 +18,7 @@
 	<script src="assets/js/sco.confirm.js"></script>
 	<script src="assets/js/sco.ajax.js"></script>
 	<script src="assets/js/sco.collapse.js"></script>
+	<script src="assets/js/sco.countdown.js"></script>
 	<script src="assets/js/prettify.js"></script>
 	<script src="assets/js/app.js"></script>
 	<title>Sco.js</title>
@@ -30,7 +31,7 @@
 			<a id="forkme_banner" href="https://github.com/terebentina/sco.js">View on GitHub</a>
 
 			<h1 id="project_title">Sco.js</h1>
-			<h2 id="project_tagline">A collection of js utlis for the web. Inspired by the twitter bootstrap js components, with real world applicability</h2>
+			<h2 id="project_tagline">A twitter bootstrap javascript extension</h2>
 
 			<section id="downloads">
 				<a class="zip_download_link" href="https://github.com/terebentina/sco.js/zipball/master">Download this project as a .zip file</a>
@@ -555,14 +556,15 @@ confirm.show();
 						</ul>
 					</div>
 					<pre class="prettyprint linenums">
-&lt;a href="#" data-trigger="collapse">Click me, I'm not using any id&lt;/a>
+&lt;a href="#" data-trigger="collapse">Click for default behaviour&lt;/a>
 &lt;div class="collapsible hide">
   Lorem ipsum...
 &lt;/div>
 &lt;a href="#" data-trigger="collapse" data-target="#collapse_test">Click me too - I am using an id&lt;/a>
 &lt;div id="collapse_test" class="hide">
   The quick...
-&lt;/div></pre>
+&lt;/div>
+&lt;a href="#" data-trigger="collapse" data-target=".hide">Toggle all at once&lt;/a></pre>
 
 					<p>Let's spice things up a bit: the accordion behaviour. In this mode, we need to tell each trigger what html element is the parent for the whole accordion:</p>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
@@ -677,7 +679,7 @@ confirm.show();
 								<td>string</td>
 								<td></td>
 								<td>Use this option to specify the target element to collapse. It should be a JQuery selector for the element you want to collapse.
-								Normally it's not needed as the plugin can figure out which element you want to collapse by itself.</td>
+								Normally it's not needed as the plugin can figure out which element to collapse by itself.</td>
 							</tr>
 							<tr>
 								<td>activeTriggerClass</td>
@@ -697,7 +699,7 @@ confirm.show();
 								<td>string</td>
 								<td>next</td>
 								<td>Can be either <code>next</code> or <code>prev</code>. Determines where the element to collapse is to be found in relation to the trigger. <code>next</code> means the trigger comes before
-								the collapsible element while prev means trigger is after the element. The plugin is actually searching for a prev/next sibling of the trigger by using the
+								the collapsible element while <code>prev</code> means trigger is after the element. The plugin is actually searching for a prev/next sibling of the trigger by using the
 								<a target="_blank" href="http://api.jquery.com/prev">prev()</a>, <a target="_blank" href="http://api.jquery.com/next">next()</a> JQuery functions.</td>
 							</tr>
 							<tr>
@@ -743,24 +745,84 @@ collapse.toggle();</pre>
 					</div>
 
 					<h3>What?</h3>
-					<p>coming soon.</p>
+					<p>A simple countdown plugin, nothing fancy here. You tell it to countdown to a certain date/time and it starts counting while displaying the counter in the html element of your choice.</p>
 
 					<h3>Why?</h3>
-					<p>coming soon.</p>
+					<p>I needed this for an auction kind of app to show the remaining time. Not really related to bootstrap but could be useful to someone.</p>
 
 					<h3>Dependencies</h3>
-					<p>coming soon.</p>
+					<p>JQuery.</p>
 
 					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<script>
+							$(function() {
+								var  today = new Date()
+									,tomorrow = Math.round(today.setDate(today.getDate() + 1) / 1000)	// seconds instead of milliseconds
+									;
+								$('#countdowner').scojs_countdown({until: tomorrow});
+							});
+						</script>
+						<div id="countdowner"></div>
+					</div>
+<pre class="prettyprint linenums">
+&lt;div id="countdowner">&lt;/div>
+&lt;script>
+$('#countdowner').scojs_countdown({until: 1364382956});
+&lt;/script></pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
+					<p>The plugin cannot be initiated with data-api but you can specify the options with <code>data</code> attributes on the target element:</p>
+					<pre class="prettyprint linenums">&lt;div id="countdowner" data-d="días" data-h="horas" data-m="minutos" data-s="segundos">&lt;/div></pre>
+
 					<h3>Via jquery</h3>
-					<h3>Via javascript</h3>
+					<pre class="prettyprint linenums">$('#target').scojs_countdown(options);</pre>
 
 					<h2>Options</h2>
-
-					<h2>Methods</h2>
+					<p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>, as in <code>data-d="days"</code>.</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>until</td>
+								<td>integer</td>
+								<td></td>
+								<td>Unix timestamp (in seconds) to countdown to. This option is required.</td>
+							</tr>
+							<tr>
+								<td>d</td>
+								<td>string</td>
+								<td>d</td>
+								<td>Text to show after the count of days. By default it shows 'd' as in 12d but if you change it to, say, 'days', it'll show 12days.</td>
+							</tr>
+							<tr>
+								<td>h</td>
+								<td>string</td>
+								<td>h</td>
+								<td>Text to show after the count of hours. By default it shows 'h' as in 12h but if you change it to, say, 'hours', it'll show 12hours.</td>
+							</tr>
+							<tr>
+								<td>m</td>
+								<td>string</td>
+								<td>m</td>
+								<td>Text to show after the count of minutes. By default it shows 'm' as in 12m but if you change it to, say, 'minutes', it'll show 12minutes.</td>
+							</tr>
+							<tr>
+								<td>s</td>
+								<td>string</td>
+								<td>s</td>
+								<td>Text to show after the count of seconds. By default it shows 's' as in 12s but if you change it to, say, 'seconds', it'll show 12seconds.</td>
+							</tr>
+						</tbody>
+					</table>
 				</section>
 
 
