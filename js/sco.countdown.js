@@ -18,24 +18,13 @@
  * ========================================================== */
 
 /*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
-/*global define:true, _:true */
 
-(function(factory) {
+;(function($, undefined) {
 	"use strict";
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_countdown';
 
-	function doit($this, data, until) {
+	function doit($elem, data, until) {
 		var str = ''
 			,started = false
 			,left = {d: 0, h: 0, m: 0, s: 0}
@@ -76,17 +65,17 @@
 			started = true;
 		}
 
-		$this.html(str);
-		setTimeout(function() {doit($this, data, until);}, 1000);
+		$elem.html(str);
+		setTimeout(function() {doit($elem, data, until);}, 500);
 	}
 
-	$.fn.countdown = function(options) {
+	$.fn[pluginName] = function(options) {
 		var $this = $(this)
 			,data = $this.data()
 			,js_current
 			;
 
-		data = $.extend({}, $.fn.countdown.defaults, data, options);
+		data = $.extend({}, $.fn[pluginName].defaults, options, data);
 
 		if (!data.until) {
 			return;
@@ -102,7 +91,7 @@
 		doit($this, data, data.until);
 	};
 
-	$.fn.countdown.defaults = {
+	$.fn[pluginName].defaults = {
 		strings: {d: 'd', h: 'h', m: 'm', s: 's'}
 	};
-}));
+})(jQuery);
