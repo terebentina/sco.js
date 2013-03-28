@@ -19,6 +19,9 @@
 	<script src="assets/js/sco.ajax.js"></script>
 	<script src="assets/js/sco.collapse.js"></script>
 	<script src="assets/js/sco.countdown.js"></script>
+	<script src="assets/js/sco.message.js"></script>
+	<script src="assets/js/jquery.form.js"></script>
+	<script src="assets/js/sco.valid.js"></script>
 	<script src="assets/js/prettify.js"></script>
 	<script src="assets/js/app.js"></script>
 	<title>Sco.js</title>
@@ -48,14 +51,14 @@
 					<li><a href="#overview"><i class="icon-chevron-right"></i> Overview</a></li>
 					<li><a href="#modals"><i class="icon-chevron-right"></i> Modal</a></li>
 					<li><a href="#confirm"><i class="icon-chevron-right"></i> Confirm</a></li>
-					<li><a href="#tab"><i class="icon-chevron-right"></i> Tab</a></li>
-					<li><a href="#ajax"><i class="icon-chevron-right"></i> Ajax</a></li>
 					<li><a href="#collapse"><i class="icon-chevron-right"></i> Collapse</a></li>
-					<li><a href="#countdown"><i class="icon-chevron-right"></i> Countdown</a></li>
-					<li><a href="#message"><i class="icon-chevron-right"></i> Message</a></li>
-					<li><a href="#placeholder"><i class="icon-chevron-right"></i> Placeholder</a></li>
+					<li><a href="#tab"><i class="icon-chevron-right"></i> Tab</a></li>
 					<li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
+					<li><a href="#message"><i class="icon-chevron-right"></i> Message</a></li>
 					<li><a href="#valid"><i class="icon-chevron-right"></i> Valid</a></li>
+					<li><a href="#ajax"><i class="icon-chevron-right"></i> Ajax</a></li>
+					<li><a href="#countdown"><i class="icon-chevron-right"></i> Countdown</a></li>
+					<li><a href="#placeholder"><i class="icon-chevron-right"></i> Placeholder</a></li>
 				</ul>
 			</div>
 			<div class="span9">
@@ -70,7 +73,10 @@
 					Most of the bootstrap js plugins are not very extensible (or they were not when I created my version of the plugins) and where they are, my requirements
 					were too different to just extend with 1-2 lines of code. This is not to say bootstrap and its js components are bad! It's a really good framework for
 					rapid development but...1 size doesn't fit all. In my case it almost fit ;)</p>
-					<p>Please note that bootstrap is using css transitions where possible and this is a great thing! My js plugins don't yet but I plan to address this problem soon ;)</p>
+					<div class="alert alert-info">
+						<strong>Note:</strong>
+						bootstrap is using css transitions where possible and this is a great thing! My js plugins don't yet but I plan to address this problem soon ;)
+					</div>
 
 					<h3>What you get</h3>
 					<p>All plugins in sco.js can be used on a bootstrap-enabled site but they can be used separately as well. Also, sco.js contains plugins that are not available
@@ -318,7 +324,7 @@ modal.destroy();
 					<p>We wanted an easy way to make the user confirm some action like deleting something from their profiles.</p>
 
 					<h3>Dependencies</h3>
-					<p>The confirm plugin depends on the modal. Make sure you load both when you want to use confirm.</p>
+					<p>The confirm plugin depends on the <a href="#modals">modal</a>. Make sure you load both when you want to use confirm.</p>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
@@ -427,95 +433,6 @@ var confirm = $.scojs_confirm({
 confirm.show();
 </pre>
 					<p>All <a href="#modal_methods">modal methods</a> are available for the confirm as well.</p>
-				</section>
-
-
-				<section id="tab">
-					<div class="page-header">
-						<h1>Tab <small>sco.tab.js</small></h1>
-					</div>
-
-					<h3>What?</h3>
-					<p>coming soon.</p>
-
-					<h3>Why?</h3>
-					<p>coming soon.</p>
-
-					<h3>Dependencies</h3>
-					<p>coming soon.</p>
-
-					<h3>Examples</h3>
-
-					<h2>Usage</h2>
-					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
-					<h3>Via javascript</h3>
-
-					<h2>Options</h2>
-
-					<h2>Methods</h2>
-				</section>
-
-
-				<section id="ajax">
-					<div class="page-header">
-						<h1>Ajax <small>sco.ajax.js</small></h1>
-					</div>
-
-					<h3>What?</h3>
-					<p>This is really just a convenient utility function that makes links load remote content with AJAX inside some target element on the page. This behaviour is also known as "ajaxification of links".
-					Could be used for a side menu - all menu links would load just the page content, without a full page reload.</p>
-					<p>Note that this function doesn't parse the output to display just a part of it in page and it doesn't make use of the browser history API. If you need such a full ajaxification plugin
-					take a look at <a target="_blank" href="https://github.com/balupton/history.js">History.js</a>.</p>
-
-					<h3>Why?</h3>
-					<p>I needed some links to load their contents with ajax but not all. There was no need for browser history API support or anything fancy.</p>
-
-					<h3>Dependencies</h3>
-					<p>Ajax does not depend on other libraries (other than JQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
-					If spin.js is found, a spinning wheel is displayed during the loading of remote content.</p>
-
-					<h3>Examples</h3>
-					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<a data-trigger="ajax" href="lipsum.html" data-target="#ajax_target" class="btn btn-primary btn-large">Ajax demo</a>
-						<div id="ajax_target">Remote content will be loaded here</div>
-					</div>
-					<pre class="prettyprint linenums">
-&lt;!-- Button to trigger ajax -->
-&lt;a data-trigger="ajax" href="lipsum.html" data-target="#ajax_target" class="btn">Ajax demo&lt;/a></pre>
-
-					<h2>Usage</h2>
-					<h3>Via data attributes (data-api)</h3>
-					<pre class="prettyprint linenums">&lt;a data-trigger="ajax" href="lipsum.html" data-target="#ajax_target" class="btn">Ajax demo&lt;/a></pre>
-					<p>The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
-					having a <code>data-trigger="ajax"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
-
-					<h2>Options</h2>
-					<p>Options are passed with attributes.</p>
-					<table class="table table-bordered table-striped">
-						<thead>
-							<tr>
-								<th style="width: 100px;">Name</th>
-								<th style="width: 50px;">type</th>
-								<th style="width: 50px;">default</th>
-								<th>description</th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr>
-								<td>data-target</td>
-								<td>string</td>
-								<td></td>
-								<td>The container for the content. This option should point to an existing element on the page.</td>
-							</tr>
-							<tr>
-								<td>href</td>
-								<td>string</td>
-								<td></td>
-								<td>URL to load the content from.</td>
-							</tr>
-						</tbody>
-					</table>
 				</section>
 
 
@@ -739,6 +656,254 @@ collapse.toggle();</pre>
 				</section>
 
 
+				<section id="tab">
+					<div class="page-header">
+						<h1>Tab <small>sco.tab.js</small></h1>
+					</div>
+
+					<h3>What?</h3>
+					<p>coming soon.</p>
+
+					<h3>Why?</h3>
+					<p>coming soon.</p>
+
+					<h3>Dependencies</h3>
+					<p>coming soon.</p>
+
+					<h3>Examples</h3>
+
+					<h2>Usage</h2>
+					<h3>Via data attributes (data-api)</h3>
+					<h3>Via jquery</h3>
+					<h3>Via javascript</h3>
+
+					<h2>Options</h2>
+
+					<h2>Methods</h2>
+				</section>
+
+
+				<section id="tooltip">
+					<div class="page-header">
+						<h1>Tooltip <small>sco.tooltip.js</small></h1>
+					</div>
+
+					<h3>What?</h3>
+					<p>coming soon.</p>
+
+					<h3>Why?</h3>
+					<p>coming soon.</p>
+
+					<h3>Dependencies</h3>
+					<p>coming soon.</p>
+
+					<h3>Examples</h3>
+
+					<h2>Usage</h2>
+					<h3>Via data attributes (data-api)</h3>
+					<h3>Via jquery</h3>
+					<h3>Via javascript</h3>
+
+					<h2>Options</h2>
+
+					<h2>Methods</h2>
+				</section>
+
+
+				<section id="message">
+					<div class="page-header">
+						<h1>Message <small>sco.message.js</small></h1>
+					</div>
+
+					<h3>What?</h3>
+					<p>This is a "flash message" - a message that appears at the top of the page and disappears after a few seconds. It can be an info or an error message.</p>
+
+					<h3>Why?</h3>
+					<p>Useful after some user action (like submitting a form for example) to let them know your app processed the action ok or there was an error.</p>
+
+					<h3>Dependencies</h3>
+					<p>JQuery.</p>
+
+					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<a id="message_trigger_ok" href="#">Click to see the info message</a>
+						<br>
+						<a id="message_trigger_err" href="#">Click to see the error message</a>
+						<script>
+							$('#message_trigger_ok').on('click', function(e) {
+								e.preventDefault();
+								$.scojs_message('This is an info message', $.scojs_message.TYPE_OK);
+							});
+							$('#message_trigger_err').on('click', function(e) {
+								e.preventDefault();
+								$.scojs_message('This is an error message', $.scojs_message.TYPE_ERROR);
+							});
+						</script>
+					</div>
+<pre class="prettyprint linenums">
+&lt;a id="message_trigger_ok" href="#">Click to see the info message&lt;/a>
+&lt;a id="message_trigger_err" href="#">Click to see the error message&lt;/a>
+&lt;script>
+  $('#message_trigger_ok').on('click', function(e) {
+    e.preventDefault();
+    $.scojs_message('This is an info message', $.scojs_message.TYPE_OK);
+  });
+  $('#message_trigger_err').on('click', function(e) {
+    e.preventDefault();
+    $.scojs_message('This is an error message', $.scojs_message.TYPE_ERROR);
+    });
+&lt;/script>
+</pre>
+
+					<h2>Usage</h2>
+					<h3>Via jquery</h3>
+					<pre class="prettyprint linenums">$.scojs_message(message, type);</pre>
+
+					<h2>Options</h2>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>type</td>
+								<td></td>
+								<td></td>
+								<td>The type of the message. Can be one of:
+									<ul>
+										<li>$.scojs_message.TYPE_OK</li>
+										<li>$.scojs_message.TYPE_ERROR</li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+
+				<section id="valid">
+					<div class="page-header">
+						<h1>Valid <small>sco.valid.js</small></h1>
+					</div>
+
+					<h3>What?</h3>
+					<p>Valid is a javascript form validation plugin. Basically, you give it a set of rules for a form's fields and it'll either submit the form if all rules pass or show error messages if not.</p>
+					<p>Valid is the most complex and most opinionated plugin of all sco.js plugins. It also makes extensive use of other plugins (from sco.js and 3rd party) so make sure you load its dependencies before using it.</p>
+
+					<h3>Why?</h3>
+					<p>There are a couple of good form validators out there. I built this one because:</p>
+					<ul>
+						<li>I needed support for general error messages (i.e. not related to a certain field), besides field-related messages.</li>
+						<li>I wanted support for the JSend format - to pass instructions/messages from the backend to the front end in a standard format.</li>
+						<li>Since I was using the <a target="_blank" href="http://kohanaframework.org">Kohana php framework</a> on the backend, I wanted the validation rules defined there to work transparently on the frontend as well.</li>
+						<li>As much I would have wanted to use the browser form validation API, they were too limited, not translatable and not customizable.</li>
+					</ul>
+
+					<h3>Dependencies</h3>
+					<p><a href="#message">Message</a> to display general messages, <a target="_blank" href="http://malsup.com/jquery/form">jQuery Form Plugin</a> to submit the form via ajax. It uses the
+					<a href="http://labs.omniti.com/labs/jsend">JSend</a> specification to receive instructions from the backend. It does not depend on <a href="#modals">modal</a> but it
+					knows how to close the modal window if instructed to do so by the backend. The defaults of the plugin are based on the excellent <a target="_blank" href="http://valdelama.com/mosto">Mosto</a> css framework for forms but
+					you can, of course, customize it to work with any framework.</p>
+
+					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<form action="valid.json" method="post" id="valid_form">
+							<label>Email<br>
+								<input type="email" name="email">
+							</label>
+							<label>Password<br>
+								<input type="password" name="pass">
+							</label>
+							<label>Password again<br>
+								<input type="password" name="pass2">
+							</label>
+							<button type="submit" class="btn">Join</button>
+						</form>
+						<script>
+							$(function() {
+								$('#valid_form').scojs_valid({rules: {email: ['not_empty', 'email'], pass: ['not_empty'], pass2: [{matches: 'pass'}]}});
+							});
+						</script>
+					</div>
+					<pre class="prettyprint linenums">
+					</pre>
+
+					<h2>Usage</h2>
+					<h3>Via data attributes (data-api)</h3>
+					<h3>Via jquery</h3>
+					<h3>Via javascript</h3>
+
+					<h2>Options</h2>
+
+					<h2>Methods</h2>
+				</section>
+				<section id="ajax">
+					<div class="page-header">
+						<h1>Ajax <small>sco.ajax.js</small></h1>
+					</div>
+
+					<h3>What?</h3>
+					<p>This is really just a convenient utility function that makes links load remote content with AJAX inside some target element on the page. This behaviour is also known as "ajaxification of links".
+					Could be used for a side menu - all menu links would load just the page content, without a full page reload.</p>
+					<p>Note that this function doesn't parse the output to display just a part of it in page and it doesn't make use of the browser history API. If you need such a full ajaxification plugin
+					take a look at <a target="_blank" href="https://github.com/balupton/history.js">History.js</a>.</p>
+
+					<h3>Why?</h3>
+					<p>I needed some links to load their contents with ajax but not all. There was no need for browser history API support or anything fancy.</p>
+
+					<h3>Dependencies</h3>
+					<p>Ajax does not depend on other libraries (other than JQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
+					If spin.js is found, a spinning wheel is displayed during the loading of remote content.</p>
+
+					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<a data-trigger="ajax" href="lipsum.html" data-target="#ajax_target" class="btn btn-primary btn-large">Ajax demo</a>
+						<div id="ajax_target">Remote content will be loaded here</div>
+					</div>
+					<pre class="prettyprint linenums">
+&lt;!-- Button to trigger ajax -->
+&lt;a data-trigger="ajax" href="lipsum.html" data-target="#ajax_target" class="btn">Ajax demo&lt;/a></pre>
+
+					<h2>Usage</h2>
+					<h3>Via data attributes (data-api)</h3>
+					<pre class="prettyprint linenums">&lt;a data-trigger="ajax" href="lipsum.html" data-target="#ajax_target" class="btn">Ajax demo&lt;/a></pre>
+					<p>The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
+					having a <code>data-trigger="ajax"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
+
+					<h2>Options</h2>
+					<p>Options are passed with attributes.</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>data-target</td>
+								<td>string</td>
+								<td></td>
+								<td>The container for the content. This option should point to an existing element on the page.</td>
+							</tr>
+							<tr>
+								<td>href</td>
+								<td>string</td>
+								<td></td>
+								<td>URL to load the content from.</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+
 				<section id="countdown">
 					<div class="page-header">
 						<h1>Countdown <small>sco.countdown.js</small></h1>
@@ -826,33 +991,6 @@ $('#countdowner').scojs_countdown({until: 1364382956});
 				</section>
 
 
-				<section id="message">
-					<div class="page-header">
-						<h1>Message <small>sco.message.js</small></h1>
-					</div>
-
-					<h3>What?</h3>
-					<p>coming soon.</p>
-
-					<h3>Why?</h3>
-					<p>coming soon.</p>
-
-					<h3>Dependencies</h3>
-					<p>coming soon.</p>
-
-					<h3>Examples</h3>
-
-					<h2>Usage</h2>
-					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
-					<h3>Via javascript</h3>
-
-					<h2>Options</h2>
-
-					<h2>Methods</h2>
-				</section>
-
-
 				<section id="placeholder">
 					<div class="page-header">
 						<h1>Placeholder <small>sco.placeholder.js</small></h1>
@@ -880,58 +1018,6 @@ $('#countdowner').scojs_countdown({until: 1364382956});
 				</section>
 
 
-				<section id="tooltip">
-					<div class="page-header">
-						<h1>Tooltip <small>sco.tooltip.js</small></h1>
-					</div>
-
-					<h3>What?</h3>
-					<p>coming soon.</p>
-
-					<h3>Why?</h3>
-					<p>coming soon.</p>
-
-					<h3>Dependencies</h3>
-					<p>coming soon.</p>
-
-					<h3>Examples</h3>
-
-					<h2>Usage</h2>
-					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
-					<h3>Via javascript</h3>
-
-					<h2>Options</h2>
-
-					<h2>Methods</h2>
-				</section>
-
-
-				<section id="valid">
-					<div class="page-header">
-						<h1>Valid <small>sco.valid.js</small></h1>
-					</div>
-
-					<h3>What?</h3>
-					<p>coming soon.</p>
-
-					<h3>Why?</h3>
-					<p>coming soon.</p>
-
-					<h3>Dependencies</h3>
-					<p>coming soon.</p>
-
-					<h3>Examples</h3>
-
-					<h2>Usage</h2>
-					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
-					<h3>Via javascript</h3>
-
-					<h2>Options</h2>
-
-					<h2>Methods</h2>
-				</section>
 			</div>
 		</div>
 	</div>
