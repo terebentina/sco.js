@@ -136,7 +136,7 @@
 					<p>All plugin options are available to use as data attributes. The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
 					having a <code>data-trigger="modal"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
 
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<pre class="prettyprint linenums">$('#trigger').scojs_modal(options);</pre>
 					or
 					<pre class="prettyprint linenums">$('.modal_triggers').scojs_modal(options);</pre>
@@ -197,7 +197,7 @@
 							<tr>
 								<td>content</td>
 								<td>string</td>
-								<td>''</td>
+								<td></td>
 								<td>Use this to define the modal content when you don't want to load the content remotely. Use either this option or the remote one but not both at once. You could use it like
 									<pre class="prettyprint linenums">$('#trigger').scojs_modal({content: 'Lorem ipsum...'});</pre>
 									or
@@ -342,7 +342,7 @@ modal.destroy();
 					<p>All modal options are available for confirm as well though some might not make much sense (like loading remote content). There are some
 					extra options available for confirm, see the options below.</p>
 
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<pre class="prettyprint linenums">$('#confirm_trigger').scojs_confirm(options);</pre>
 					<p>Like with the modal, you call scojs_confirm() on the trigger, not on the modal element itself. And, if <code>data-</code> attributes exist, they
 					overwrite any general options you pass to the plugin.</p>
@@ -407,8 +407,8 @@ modal.destroy();
 									If no <code>data-action</code> attribute is found, the action option is set to the href of the trigger so when you click on yes
 									you will be taken to that url.
 									<p>For example, clicking on one of the following:</p>
-									<pre class="prettyprint linenums">&lt;a data-trigger="confirm" href="/delete/me" class="btn">Delete&lt;/a>
-									&lt;button class="btn" data-action="/delete/me" data-trigger="confirm">Delete&lt;/button></pre>
+<pre class="prettyprint linenums">&lt;a data-trigger="confirm" href="/delete/me" class="btn">Delete&lt;/a>
+&lt;button class="btn" data-action="/delete/me" data-trigger="confirm">Delete&lt;/button></pre>
 									would show the confirm modal and when clicking on the yes button there, you'd be taken to <code>/delete/me</code>.
 									<p>Note that when both <code>href</code> and <code>data-action</code> are found, href is ignored.</p>
 									<p>When this option is a function, clicking on the yes button would execute that function (in the context of the confirm modal object) and then close the modal.</p>
@@ -557,7 +557,7 @@ confirm.show();
 					<p>The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
 					having a <code>data-trigger="collapse"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
 
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<pre class="prettyprint linenums">$('#collapse_trigger').scojs_collapse(options);</pre>
 					<p>If <code>data-</code> attributes exist, they overwrite any general options you pass to the plugin.</p>
 					<p>When you call the plugin this way, all it does is toggle the target. To toggle it back you'd call the plugin again. However, it's best used inside a click event (or hover/etc) like this:</p>
@@ -675,7 +675,7 @@ collapse.toggle();</pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<h3>Via javascript</h3>
 
 					<h2>Options</h2>
@@ -702,7 +702,7 @@ collapse.toggle();</pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<h3>Via javascript</h3>
 
 					<h2>Options</h2>
@@ -757,7 +757,7 @@ collapse.toggle();</pre>
 </pre>
 
 					<h2>Usage</h2>
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<pre class="prettyprint linenums">$.scojs_message(message, type);</pre>
 
 					<h2>Options</h2>
@@ -814,27 +814,271 @@ collapse.toggle();</pre>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<form action="valid.json" method="post" id="valid_form" class="form-horizontal">
+						<form action="valid.json" id="valid_form" class="form-horizontal">
 							<label><div>Email</div> <input type="email" name="email"></label>
 							<label><div>Password</div> <input type="password" name="pass"></label>
 							<label><div>Password again</div> <input type="password" name="pass2"></label>
-							<button type="submit" class="btn">Join</button>
+							<button type="submit" class="btn">Try</button>
 						</form>
 						<script>
 							$(function() {
-								$('#valid_form').scojs_valid({rules: {email: ['not_empty', 'email'], pass: ['not_empty'], pass2: [{matches: 'pass'}]}});
+								$('#valid_form').scojs_valid({rules: {email: ['not_empty', 'email'], pass: ['not_empty', {min_length: 4}], pass2: [{matches: 'pass'}]}});
 							});
 						</script>
 					</div>
 					<pre class="prettyprint linenums">
-					</pre>
+&lt;form action="valid.json" id="valid_form" class="form-horizontal">
+  &lt;label>&lt;div>Email&lt;/div> &lt;input type="email" name="email">&lt;/label>
+  &lt;label>&lt;div>Password&lt;/div> &lt;input type="password" name="pass">&lt;/label>
+  &lt;label>&lt;div>Password again&lt;/div> &lt;input type="password" name="pass2">&lt;/label>
+  &lt;button type="submit" class="btn">Try&lt;/button>
+&lt;/form>
+&lt;script>
+  $(function() {
+    $('#valid_form').scojs_valid({rules: {email: ['not_empty', 'email'], pass: ['not_empty', {'min_length': 4}], pass2: [{matches: 'pass'}]}});
+  });
+&lt;/script></pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<h3>Via javascript</h3>
 
 					<h2>Options</h2>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>wrapper</td>
+								<td>string</td>
+								<td>label</td>
+								<td>The wrapper of a form row. The default is set to label because the <a target="_blank" href="http://valdelama.com/mosto">Mosto</a> framework is using that. For <a target="_blank" href="http://twitter.github.com/bootstrap">Bootstrap</a> you could use <code>div.control-group</code>.
+								This option is used to add an <code>.error</code> class to the selected element whenever there's an error related to this field so that you can display the field or label/error message in a different color/style.</td>
+							</tr>
+							<tr>
+								<td>rules</td>
+								<td>object</td>
+								<td>{}</td>
+								<td>
+									This is the set of rules that the whole form must pass for it to be submitted. The format of the object is field names as keys and arrays with rules as values:
+									<pre class="prettyprint">{email: ['not_empty', 'email'], name: ['not_empty', {equals: 'john'}]}</pre>
+									See the list of rules below for what can be used here.
+								</td>
+							</tr>
+							<tr>
+								<td>messages</td>
+								<td>object</td>
+								<td>{}</td>
+								<td>The messages to display for each field in case of errors with that field. Could be useful for translating the messages into other languages. If you don't specify custom messages for your fields, the default ones will be used.
+								See below for the default messages and message format.</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<h3>Rules</h3>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 110px;">Example</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>not_empty</td>
+								<td>string</td>
+								<td>'not_empty'</td>
+								<td>Use this rule if the field is required.</td>
+							</tr>
+							<tr>
+								<td>min_length</td>
+								<td>object</td>
+								<td>{min_length: 10}</td>
+								<td>If the field is not empty, it has to have at least the specified number of characters. Note that an empty field will pass this rule! If you want the field to be required, use the <code>not_empty</code> rule.</td>
+							</tr>
+							<tr>
+								<td>max_length</td>
+								<td>object</td>
+								<td>{max_length: 20}</td>
+								<td>If the field is not empty, it has to have at most the specified number of characters. Note that an empty field will pass this rule! If you want the field to be required, use the <code>not_empty</code> rule.</td>
+							</tr>
+							<tr>
+								<td>regex</td>
+								<td>object</td>
+								<td>{regex: /[a-z]/}</td>
+								<td>The field must pass the specified regular expression.</td>
+							</tr>
+							<tr>
+								<td>email</td>
+								<td>string</td>
+								<td>'email'</td>
+								<td>The field must be a valid email.</td>
+							</tr>
+							<tr>
+								<td>url</td>
+								<td>string</td>
+								<td>'url'</td>
+								<td>The field must be a valid url.</td>
+							</tr>
+							<tr>
+								<td>exact_length</td>
+								<td>object</td>
+								<td>{exact_length: 10}</td>
+								<td>If the field is not empty, it has to have exactly the specified number of characters. Note that an empty field will pass this rule! If you want the field to be required, use the <code>not_empty</code> rule.</td>
+							</tr>
+							<tr>
+								<td>equals</td>
+								<td>object</td>
+								<td>{equals: 'bar'}</td>
+								<td>The field value must be exactly the specified string.</td>
+							</tr>
+							<tr>
+								<td>ip</td>
+								<td>string</td>
+								<td>'ip'</td>
+								<td>The field must be a valid IP address.</td>
+							</tr>
+							<tr>
+								<td>credit_card</td>
+								<td>string</td>
+								<td>'credit_card'</td>
+								<td>The field must be a valid credit card.</td>
+							</tr>
+							<tr>
+								<td>alpha</td>
+								<td>string</td>
+								<td>'alpha'</td>
+								<td>If the field is not empty, it must contain only a to z characters.</td>
+							</tr>
+							<tr>
+								<td>alpha_numeric</td>
+								<td>string</td>
+								<td>'alpha_numeric'</td>
+								<td>Like <code>alpha</code> plus the 0 to 9 digits.</td>
+							</tr>
+							<tr>
+								<td>alpha_dash</td>
+								<td>string</td>
+								<td>'alpha_dash'</td>
+								<td>Like <code>alpha_numeric</code> plus underscore (_) and minus (-).</td>
+							</tr>
+							<tr>
+								<td>digit</td>
+								<td>string</td>
+								<td>'digit'</td>
+								<td>If the field is not empty, it must contain only digits (0 to 9).</td>
+							</tr>
+							<tr>
+								<td>numeric</td>
+								<td>string</td>
+								<td>'numeric'</td>
+								<td>The field must contain a numeric value (can have thousands separators, decimal separator and a sign). For example -123,456.50</td>
+							</tr>
+							<tr>
+								<td>decimal</td>
+								<td>string</td>
+								<td>'decimal'</td>
+								<td>The field must contain a number, with optional sign and decimal separator.</td>
+							</tr>
+							<tr>
+								<td>matches</td>
+								<td>object</td>
+								<td>{matches: 'field1'}</td>
+								<td>The field must match the specified field (have the same value as the other field).</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<h3>Messages</h3>
+					<p>The default messages used by the plugin, when no custom message is set. Note that any occurence of the string <code>:value</code> in the message is replaced
+					by the rule constraint value.</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Message for</th>
+								<th>message</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>not_empty</td>
+								<td>This field is required.</td>
+							</tr>
+							<tr>
+								<td>min_length</td>
+								<td>Please enter at least :value characters.</td>
+							</tr>
+							<tr>
+								<td>max_length</td>
+								<td>Please enter no more than :value characters.</td>
+							</tr>
+							<tr>
+								<td>regex</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>email</td>
+								<td>Please enter a valid email address.</td>
+							</tr>
+							<tr>
+								<td>url</td>
+								<td>Please enter a valid URL.</td>
+							</tr>
+							<tr>
+								<td>exact_length</td>
+								<td>Please enter exactly :value characters.</td>
+							</tr>
+							<tr>
+								<td>equals</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>ip</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>credit_card</td>
+								<td>Please enter a valid credit card number.</td>
+							</tr>
+							<tr>
+								<td>alpha</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>alpha_numeric</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>alpha_dash</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>digit</td>
+								<td>Please enter only digits.</td>
+							</tr>
+							<tr>
+								<td>numeric</td>
+								<td>Please enter a valid number.</td>
+							</tr>
+							<tr>
+								<td>decimal</td>
+								<td>Please enter a decimal number.</td>
+							</tr>
+							<tr>
+								<td>matches</td>
+								<td>Must match the previous value.</td>
+							</tr>
+						</tbody>
+					</table>
 
 					<h2>Methods</h2>
 				</section>
@@ -937,7 +1181,7 @@ $('#countdowner').scojs_countdown({until: 1364382956});
 					<p>The plugin cannot be initiated with data-api but you can specify the options with <code>data</code> attributes on the target element:</p>
 					<pre class="prettyprint linenums">&lt;div id="countdowner" data-d="días" data-h="horas" data-m="minutos" data-s="segundos">&lt;/div></pre>
 
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<pre class="prettyprint linenums">$('#target').scojs_countdown(options);</pre>
 
 					<h2>Options</h2>
@@ -1005,7 +1249,7 @@ $('#countdowner').scojs_countdown({until: 1364382956});
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
-					<h3>Via jquery</h3>
+					<h3>As a jquery plugin</h3>
 					<h3>Via javascript</h3>
 
 					<h2>Options</h2>
