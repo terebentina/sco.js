@@ -9,6 +9,7 @@
 	<link href="assets/css/bootstrap.css" rel="stylesheet">
 	<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
 	<link href="assets/css/prettify.css" rel="stylesheet">
+	<link href="assets/css/mosto.css" rel="stylesheet">
 	<link href="assets/css/styles.css" rel="stylesheet">
 
 	<script src="assets/js/jquery-1.8.3.min.js"></script>
@@ -799,6 +800,7 @@ collapse.toggle();</pre>
 					<p>There are a couple of good form validators out there. I built this one because:</p>
 					<ul>
 						<li>I needed support for general error messages (i.e. not related to a certain field), besides field-related messages.</li>
+						<li>I needed support for client side validation, as well as server side validation that would pass the errors to the client for display (<small>for example when a field would pass the "must be an email" client-side rule but it won't pass the "email already exists" server-side rule</small>).</li>
 						<li>I wanted support for the JSend format - to pass instructions/messages from the backend to the front end in a standard format.</li>
 						<li>Since I was using the <a target="_blank" href="http://kohanaframework.org">Kohana php framework</a> on the backend, I wanted the validation rules defined there to work transparently on the frontend as well.</li>
 						<li>As much I would have wanted to use the browser form validation API, they were too limited, not translatable and not customizable.</li>
@@ -806,22 +808,16 @@ collapse.toggle();</pre>
 
 					<h3>Dependencies</h3>
 					<p><a href="#message">Message</a> to display general messages, <a target="_blank" href="http://malsup.com/jquery/form">jQuery Form Plugin</a> to submit the form via ajax. It uses the
-					<a href="http://labs.omniti.com/labs/jsend">JSend</a> specification to receive instructions from the backend. It does not depend on <a href="#modals">modal</a> but it
+					<a href="http://labs.omniti.com/labs/jsend">JSend</a> specification to receive instructions from the backend. It does not depend on <a href="#modals">Modal</a> but it
 					knows how to close the modal window if instructed to do so by the backend. The defaults of the plugin are based on the excellent <a target="_blank" href="http://valdelama.com/mosto">Mosto</a> css framework for forms but
 					you can, of course, customize it to work with any framework.</p>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<form action="valid.json" method="post" id="valid_form">
-							<label>Email<br>
-								<input type="email" name="email">
-							</label>
-							<label>Password<br>
-								<input type="password" name="pass">
-							</label>
-							<label>Password again<br>
-								<input type="password" name="pass2">
-							</label>
+						<form action="valid.json" method="post" id="valid_form" class="form-horizontal">
+							<label><div>Email</div> <input type="email" name="email"></label>
+							<label><div>Password</div> <input type="password" name="pass"></label>
+							<label><div>Password again</div> <input type="password" name="pass2"></label>
 							<button type="submit" class="btn">Join</button>
 						</form>
 						<script>
