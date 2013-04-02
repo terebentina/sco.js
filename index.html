@@ -148,7 +148,7 @@
 					This decision was made because we found out that we never wanted more modals appearing on the page at the same time. So reusing the same modal HTML for every triggered modal
 					seemed quite logical.</p>
 
-					<h3>Via javascript</h3>
+					<h3>With access to the object</h3>
 					<pre class="prettyprint linenums">var modal = $.scojs_modal(options);</pre>
 					<p>This gives you access to the created javascript object. Note that when you launch the modal this way, it's not shown by default. You'll have to call <code>modal.show()</code>
 					at a later time to show the modal.</p>
@@ -347,7 +347,7 @@ modal.destroy();
 					<p>Like with the modal, you call scojs_confirm() on the trigger, not on the modal element itself. And, if <code>data-</code> attributes exist, they
 					overwrite any general options you pass to the plugin.</p>
 
-					<h3>Via javascript</h3>
+					<h3>With access to the object</h3>
 					<pre class="prettyprint linenums">var confirm = $.scojs_confirm(options);</pre>
 					<p>This gives you access to the created javascript object. Note that when you launch the confirm this way, it's not shown by default. You'll have to call <code>confirm.show()</code>
 					at a later time to show the confirm modal.</p>
@@ -569,7 +569,7 @@ confirm.show();
   });
 &lt;/script></pre>
 
-					<h3>Via javascript</h3>
+					<h3>With access to the object</h3>
 					<pre class="prettyprint linenums">var collapse = $.scojs_collapse(options);</pre>
 					<p>This gives you access to the created javascript object. Note that when you launch the collapse this way, it doesn't toggle the target by default. You'll have to call <code>collapse.toggle()</code>
 					at a later time, as many times as you want, to toggle the target on/off.</p>
@@ -676,7 +676,7 @@ collapse.toggle();</pre>
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
 					<h3>As a jquery plugin</h3>
-					<h3>Via javascript</h3>
+					<h3>With access to the object</h3>
 
 					<h2>Options</h2>
 
@@ -703,7 +703,7 @@ collapse.toggle();</pre>
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
 					<h3>As a jquery plugin</h3>
-					<h3>Via javascript</h3>
+					<h3>With access to the object</h3>
 
 					<h2>Options</h2>
 
@@ -841,8 +841,20 @@ collapse.toggle();</pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
+					<p>No data attributes support yet but this is something I plan on having eventually. Patches are welcome!</p>
+
 					<h3>As a jquery plugin</h3>
-					<h3>Via javascript</h3>
+					<pre class="prettyprint linenums">$('#form').scojs_valid({rules: options, messages: options});</pre>
+
+					<h3>With access to the object</h3>
+					<pre class="prettyprint linenums">var valid = $.scojs_valid(formId, options);</pre>
+					<p>
+						This gives you access to the created javascript object. You will have to call the object's methods on your own to trigger validation. Normally, this is all wrapped in the jQuery plugin but
+						if you want custom functionality or you don't want to depend on the jQuery form plugin, this is the way to do it. You'll probably want to call <code>.validate()</code> on the js object before submitting the form
+						and handle the JSend response from the server later on.<br>
+						<code>formId</code> can be either a string selector or a jQuery object.<br>
+						<code>options</code> should be an object with rules and (optional) messages: <code>{rules: {...}, messages: {...}}</code>
+					</p>
 
 					<h2>Options</h2>
 					<table class="table table-bordered table-striped">
@@ -860,7 +872,7 @@ collapse.toggle();</pre>
 								<td>string</td>
 								<td>label</td>
 								<td>The wrapper of a form row. The default is set to label because the <a target="_blank" href="http://valdelama.com/mosto">Mosto</a> framework is using that. For <a target="_blank" href="http://twitter.github.com/bootstrap">Bootstrap</a> you could use <code>div.control-group</code>.
-								This option is used to add an <code>.error</code> class to the selected element whenever there's an error related to this field so that you can display the field or label/error message in a different color/style.</td>
+								This option is used to add an <code>.error</code> class to the selected element whenever there's an error related to this field so that you can display the field or label/error message in a different color/style. If you set this to <code>null</code>, the error class won't be added at all.</td>
 							</tr>
 							<tr>
 								<td>rules</td>
@@ -1081,6 +1093,11 @@ collapse.toggle();</pre>
 					</table>
 
 					<h2>Methods</h2>
+					<h4>.validate()</h4>
+					<p>Performs the client side validation and show the errors on the form fields, if any. Returns <code>true</code> if all rules pass and <code>false</code> otherwise.</p>
+					<pre class="prettyprint linenums">
+var valid = $.scojs_valid('#signup_form', {rules: {email: ['not_empty']}});
+valid.validate();</pre>
 				</section>
 				<section id="ajax">
 					<div class="page-header">
@@ -1250,7 +1267,7 @@ $('#countdowner').scojs_countdown({until: 1364382956});
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
 					<h3>As a jquery plugin</h3>
-					<h3>Via javascript</h3>
+					<h3>With access to the object</h3>
 
 					<h2>Options</h2>
 
