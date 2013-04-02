@@ -59,7 +59,6 @@
 					<li><a href="#valid"><i class="icon-chevron-right"></i> Valid</a></li>
 					<li><a href="#ajax"><i class="icon-chevron-right"></i> Ajax</a></li>
 					<li><a href="#countdown"><i class="icon-chevron-right"></i> Countdown</a></li>
-					<li><a href="#placeholder"><i class="icon-chevron-right"></i> Placeholder</a></li>
 				</ul>
 			</div>
 			<div class="span9">
@@ -808,7 +807,7 @@ collapse.toggle();</pre>
 
 					<h3>Dependencies</h3>
 					<p><a href="#message">Message</a> to display general messages, <a target="_blank" href="http://malsup.com/jquery/form">jQuery Form Plugin</a> to submit the form via ajax. It uses the
-					<a href="http://labs.omniti.com/labs/jsend">JSend</a> specification to receive instructions from the backend. It does not depend on <a href="#modals">Modal</a> but it
+					<a target="_blank" href="http://labs.omniti.com/labs/jsend">JSend</a> specification to receive instructions from the backend. It does not depend on <a href="#modals">Modal</a> but it
 					knows how to close the modal window if instructed to do so by the backend. The defaults of the plugin are based on the excellent <a target="_blank" href="http://valdelama.com/mosto">Mosto</a> css framework for forms but
 					you can, of course, customize it to work with any framework.</p>
 
@@ -1092,6 +1091,54 @@ collapse.toggle();</pre>
 						</tbody>
 					</table>
 
+
+					<h3>Communicate with the backend</h3>
+					<p>Once the client side validation has passed, the form is submitted to the backend where you should have another round of validation. The backend can then tell the client what to do next: show some more errors, go to another page, show a <a href="#message">Message</a> and so on.
+					<br>The instructions from backend to frontend are sent as json, in the <a target="_blank" href="http://labs.omniti.com/labs/jsend">JSend</a> format.</p>
+					<p>Examples:<br>
+						<code>{"status":"success","data":{"next":"http://google.com"}}</code><br>
+						<code>{"status":"fail","data":{"errors":{"email":"This error comes from server side"}}}</code><br>
+						<code>{"status":"error","message":"The server made a boo boo"}</code>
+					</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">possible values</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>status</td>
+								<td>fail|error|success</td>
+								<td>Use <code>fail</code> when there were validation errors on the server, <code>error</code> when there's a problem with the server and <code>success</code> when validation passed.</td>
+							</tr>
+							<tr>
+								<td>data</td>
+								<td></td>
+								<td>
+									This object is used for fail and success status codes to pass additional instructions to the frontend. Not used for error status codes.
+									<ul>
+										<li>with <code>fail</code> - data must be an object with a single <code>errors</code> key. The value of errors must be an object with field names as keys and error messages as values (<code>{"status":"fail","data":{"errors":{"email":"This email already exists", "name":"Enter your full name"}}}</code>)</li>
+										<li>
+											with <code>success</code> - data must be an object with one of the following keys:
+											<ul>
+												<li><code>next</code> - (optional) Can have a value of "." to refresh the current page, "x" to close the modal the form was display into or some url to redirect the browser to that url.</li>
+												<li><code>message</code> - (optional) If set, a success flash message is displayed using <a href="#message">Message</a>.</li>
+											</ul>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td>message</td>
+								<td></td>
+								<td>Used only with <code>error</code> status codes. An error flash message is displayed using <a href="#message">Message</a>.</td>
+							</tr>
+						</tbody>
+					</table>
+
 					<h2>Methods</h2>
 					<h4>.validate()</h4>
 					<p>Performs the client side validation and show the errors on the form fields, if any. Returns <code>true</code> if all rules pass and <code>false</code> otherwise.</p>
@@ -1246,35 +1293,6 @@ $('#countdowner').scojs_countdown({until: 1364382956});
 						</tbody>
 					</table>
 				</section>
-
-
-				<section id="placeholder">
-					<div class="page-header">
-						<h1>Placeholder <small>sco.placeholder.js</small></h1>
-					</div>
-
-					<h3>What?</h3>
-					<p>coming soon.</p>
-
-					<h3>Why?</h3>
-					<p>coming soon.</p>
-
-					<h3>Dependencies</h3>
-					<p>coming soon.</p>
-
-					<h3>Examples</h3>
-
-					<h2>Usage</h2>
-					<h3>Via data attributes (data-api)</h3>
-					<h3>As a jquery plugin</h3>
-					<h3>With access to the object</h3>
-
-					<h2>Options</h2>
-
-					<h2>Methods</h2>
-				</section>
-
-
 			</div>
 		</div>
 	</div>
