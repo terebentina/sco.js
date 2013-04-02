@@ -96,7 +96,7 @@
 		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 	};
 
-	$(document).on('click.' + pluginName, '[data-trigger="confirm"]', function(e) {
+	$(document).on('click.' + pluginName, '[data-trigger="confirm"]', function() {
 		$(this)[pluginName]();
 		return false;
 	});

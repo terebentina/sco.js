@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, eqeqeq: false */
 
 ;(function($, undefined) {
 	"use strict";
@@ -31,7 +31,7 @@
 			$selector = $('<div/>', {id: $[pluginName].options.id}).appendTo($[pluginName].options.appendTo);
 		}
 		$selector.html(message);
-		if (type == undefined || type == $[pluginName].TYPE_ERROR) {
+		if (type === undefined || type == $[pluginName].TYPE_ERROR) {
 			$selector.removeClass($[pluginName].options.okClass).addClass($[pluginName].options.errClass);
 		} else if (type == $[pluginName].TYPE_OK) {
 			$selector.removeClass($[pluginName].options.errClass).addClass($[pluginName].options.okClass);

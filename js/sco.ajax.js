@@ -17,15 +17,15 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true */
-/*global define:true, Spinner:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, eqeqeq:false */
+/*global Spinner:true */
 
 ;(function($, undefined) {
 	"use strict";
 
 	var pluginName = 'scojs_ajax';
 
-	$(document).on('click.' + pluginName, '[data-trigger="ajax"]', function(e) {
+	$(document).on('click.' + pluginName, '[data-trigger="ajax"]', function() {
 		var $this = $(this)
 			,data = $this.data()
 			,$target
@@ -33,7 +33,6 @@
 			;
 		if (typeof data['target'] != 'undefined') {
 			$target = $(data['target']);
-			var spinner;
 			if (typeof Spinner == 'function') {
 				spinner = new Spinner({color: '#3d9bce'}).spin($target[0]);
 			}
