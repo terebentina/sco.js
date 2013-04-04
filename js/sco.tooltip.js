@@ -50,8 +50,9 @@
 				self.$target = $(self.options.target);
 			}
 			if (self.options.hoverable) {
-				self.$tooltip.on('mouseenter.' + pluginName, $.proxy(self.on_mouseenter, self))
-							 .on('mouseleave.' + pluginName + ' close.' + pluginName, $.proxy(self.on_mouseleave, self));
+				self.$tooltip.on('mouseenter.' + pluginName, $.proxy(self.do_mouseenter, self))
+							 .on('mouseleave.' + pluginName, $.proxy(self.do_mouseleave, self))
+							 .on('close.' + pluginName, $.proxy(self.hide, self));
 			}
 		};
 
