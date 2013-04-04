@@ -10,6 +10,7 @@
 	<link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
 	<link href="assets/css/prettify.css" rel="stylesheet">
 	<link href="assets/css/mosto.css" rel="stylesheet">
+	<link href="assets/css/scojs.css" rel="stylesheet">
 	<link href="assets/css/styles.css" rel="stylesheet">
 
 	<script src="assets/js/jquery-1.8.3.min.js"></script>
@@ -22,6 +23,7 @@
 	<script src="assets/js/sco.countdown.js"></script>
 	<script src="assets/js/sco.message.js"></script>
 	<script src="assets/js/jquery.form.js"></script>
+	<script src="assets/js/sco.tooltip.js"></script>
 	<script src="assets/js/sco.valid.js"></script>
 	<script src="assets/js/prettify.js"></script>
 	<script src="assets/js/app.js"></script>
@@ -106,7 +108,7 @@
 					if it didn't exist in the page already.</p>
 
 					<h3>Dependencies</h3>
-					<p>The modal does not depend on other libraries (other than JQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
+					<p>The modal does not depend on other libraries (other than jQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
 					If spin.js is found, a spinning wheel is displayed during the loading of remote content.</p>
 
 					<h3>Examples</h3>
@@ -280,7 +282,7 @@ $('#trigger').scojs_modal({
   title: 'Modals are cool',
   content: "No, they're not"
 });</pre>
-					<p>There are no other methods available in data-api or JQuery mode yet. The following methods are available in javascript mode only:</p>
+					<p>There are no other methods available in data-api or jQuery mode yet. The following methods are available in when you get access to the js object:</p>
 					<h4>.show()</h4>
 					<p>Shows the modal.</p>
 					<pre class="prettyprint linenums">
@@ -430,8 +432,7 @@ var confirm = $.scojs_confirm({
     this.close();
   }
 });
-confirm.show();
-</pre>
+confirm.show();</pre>
 					<p>All <a href="#modal_methods">modal methods</a> are available for the confirm as well.</p>
 				</section>
 
@@ -449,7 +450,7 @@ confirm.show();
 					most of the time it's now how an accordion works. You usually want to click on a menu link and expand the block under/above that link. So I made this collapse plugin to address the said issues.</p>
 
 					<h3>Dependencies</h3>
-					<p>The collapse does not depend on other libraries (other than JQuery, of course).</p>
+					<p>The collapse does not depend on other libraries (other than jQuery, of course).</p>
 
 					<h3>Examples</h3>
 					<p>In its most basic form, the collapser plugin is nothing more than a simple on/off toggler for another block element:</p>
@@ -589,13 +590,13 @@ confirm.show();
 								<td>parent</td>
 								<td>string</td>
 								<td></td>
-								<td>Using this option activates the accordion behaviour. It should be a JQuery selector for the element wrapping the accordion.</td>
+								<td>Using this option activates the accordion behaviour. It should be a jQuery selector for the element wrapping the accordion.</td>
 							</tr>
 							<tr>
 								<td>target</td>
 								<td>string</td>
 								<td></td>
-								<td>Use this option to specify the target element to collapse. It should be a JQuery selector for the element you want to collapse.
+								<td>Use this option to specify the target element to collapse. It should be a jQuery selector for the element you want to collapse.
 								Normally it's not needed as the plugin can figure out which element to collapse by itself.</td>
 							</tr>
 							<tr>
@@ -617,7 +618,7 @@ confirm.show();
 								<td>next</td>
 								<td>Can be either <code>next</code> or <code>prev</code>. Determines where the element to collapse is to be found in relation to the trigger. <code>next</code> means the trigger comes before
 								the collapsible element while <code>prev</code> means trigger is after the element. The plugin is actually searching for a prev/next sibling of the trigger by using the
-								<a target="_blank" href="http://api.jquery.com/prev">prev()</a>, <a target="_blank" href="http://api.jquery.com/next">next()</a> JQuery functions.</td>
+								<a target="_blank" href="http://api.jquery.com/prev">prev()</a>, <a target="_blank" href="http://api.jquery.com/next">next()</a> jQuery functions.</td>
 							</tr>
 							<tr>
 								<td>collapseSelector</td>
@@ -635,7 +636,7 @@ confirm.show();
 								<td>ease</td>
 								<td>string</td>
 								<td>slide</td>
-								<td>The effect to use to show/hide the target element. Must be an effect that supports the toggle JQuery functions (like toggleSlide(), toggleFade() or simply toggle()).</td>
+								<td>The effect to use to show/hide the target element. Must be an effect that supports the toggle jQuery functions (like toggleSlide(), toggleFade() or simply toggle()).</td>
 							</tr>
 						</tbody>
 					</table>
@@ -647,7 +648,7 @@ $('#trigger').scojs_collapse({
   parent: '#sidebar',
   mode: 'prev'
 });</pre>
-					<p>There are no other methods available in data-api or JQuery mode yet. The following methods are available in javascript mode only:</p>
+					<p>There are no other methods available in data-api or jQuery mode yet. The following methods are available when you get access to the js object:</p>
 					<h4>.toggle()</h4>
 					<p>Toggles the target element.</p>
 					<pre class="prettyprint linenums">
@@ -689,24 +690,172 @@ collapse.toggle();</pre>
 					</div>
 
 					<h3>What?</h3>
-					<p>coming soon.</p>
+					<p id="tooltip_element">Y'know...tooltips. The kind of dialog baloon that usually appears on hover over stuff.</p>
 
 					<h3>Why?</h3>
-					<p>coming soon.</p>
+					<p>While other tooltip plugins focus on pixel perfect positioning, the main focus of Sco.js tooltips plugin is to keep the actual tooltip in the viewport at all times. It's not so much about perfect positioning but
+					about making sure that it's fully shown in the view area when you hover over elements with tooltips, even over those that are positioned near edges of the viewport.</p>
 
 					<h3>Dependencies</h3>
-					<p>coming soon.</p>
+					<p>jQuery.</p>
 
 					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<a href="#" data-trigger="tooltip" data-content="Lorem ipsum dolor">Hover me</a>
+					</div>
+<pre class="prettyprint linenums">
+&lt;a href="#" data-trigger="tooltip" data-content="Lorem ipsum dolor">Hover me&lt;/a></pre>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
+					<pre class="prettyprint linenums">&lt;div data-trigger="tooltip" data-content-elem="#tooltip_element">Hover me&lt;/div></pre>
+					<p>The data-api usage is "live" - meaning that you don't have to rebind new elements. Every new element
+					having a <code>data-trigger="tooltip"</code> attribute that is added to the dom after the initial load will work out of the box.</p>
+
 					<h3>As a jquery plugin</h3>
+					<pre class="prettyprint linenums">$('.tooltips').scojs_tooltip(options);</pre>
+					<p>If the trigger element has <code>data-</code> attributes and you pass options as well, the data attributes overwrite the options with the same name.</p>
+
 					<h3>With access to the object</h3>
+					<pre class="prettyprint linenums">var tooltip = $.scojs_tooltip('#trigger', options);</pre>
+					<p>This gives you access to the created javascript object. Note that when you launch the tooltip this way, it's not shown by default. You'll have to call <code>tooltip.show()</code>
+					at a later time to show the tooltip.</p>
 
 					<h2>Options</h2>
+					<p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>, as in <code>data-content="my content"</code>.</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>content</td>
+								<td>string</td>
+								<td></td>
+								<td>The content that should be shown in the tooltip.</td>
+							</tr>
+							<tr>
+								<td>contentAttr</td>
+								<td>string</td>
+								<td></td>
+								<td>Get the content from the trigger attribute specified by this option.</td>
+							</tr>
+							<tr>
+								<td>contentElem</td>
+								<td>string</td>
+								<td></td>
+								<td>Get the content from some other element on the page (this is the selector for that element) <code>$('.tooltip').scojs_tooltip({contentElem: '#foo'})</code>.</td>
+							</tr>
+							<tr>
+								<td>hoverable</td>
+								<td>bool</td>
+								<td>true</td>
+								<td>If this option is set to true, hovering over the tooltip will keep it open. When set to false, only hover over the trigger will keep the tooltip open.</td>
+							</tr>
+							<tr>
+								<td>delay</td>
+								<td>int</td>
+								<td>200</td>
+								<td>The time in milliseconds after the mouse leaves the trigger element before the tooltip is hidden.</td>
+							</tr>
+							<tr>
+								<td>cssclass</td>
+								<td>string</td>
+								<td></td>
+								<td>If set, this class is added to the tooltip.</td>
+							</tr>
+							<tr>
+								<td>position</td>
+								<td>string</td>
+								<td>n</td>
+								<td>Where should the tooltip be shown in relation to the trigger. Possible values are:
+									<ul>
+										<li><code>e</code> to the left of the trigger</li>
+										<li><code>w</code> to the right of the trigger</li>
+										<li><code>n</code> above the trigger</li>
+										<li><code>s</code> below the trigger</li>
+										<li><code>ne</code> top right corner of the trigger</li>
+										<li><code>nw</code> top left corner of the trigger</li>
+										<li><code>se</code> bottom right corner of the trigger</li>
+										<li><code>sw</code> bottom left corner of the trigger</li>
+										<li><code>center</code> centered over the trigger</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<td>autoclose</td>
+								<td>bool</td>
+								<td>true</td>
+								<td>
+									When true, the tooltip behaves like any normal tooltip: it's shown on mouse over trigger and hidden on mouse out. When false, the tooltip is shown on mouse over but not hidden anymore on mouse out. You will have to close it either by javascript or have a button/link with a <code>data-dismiss="tooltip"</code> attribute which will close the tooltip on click.
+									<br>Example:
+									<div>
+										<a href="#" data-trigger="tooltip" data-autoclose="0" data-content-elem="#tooltip_target1">See the wonder</a>
+										<div id="tooltip_target1" class="hide">This is such an important message that you need to click to close <button class="btn" data-dismiss="tooltip">close</button></div>
+									</div>
+								</td>
+							</tr>
+							<tr>
+								<td>target</td>
+								<td>string</td>
+								<td></td>
+								<td>
+									When this is set it should be a selector for some other element on the page. The tooltip will be shown over that element instead of over the trigger.
+									<br>Example:
+									<div>
+										<a href="#" data-trigger="tooltip" data-target="#tooltip_target2" data-content="wow, this is cool!">I am the trigger, hover me</a>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<a href="#" id="tooltip_target2">I am the target, hover won't help</a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 
 					<h2>Methods</h2>
+					<h4>.scojs_tooltip(options)</h4>
+					<pre class="prettyprint linenums">
+$('#trigger').scojs_tooltip({
+  content: "Tooltip content"
+  ,cssclass: 'pretty'
+  ,delay: 1000
+});</pre>
+					<p>The following methods are available when you get access to the js object:</p>
+					<h4>.show()</h4>
+					<p>Shows the tooltip straight away.</p>
+					<pre class="prettyprint linenums">
+var tooltip = $.scojs_tooltip('#trigger', {
+  target: '#foo'
+  ,content: 'tooltip content'
+});
+tooltip.show();</pre>
+
+					<h4>.hide()</h4>
+					<p>Hides the tooltip straight away.</p>
+					<pre class="prettyprint linenums">
+var tooltip = $.scojs_tooltip('#trigger', {
+  target: '#foo'
+  ,content: 'tooltip content'
+});
+tooltip.show();
+tooltip.hide();</pre>
+
+					<h4>.do_mouseenter()</h4>
+					<p>See .do_mouseleave()</p>
+
+					<h4>.do_mouseleave()</h4>
+					<p>Useful when you have the <code>delay</code> option set and you don't want to hide the tooltip right away but instead hide it after the set delay. Also, this gives a chance to the user to hover over the trigger again and keep the tooltip open some more.</p>
+					<pre class="prettyprint linenums">
+var tooltip = $.scojs_tooltip('#trigger', {
+  ,delay: 1000
+});
+tooltip.show();
+tooltip.do_mouseleave();</pre>
 				</section>
 
 
@@ -722,7 +871,7 @@ collapse.toggle();</pre>
 					<p>Useful after some user action (like submitting a form for example) to let them know your app processed the action ok or there was an error.</p>
 
 					<h3>Dependencies</h3>
-					<p>JQuery.</p>
+					<p>jQuery.</p>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
@@ -740,7 +889,7 @@ collapse.toggle();</pre>
 							});
 						</script>
 					</div>
-<pre class="prettyprint linenums">
+					<pre class="prettyprint linenums">
 &lt;a id="message_trigger_ok" href="#">Click to see the info message&lt;/a>
 &lt;a id="message_trigger_err" href="#">Click to see the error message&lt;/a>
 &lt;script>
@@ -1120,7 +1269,7 @@ collapse.toggle();</pre>
 								<td>
 									This object is used for fail and success status codes to pass additional instructions to the frontend. Not used for error status codes.
 									<ul>
-										<li>with <code>fail</code> - data must be an object with a single <code>errors</code> key. The value of errors must be an object with field names as keys and error messages as values (<code>{"status":"fail","data":{"errors":{"email":"This email already exists", "name":"Enter your full name"}}}</code>)</li>
+										<li>with <code>fail</code> - data must be an object with a single <code>errors</code> key. The value of errors must be an object with field names as keys and error messages as values <pre>{"status":"fail","data":{"errors":{"email":"This email already exists", "name":"Enter your full name"}}}</pre></li>
 										<li>
 											with <code>success</code> - data must be an object with one of the following keys:
 											<ul>
@@ -1161,7 +1310,7 @@ valid.validate();</pre>
 					<p>I needed some links to load their contents with ajax but not all. There was no need for browser history API support or anything fancy.</p>
 
 					<h3>Dependencies</h3>
-					<p>Ajax does not depend on other libraries (other than JQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
+					<p>Ajax does not depend on other libraries (other than jQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
 					If spin.js is found, a spinning wheel is displayed during the loading of remote content.</p>
 
 					<h3>Examples</h3>
@@ -1220,7 +1369,7 @@ valid.validate();</pre>
 					<p>I needed this for an auction kind of app to show the remaining time. Not really related to bootstrap but could be useful to someone.</p>
 
 					<h3>Dependencies</h3>
-					<p>JQuery.</p>
+					<p>jQuery.</p>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">

@@ -223,35 +223,3 @@ section {
 .modal .inner .lipsum {
 	padding: 10px 20px;
 }
-
-/* sco.message.js */
-#page_message {
-	-webkit-background-size: 40px 40px;
-	-moz-background-size: 40px 40px;
-	background-size: 40px 40px;
-	-moz-box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.4);
-	-webkit-box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.4);
-	box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.4);
-	display: none;
-	font-size: 16px;
-	overflow: visible;
-	text-align: center;
-	left: 0;
-	top: 0;
-	/* place over all elements, also over popups */
-	z-index: 10001;
-	width: 100%;
-	border: 1px solid;
-	color: #fff;
-	padding: 15px;
-	position: fixed;
-	text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-}
-.page_mess_error {
-  background-color: #de4343;
-  border-color: #c43d3d;
-}
-.page_mess_ok {
-  background-color: #48bb5e;
-  border-color: #309343;
-}
