@@ -17,272 +17,263 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true, smarttabs:true */
-/*global define:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, smarttabs:true, eqeqeq:false */
 
-(function(factory) {
+;(function($, undefined) {
 	"use strict";
 
-    if (typeof define === 'function' && define.amd) {
-        // Register as an anonymous AMD module:
-        define([
-            'jquery'
-        ], factory);
-    } else {
-        // Browser globals:
-        factory(window.jQuery);
-    }
-}(function($) {
-	"use strict";
+	var pluginName = 'scojs_tooltip';
 
-	function live_tooltip(e, options) {
-		var self,
-			$trigger;
+	function Tooltip($trigger, options) {
+		this.options = $.extend({}, $.fn[pluginName].defaults, options);
+		this.$tooltip = null;
+		this.$trigger = this.$target = $trigger;
+		this.leave_timeout = null;
+		this.options.trigger_title = null;
+		var self = this;
 
-		function on_mouseenter() {
-			if (self.leave_timeout !== null) {
-				clearTimeout(self.leave_timeout);
-				self.leave_timeout = null;
-			}
-		}
-
-		function on_mouse_leave(delay, force) {
-			if (typeof delay === 'undefined') {
-				delay = self.data.delay;
-			}
-			if (typeof force === 'undefined') {
-				force = false;
-			}
-			if (self.leave_timeout !== null) {
-				clearTimeout(self.leave_timeout);
-				self.leave_timeout = null;
-			}
-			if (self.data.autoclose || force) {
-				self.leave_timeout = setTimeout(function() {
-					clearTimeout(self.leave_timeout);
-					self.leave_timeout = null;
-					self.on_close.call(self);
-					self.$tooltip.remove();
-					if (typeof $trigger !== 'undefined') {
-						$trigger.removeData('scotip');
-					}
-				}, delay);
-			}
-		}
-
-		function apply_data(data, mirror) {
-			if (typeof mirror === 'undefined') {
-				mirror = true;
-			}
-			for (var p in data) {
-				if (data.hasOwnProperty(p)) {
-					if (typeof $.fn.scotip.defaults[p] !== 'undefined') {
-						if (p === 'content') {
-							self.$tooltip.find('span').html(data[p]);
-						} else if (p === 'cssclass' && data[p] !== '') {
-							self.$tooltip.addClass(data[p]);
-						} else if (p === 'position') {
-							self.$tooltip.removeClass('pos_w pos_e pos_n pos_s pos_nw pos_ne pos_se pos_sw pos_center').addClass('pos_' + data[p]);
-							var target_box,
-								tooltip_box = {left: 0, top: 0, width: Math.floor(self.$tooltip.outerWidth()), height: Math.floor(self.$tooltip.outerHeight())},
-								pointer_box = {left: 0, top: 0, width: Math.floor(self.$tooltip.find('.pointer').outerWidth()), height: Math.floor(self.$tooltip.find('.pointer').outerHeight())},
-								doc_box = {left: $(document).scrollLeft(), top: $(document).scrollTop(), width: $(window).width(), height: $(window).height()};
-							if (self.$target) {
-								target_box = self.$target.offset();
-								target_box.left = Math.floor(target_box.left);
-								target_box.top = Math.floor(target_box.top);
-								target_box.width = Math.floor(self.$target.outerWidth());
-								target_box.height = Math.floor(self.$target.outerHeight());
-							} else {
-								target_box = {
-									left: Math.floor(($(document).scrollLeft() + $(window).width()) / 2)
-									,top: Math.floor(($(document).scrollTop() + $(window).height()) / 2)
-									,width: 0
-									,height: 0
-								};
-							}
-							if (data[p] === 'w') {
-								tooltip_box.left = target_box.left - tooltip_box.width - pointer_box.width;
-								tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height)/2);
-								pointer_box.left = tooltip_box.width;
-								pointer_box.top = Math.floor(target_box.height / 2);
-							} else if (data[p] === 'e') {
-								tooltip_box.left = target_box.left + target_box.width + pointer_box.width;
-								tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height)/2);
-								pointer_box.left = -pointer_box.width;
-								pointer_box.top = Math.floor(tooltip_box.height / 2);
-							} else if (data[p] === 'n') {
-								tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width)/2);
-								tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
-								pointer_box.left = Math.floor(tooltip_box.width / 2);
-								pointer_box.top = tooltip_box.height;
-							} else if (data[p] === 's') {
-								tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width) / 2);
-								tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
-								pointer_box.left = Math.floor(tooltip_box.width / 2);
-								pointer_box.top = -pointer_box.height;
-							} else if (data[p] === 'nw') {
-								tooltip_box.left = target_box.left - tooltip_box.width + pointer_box.width;	// +pointer_box.width because pointer is under
-								tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
-								pointer_box.left = tooltip_box.width - pointer_box.width;
-								pointer_box.top = tooltip_box.height;
-							} else if (data[p] === 'ne') {
-								tooltip_box.left = target_box.left + target_box.width - pointer_box.width;
-								tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
-								pointer_box.left = 1;
-								pointer_box.top = tooltip_box.height;
-							} else if (data[p] === 'se') {
-								tooltip_box.left = target_box.left + target_box.width - pointer_box.width;
-								tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
-								pointer_box.left = 1;
-								pointer_box.top = -pointer_box.height;
-							} else if (data[p] === 'sw') {
-								tooltip_box.left = target_box.left - tooltip_box.width + pointer_box.width;
-								tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
-								pointer_box.left = tooltip_box.width - pointer_box.width;
-								pointer_box.top = -pointer_box.height;
-							} else if (data[p] === 'center') {
-								tooltip_box.left = target_box.left + Math.floor((target_box.width - tooltip_box.width) / 2);
-								tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
-								mirror = false;
-								self.$tooltip.find('.pointer').hide();
-							}
-
-							// if the tooltip is out of bounds we first mirror its position
-							if (mirror) {
-								var newpos = data[p],
-									do_mirror = false;
-								if (tooltip_box.left < doc_box.left) {
-									newpos = newpos.replace('w', 'e');
-									do_mirror = true;
-								} else if (tooltip_box.left + tooltip_box.width > doc_box.left + doc_box.width) {
-									newpos = newpos.replace('e', 'w');
-									do_mirror = true;
-								}
-								if (tooltip_box.top < doc_box.top) {
-									newpos = newpos.replace('n', 's');
-									do_mirror = true;
-								} else if (tooltip_box.top + tooltip_box.height > doc_box.top + doc_box.height) {
-									newpos = newpos.replace('s', 'n');
-									do_mirror = true;
-								}
-								if (do_mirror) {
-									apply_data({position: newpos}, false);
-									return;
-								}
-							}
-
-							// if we're here, it's definitely after the mirroring or the position is center
-							// this part is for slightly moving the tooltip if it's still out of bounds
-							var pointer_left = null,
-								pointer_top = null;
-							if (tooltip_box.left < doc_box.left) {
-								pointer_left = tooltip_box.left - doc_box.left;
-								tooltip_box.left = doc_box.left;
-							} else if (tooltip_box.left + tooltip_box.width > doc_box.left + doc_box.width) {
-								pointer_left = tooltip_box.left - doc_box.left - doc_box.width + tooltip_box.width;
-								tooltip_box.left = doc_box.left + doc_box.width - tooltip_box.width;
-							}
-							if (tooltip_box.top < doc_box.top) {
-								pointer_top = tooltip_box.top - doc_box.top;
-								tooltip_box.top = doc_box.top;
-							} else if (tooltip_box.top + tooltip_box.height > doc_box.top + doc_box.height) {
-								pointer_top = tooltip_box.top - doc_box.top - doc_box.height + tooltip_box.height;
-								tooltip_box.top = doc_box.top + doc_box.height - tooltip_box.height;
-							}
-
-							self.$tooltip.css({left: tooltip_box.left, top: tooltip_box.top}).show();
-							if (pointer_left !== null) {
-								self.$tooltip.find('.pointer').css('margin-left', '+=' + pointer_left);
-							}
-							if (pointer_top !== null) {
-								self.$tooltip.find('.pointer').css('margin-top', '+=' + pointer_top);
-							}
-						}
-					}
+		function init() {
+			self.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo(self.options.appendTo).hide();
+			if (self.options.contentElem !== undefined && self.options.contentElem !== null) {
+				self.options.content = $(self.options.contentElem).html();
+			} else if (self.options.contentAttr !== undefined && self.options.contentAttr !== null) {
+				self.options.content = self.$trigger.attr(self.options.contentAttr);
+				if (self.options.contentAttr == 'title') {
+					self.options.trigger_title = self.options.content;
 				}
 			}
-		}
+			self.$tooltip.find('span').html(self.options.content);
+			if (self.options.cssclass != '') {
+					self.$tooltip.addClass(self.options.cssclass);
+			}
+			if (self.options.target !== undefined) {
+				self.$target = $(self.options.target);
+			}
+			if (self.options.hoverable) {
+				self.$tooltip.on('mouseenter.' + pluginName, $.proxy(self.on_mouseenter, self))
+							 .on('mouseleave.' + pluginName + ' close.' + pluginName, $.proxy(self.on_mouseleave, self));
+			}
+		};
 
-		function build_tooltip(options) {
-			self = {
-				on_mouseenter: on_mouseenter
-				,close: on_mouse_leave
-				,on_close: function() {}
-			};
-			self.leave_timeout = null;
-			if (typeof options.target !== 'undefined') {
-				self.$target = $(options.target);
-				delete options.target;
-			} else if ($trigger) {
-				self.$target = $trigger;
-			}
-			if (typeof options.content_elem != 'undefined' && options.content_elem !== null) {
-				options.content = $(options.content_elem).html();
-				delete options.content_elem;
-			}
-			if (typeof options.on_close != 'undefined') {
-				self.on_close = options.on_close;
-				delete options.on_close;
-			}
-			if (typeof options.content_attr != 'undefined' && options.content_attr !== null) {
-				options.content = $trigger.attr(options.content_attr);
-				delete options.content_attr;
-			}
-			self.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo('body');
-			self.data = $.extend(true, {}, $.fn.scotip.defaults, options);
-			apply_data(self.data);
-			if (self.data.hoverable) {
-				self.$tooltip.bind('mouseenter', on_mouseenter)
-							 .bind('mouseleave close', function(e, delay, force) {on_mouse_leave(delay, force);});
-			}
-		}
-
-		if (e !== null) {
-			$trigger = $(e.currentTarget);
-			self = $trigger.data('scotip');
-			options = e.data;
-			if (e.type === 'mouseenter') {
-				if (typeof self !== 'undefined') {
-					on_mouseenter();
-				} else {
-					options = $.extend({}, options, $trigger.data());
-					build_tooltip(options);
-					$trigger.data('scotip', self);
-				}
-			} else if (e.type === 'mouseleave') {
-				on_mouse_leave(self.data.delay);
-			}
-		} else if (!$.isEmptyObject(options)) {
-			build_tooltip(options);
-			self.close();
-		}
-
-		return self;
+		init();
 	}
 
-	$.fn.scotip = function(opts) {
-		$(document).delegate(this.selector, 'hover', opts, live_tooltip);
-	};
 
-	$.scotip = function(options) {
-		return live_tooltip(null, options);
-	};
+	$.extend(Tooltip.prototype, {
+		open: function(allow_mirror) {
+			if (allow_mirror === undefined) {
+				allow_mirror = true;
+			}
+			this.$tooltip.removeClass('pos_w pos_e pos_n pos_s pos_nw pos_ne pos_se pos_sw pos_center').addClass('pos_' + this.options.position);
+			var  target_box = this.$target.offset()
+				,tooltip_box = {left: 0, top: 0, width: Math.floor(this.$tooltip.outerWidth()), height: Math.floor(this.$tooltip.outerHeight())}
+				,pointer_box = {left: 0, top: 0, width: Math.floor(this.$tooltip.find('.pointer').outerWidth()), height: Math.floor(this.$tooltip.find('.pointer').outerHeight())}
+				,doc_box = {left: $(document).scrollLeft(), top: $(document).scrollTop(), width: $(window).width(), height: $(window).height()}
+				;
+			target_box.left = Math.floor(target_box.left);
+			target_box.top = Math.floor(target_box.top);
+			target_box.width = Math.floor(this.$target.outerWidth());
+			target_box.height = Math.floor(this.$target.outerHeight());
 
-	$(document).on('click.scotip', '[data-dismiss="tooltip"]', function(e) {
-		e.preventDefault();
-		$(this).parents('.tooltip').trigger('close', [0, true]);
+			if (this.options.position === 'w') {
+				tooltip_box.left = target_box.left - tooltip_box.width - pointer_box.width;
+				tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
+				pointer_box.left = tooltip_box.width;
+				pointer_box.top = Math.floor(target_box.height / 2);
+			} else if (this.options.position === 'e') {
+				tooltip_box.left = target_box.left + target_box.width + pointer_box.width;
+				tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
+				pointer_box.left = -pointer_box.width;
+				pointer_box.top = Math.floor(tooltip_box.height / 2);
+			} else if (this.options.position === 'n') {
+				tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width) / 2);
+				tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
+				pointer_box.left = Math.floor(tooltip_box.width / 2);
+				pointer_box.top = tooltip_box.height;
+			} else if (this.options.position === 's') {
+				tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width) / 2);
+				tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
+				pointer_box.left = Math.floor(tooltip_box.width / 2);
+				pointer_box.top = -pointer_box.height;
+			} else if (this.options.position === 'nw') {
+				tooltip_box.left = target_box.left - tooltip_box.width + pointer_box.width;	// +pointer_box.width because pointer is under
+				tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
+				pointer_box.left = tooltip_box.width - pointer_box.width;
+				pointer_box.top = tooltip_box.height;
+			} else if (this.options.position === 'ne') {
+				tooltip_box.left = target_box.left + target_box.width - pointer_box.width;
+				tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
+				pointer_box.left = 1;
+				pointer_box.top = tooltip_box.height;
+			} else if (this.options.position === 'se') {
+				tooltip_box.left = target_box.left + target_box.width - pointer_box.width;
+				tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
+				pointer_box.left = 1;
+				pointer_box.top = -pointer_box.height;
+			} else if (this.options.position === 'sw') {
+				tooltip_box.left = target_box.left - tooltip_box.width + pointer_box.width;
+				tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
+				pointer_box.left = tooltip_box.width - pointer_box.width;
+				pointer_box.top = -pointer_box.height;
+			} else if (this.options.position === 'center') {
+				tooltip_box.left = target_box.left + Math.floor((target_box.width - tooltip_box.width) / 2);
+				tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
+				allow_mirror = false;
+				this.$tooltip.find('.pointer').hide();
+			}
+
+			// if the tooltip is out of bounds we first mirror its position
+			if (allow_mirror) {
+				var  newpos = this.options.position
+					,do_mirror = false;
+				if (tooltip_box.left < doc_box.left) {
+					newpos = newpos.replace('w', 'e');
+					do_mirror = true;
+				} else if (tooltip_box.left + tooltip_box.width > doc_box.left + doc_box.width) {
+					newpos = newpos.replace('e', 'w');
+					do_mirror = true;
+				}
+				if (tooltip_box.top < doc_box.top) {
+					newpos = newpos.replace('n', 's');
+					do_mirror = true;
+				} else if (tooltip_box.top + tooltip_box.height > doc_box.top + doc_box.height) {
+					newpos = newpos.replace('s', 'n');
+					do_mirror = true;
+				}
+				if (do_mirror) {
+					this.options.position = newpos;
+					this.open(false);
+					return;
+				}
+			}
+
+			// if we're here, it's definitely after the mirroring or the position is center
+			// this part is for slightly moving the tooltip if it's still out of bounds
+			var pointer_left = null,
+				pointer_top = null;
+			if (tooltip_box.left < doc_box.left) {
+				pointer_left = tooltip_box.left - doc_box.left - pointer_box.width / 2;
+				tooltip_box.left = doc_box.left;
+			} else if (tooltip_box.left + tooltip_box.width > doc_box.left + doc_box.width) {
+				pointer_left = tooltip_box.left - doc_box.left - doc_box.width + tooltip_box.width - pointer_box.width / 2;
+				tooltip_box.left = doc_box.left + doc_box.width - tooltip_box.width;
+			}
+			if (tooltip_box.top < doc_box.top) {
+				pointer_top = tooltip_box.top - doc_box.top - pointer_box.height / 2;
+				tooltip_box.top = doc_box.top;
+			} else if (tooltip_box.top + tooltip_box.height > doc_box.top + doc_box.height) {
+				pointer_top = tooltip_box.top - doc_box.top - doc_box.height + tooltip_box.height - pointer_box.height / 2;
+				tooltip_box.top = doc_box.top + doc_box.height - tooltip_box.height;
+			}
+
+			this.$tooltip.css({left: tooltip_box.left, top: tooltip_box.top});
+			if (pointer_left !== null) {
+				this.$tooltip.find('.pointer').css('margin-left', pointer_left);
+			}
+			if (pointer_top !== null) {
+				this.$tooltip.find('.pointer').css('margin-top', '+=' + pointer_top);
+			}
+
+			if (this.options.trigger_title) {
+				this.$trigger.attr('title', '');
+			}
+			this.$tooltip.show();
+		}
+
+		,close: function() {
+			if (this.options.trigger_title) {
+				this.$trigger.attr('title', this.options.trigger_title);
+			}
+			if (typeof this.options.on_close == 'function') {
+				this.options.on_close.call(this);
+			}
+			this.$tooltip.hide();
+		}
+
+		,do_mouseenter: function() {
+			if (this.leave_timeout !== null) {
+				clearTimeout(this.leave_timeout);
+				this.leave_timeout = null;
+			}
+			this.open();
+		}
+
+		,do_mouseleave: function() {
+			var self = this;
+			if (this.leave_timeout !== null) {
+				clearTimeout(this.leave_timeout);
+				this.leave_timeout = null;
+			}
+			if (this.options.autoclose) {
+				this.leave_timeout = setTimeout(function() {
+					clearTimeout(self.leave_timeout);
+					self.leave_timeout = null;
+					self.close();
+				}, this.options.delay);
+			}
+		}
 	});
 
-	$.fn.scotip.defaults = {
-		content_elem: null,
-		content_attr: null,
-		content: '',
-		hoverable: true,		// should mouse over tooltip hold the tooltip or not?
-		delay: 0,
-		cssclass: '',
-		// n,s,e,w,ne,nw,se,sw,center
-		position: 'n',
-		autoclose: true
+	$.fn[pluginName] = function(options) {
+		var method = null
+			,first_run = false
+			;
+		if (typeof options == 'string') {
+			method = options;
+		}
+		return this.each(function() {
+			var obj;
+			if (!(obj = $.data(this, pluginName))) {
+				var  $this = $(this)
+					,data = $this.data()
+					;
+				first_run = true;
+				if (typeof options === 'object') {
+					options = $.extend({}, options, data);
+				} else {
+					options = data;
+				}
+				obj = new Tooltip($this, options);
+				$.data(this, pluginName, obj);
+			}
+			if (method) {
+				obj[method]();
+			} else if (first_run) {
+				$(this).on('mouseenter.' + pluginName, function() {
+					obj.do_mouseenter();
+				}).on('mouseleave.' + pluginName, function() {
+					obj.do_mouseleave();
+				});
+			} else {
+				obj.open();
+			}
+		});
 	};
-}));
+
+
+	$[pluginName] = function(options) {
+		return Tooltip(options);
+	};
+
+
+	$.fn[pluginName].defaults = {
+		 contentElem: null
+		,contentAttr: null
+		,content: ''
+		,hoverable: true		// should mouse over tooltip hold the tooltip or not?
+		,delay: 0
+		,cssclass: ''
+		,position: 'n'			// n,s,e,w,ne,nw,se,sw,center
+		,autoclose: true
+		,appendTo: 'body'	// where should the tooltips be appended to (default to document.body). Added for unit tests, not really needed in real life.
+	};
+
+	$(document).on('mouseenter.' + pluginName, '[data-trigger="tooltip"]', function() {
+		$(this)[pluginName]('do_mouseenter');
+	}).on('mouseleave.' + pluginName, '[data-trigger="tooltip"]', function() {
+		$(this)[pluginName]('do_mouseleave');
+	});
+	$(document).off('click.' + pluginName, '[data-dismiss="tooltip"]').on('click.' + pluginName, '[data-dismiss="tooltip"]', function(e) {
+		$(this).parents('.tooltip').trigger('close');
+	});
+})(jQuery);
