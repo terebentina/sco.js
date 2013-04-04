@@ -261,7 +261,7 @@
 		,contentAttr: null
 		,content: ''
 		,hoverable: true		// should mouse over tooltip hold the tooltip or not?
-		,delay: 0
+		,delay: 200
 		,cssclass: ''
 		,position: 'n'			// n,s,e,w,ne,nw,se,sw,center
 		,autoclose: true
