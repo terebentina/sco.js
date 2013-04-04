@@ -44,7 +44,7 @@
 			}
 			self.$tooltip.find('span').html(self.options.content);
 			if (self.options.cssclass != '') {
-					self.$tooltip.addClass(self.options.cssclass);
+				self.$tooltip.addClass(self.options.cssclass);
 			}
 			if (self.options.target !== undefined) {
 				self.$target = $(self.options.target);
@@ -252,8 +252,11 @@
 	};
 
 
-	$[pluginName] = function(options) {
-		return Tooltip(options);
+	$[pluginName] = function(elem, options) {
+		if (typeof elem === 'string') {
+			elem = $(elem);
+		}
+		return new Tooltip(elem, options);
 	};
 
 
