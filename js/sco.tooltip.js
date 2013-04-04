@@ -60,7 +60,7 @@
 
 
 	$.extend(Tooltip.prototype, {
-		open: function(allow_mirror) {
+		show: function(allow_mirror) {
 			if (allow_mirror === undefined) {
 				allow_mirror = true;
 			}
@@ -142,7 +142,7 @@
 				}
 				if (do_mirror) {
 					this.options.position = newpos;
-					this.open(false);
+					this.show(false);
 					return;
 				}
 			}
@@ -180,7 +180,7 @@
 			this.$tooltip.show();
 		}
 
-		,close: function() {
+		,hide: function() {
 			if (this.options.trigger_title) {
 				this.$trigger.attr('title', this.options.trigger_title);
 			}
@@ -195,7 +195,7 @@
 				clearTimeout(this.leave_timeout);
 				this.leave_timeout = null;
 			}
-			this.open();
+			this.show();
 		}
 
 		,do_mouseleave: function() {
@@ -208,7 +208,7 @@
 				this.leave_timeout = setTimeout(function() {
 					clearTimeout(self.leave_timeout);
 					self.leave_timeout = null;
-					self.close();
+					self.hide();
 				}, this.options.delay);
 			}
 		}
@@ -245,7 +245,7 @@
 					obj.do_mouseleave();
 				});
 			} else {
-				obj.open();
+				obj.show();
 			}
 		});
 	};
