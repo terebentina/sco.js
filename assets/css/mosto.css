@@ -7,6 +7,7 @@ i {
 form {
   font: 13px/18px;
   margin-bottom: 18px;
+  clear: both;
 }
 
 form * {
@@ -65,6 +66,7 @@ textarea {
   height: auto;
   min-height: 60px;
   width: 240px;
+  margin-top: 5px;
 }
 
 input[type="number"] {
@@ -140,14 +142,11 @@ input:-moz-placeholder {
   color: #999999;
 }
 
-label .message {
+form .message {
   color: #999999;
   font-size: 12px;
-  vertical-align: middle;
-}
-
-.help-inline label input {
-  display: inline;
+  clear: both;
+  display: block;
 }
 
 .label-group label:first-of-type {
@@ -174,21 +173,39 @@ label .message {
 .form-horizontal .label-group > div:first-child {
   width: 130px;
   text-align: right;
-  padding-right: 3px;
-  display: inline-block;
-  vertical-align: middle;
+  margin-right: 5px;
 }
 
 .form-horizontal label input,
 .form-horizontal label select,
-.form-horizontal label textarea {
-  display: inline-block;
+.form-horizontal label textarea,
+.form-horizontal .label-group label,
+.form-horizontal .inline label,
+.form-horizontal label > div:first-child,
+.form-horizontal .label-group > div:first-child,
+.form-horizontal .message,
+.help-inline .message,
+.help-inline label input {
+  float: left;
+}
+
+.inline label {
+  display: inline;
 }
 
 .form-horizontal .label-group label,
-.label-group.inline label {
-  display: inline;
+.label-group.inline label,
+.form-horizontal label > div:first-child,
+.form-horizontal .label-group > div:first-child,
+.form-horizontal .message,
+.help-inline .message {
   line-height: 36px;
+}
+
+.form-horizontal .message,
+.help-inline .message {
+  margin-left: 5px;
+  clear: none;
 }
 
 .label-group.inline label input {
@@ -215,17 +232,15 @@ label .message {
 }
 
 .form-horizontal .stacked label {
-  display: table;
+  float: none;
+  clear: both;
+}
+
+.form-horizontal .stacked > div:first-child {
+  line-height: 18px;
 }
 
 /*@end clear */
-.form-horizontal input[type="text"],
-.form-horizontal input[type="password"],
-.form-horizontal input[type="email"],
-input[type="search"] {
-  display: inline;
-}
-
 .form-horizontal .label-group label input {
   float: none;
 }
@@ -264,6 +279,7 @@ label .message.hint {
   -moz-transition: all 0.2s ease-in;
   transition: all 0.2s ease-in;
   opacity: 0;
+  position: static\9;
 }
 
 label.error .message.hint,
@@ -271,9 +287,9 @@ input:focus + .message.hint {
   opacity: 1;
 }
 
-.form-horizontal label .message.hint {
+.form-horizontal .message.hint {
   line-height: 34px;
-  margin-left: 5px;
+  position: static;
 }
 
 /*@end hint*/
@@ -281,32 +297,29 @@ input:focus + .message.hint {
 .prepend,
 .append {
   background: #f9f9f9;
-  display: inline-block;
   border: 1px solid #cccccc;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1);
   vertical-align: top;
   height: 28px;
   padding: 4px 8px;
   margin: 3px 0;
-  vertical-align: middle;
   line-height: 19px;
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
+  float: left;
 }
 
 .prepend {
   border-right: none;
-  margin-right: -4px;
 }
 
 .prepend + input {
-  display: inline;
+  float: left;
 }
 
 .append {
   border-left: none;
-  margin-left: -4px;
 }
 
 .prepend + input,

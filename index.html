@@ -16,6 +16,7 @@
 	<script src="assets/js/jquery-1.8.3.min.js"></script>
     <script src="assets/js/bootstrap-scrollspy.js"></script>
     <script src="assets/js/bootstrap-affix.js"></script>
+    <script src="assets/js/bootstrap-transition.js"></script>
 	<script src="assets/js/sco.modal.js"></script>
 	<script src="assets/js/sco.confirm.js"></script>
 	<script src="assets/js/sco.ajax.js"></script>
@@ -24,6 +25,8 @@
 	<script src="assets/js/sco.message.js"></script>
 	<script src="assets/js/jquery.form.js"></script>
 	<script src="assets/js/sco.tooltip.js"></script>
+	<script src="assets/js/sco.tabcore.js"></script>
+	<script src="assets/js/sco.tab.js"></script>
 	<script src="assets/js/sco.valid.js"></script>
 	<script src="assets/js/prettify.js"></script>
 	<script src="assets/js/app.js"></script>
@@ -672,6 +675,28 @@ collapse.toggle();</pre>
 					<p>coming soon.</p>
 
 					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-example" data-easing="fade">
+							<li class="active"><a href="#">Tab 1</a></li>
+							<li><a href="#">Tab 2</a></li>
+							<li><a href="#">Tab 3</a></li>
+							<li><a href="#">Tab 4</a></li>
+						</ul>
+						<div class="pane-wrapper" id="tab-example">
+							<div>
+								<p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+							</div>
+							<div>
+								<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+							</div>
+							<div>
+								<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+							</div>
+							<div>
+								<p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+							</div>
+						</div>
+					</div>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
@@ -705,6 +730,8 @@ collapse.toggle();</pre>
 					</div>
 <pre class="prettyprint linenums">
 &lt;a href="#" data-trigger="tooltip" data-content="Lorem ipsum dolor">Hover me&lt;/a></pre>
+					<p>Scroll the page up till the example link above is at the very top of the page and hover over the link again - you will see the tooltip appearing below the link. Try the same with left/right/bottom - the tooltip will reposition itself
+					to stay on page all the time.</p>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
@@ -796,7 +823,7 @@ collapse.toggle();</pre>
 									<br>Example:
 									<div>
 										<a href="#" data-trigger="tooltip" data-autoclose="0" data-content-elem="#tooltip_target1">See the wonder</a>
-										<div id="tooltip_target1" class="hide">This is such an important message that you need to click to close <button class="btn" data-dismiss="tooltip">close</button></div>
+										<div id="tooltip_target1" class="hide">This is such an important message that you need to click to close <button class="button" data-dismiss="tooltip">close</button></div>
 									</div>
 								</td>
 							</tr>
@@ -966,7 +993,7 @@ tooltip.do_mouseleave();</pre>
 							<label><div>Email</div> <input type="email" name="email"></label>
 							<label><div>Password</div> <input type="password" name="pass"></label>
 							<label><div>Password again</div> <input type="password" name="pass2"></label>
-							<button type="submit" class="btn">Try</button>
+							<button type="submit" class="button">Try</button>
 						</form>
 						<script>
 							$(function() {
