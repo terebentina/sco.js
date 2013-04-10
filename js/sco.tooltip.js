@@ -54,7 +54,7 @@
 							 .on('mouseleave.' + pluginName, $.proxy(self.do_mouseleave, self))
 							 .on('close.' + pluginName, $.proxy(self.hide, self));
 			}
-		};
+		}
 
 		init();
 	}
