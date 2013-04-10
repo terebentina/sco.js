@@ -56,7 +56,7 @@
 		if ($.address) {
 			$.address.externalChange(function(e) {
 				var hash = '#' + e.value.slice(1);
-				self.$tab_headers.find('a').each(function(i) {
+				self.$tab_headers.find('a').each(function() {
 					var $this = $(this);
 					if ($this.attr('href') === hash) {
 						auto_click = true;
