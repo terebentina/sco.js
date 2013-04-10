@@ -28,89 +28,41 @@
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$tab_headers = $tab_headers;
 
-		if (typeof this.options.content === 'undefined') {
+		if (this.options.content === undefined) {
 			return;
 		}
-		this.$content = $(this.options.content).children();
 
-		if (typeof this.options.onInit === 'function') {
-			this.options.onInit.call(this);
-		}
+		this.tabcore = $.scojs_tabcore(this.options.content, this.options);
 
+		var self = this;
 		this.$tab_headers.on('click.' + pluginName, 'a', function(e) {
-			var $this = $(this)
-				,$my_li = $this.parents('li')
+			var  $this = $(this)
+				,$my_li = $this.closest('li')
 				,my_index = $my_li.index()
-				,options = {active: my_index};
+				;
 
 			if (!$.address) {
 				e.preventDefault();
 			}
-			// @todo not working
-			//if ($this.attr('href').indexOf('#') !== 0) {
-			//	e.preventDefault();
-			//	options.href = $this.attr('href');
-			//}
 
-			this.set(options);
+			self.$tab_headers.find('li.active').removeClass('active');
+			$my_li.addClass('active');
+
+			self.tabcore.select(my_index);
 		});
 
-		this.set(this.options);
-
 		if ($.address) {
-			var self = this;
 			$.address.externalChange(function(e) {
 				var hash = '#' + e.value.slice(1);
 				this.$tab_headers.find('a').each(function(i) {
 					if ($(this).attr('href') === hash) {
-						self.set({active: i});
+						self.tabcore.select(i);
 						return false;
 					}
 				});
 			}).history(true);
 		}
 	}
-
-	$.extend(Tab.prototype, {
-			get: function(key) {
-				if (typeof self.options[key] !== 'undefined') {
-					return self.options[key];
-				}
-
-				return undefined;
-			},
-
-			set: function(map) {
-				var self = this;
-				$.each(map, function(k, v) {
-					if (k === 'active') {
-						if (v !== self.get('active')) {
-							if (typeof self.options.onBeforeSelect == 'function') {
-								self.options.onBeforeSelect.call(self, v);
-							}
-							var $header_children = self.$tab_headers.children();
-							// remove the .active class from all tab headers and add .active to selected tab header
-							$header_children.removeClass('active').eq(v).addClass('active');
-							// hide all tab content and show only the selected one
-							self.$content.hide().removeClass('active').eq(v).addClass('active').fadeIn(function() {
-								if (typeof self.options.onAfterSelect == 'function') {
-									self.options.onAfterSelect.call(self, v);
-								}
-							});
-						}
-					/*
-					} else if (k === 'href' && v !== '') {
-						// @todo not working
-						self.$content.find('.active').load(v);
-					*/
-					}
-				});
-				return self;
-			},
-
-		});
-	}
-
 
 	$.fn[pluginName] = function(options) {
 		return this.each(function() {
@@ -123,17 +75,15 @@
 				obj = new Tab($this, options);
 				$.data(this, pluginName, obj);
 			}
-			obj.toggle();
 		});
 	};
 
-
 	$.fn[pluginName].defaults = {
 		active: 0
-		,onBeforeSelect: null
-		,onAfterSelect: null
-		//,auto_advance: false	// false or milliseconds to wait till advancing
-		//,easing: null
-		//,href: ''
+		,easing: ''
 	};
+
+	$(function() {
+		$('[data-trigger="tab"]')[pluginName]();
+	});
 })(jQuery);
