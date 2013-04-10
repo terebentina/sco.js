@@ -1363,15 +1363,89 @@ valid.validate();</pre>
 							});
 						</script>
 					</div>
+					<pre class="prettyprint linenums">
+&lt;div class="pane-wrapper" id="panes-example">
+  &lt;div>&lt;img src="assets/img/carousel1.jpg">&lt;/div>
+  &lt;div>&lt;img src="assets/img/carousel2.jpg">&lt;/div>
+&lt;/div>
+&lt;button class="btn" id="select-pane1">Show 1&lt;/button>
+&lt;button class="btn" id="select-pane2">Show 2&lt;/button>
+&lt;script>
+  $(function() {
+    var $panes = $.scojs_panes('#panes-example', {easing: 'flip'});
+    $('#select-pane1').on('click', function() {
+      $panes.select(0);
+    });
+    $('#select-pane2').on('click', function() {
+      $panes.select(1);
+    });
+  });
+&lt;/script></pre>
 
 					<h2>Usage</h2>
-					<h3>Via data attributes (data-api)</h3>
-					<h3>As a jquery plugin</h3>
 					<h3>With access to the object</h3>
+					<pre class="prettyprint linenums">var $panes = $.scojs_panes(selector, options);</pre>
 
 					<h2>Options</h2>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>active</td>
+								<td>integer</td>
+								<td>0</td>
+								<td>The index of the active pane (0 based).</td>
+							</tr>
+							<tr>
+								<td>easing</td>
+								<td>string</td>
+								<td></td>
+								<td>The css class to add to the wrapper. You could add the class yourself in html without specifying this option to the plugin but I might implement a javascript fallback for fade/slide so it's better
+								that the plugin is aware of this. At the moment you can use <code>fade</code>, <code>slide</code> and <code>flip</code>. You can, of course, define your own css-based transition effects, in which case you'd specify here the name of your css class.</td>
+							</tr>
+							<tr>
+								<td>onInit</td>
+								<td>function</td>
+								<td></td>
+								<td>The callback to run just before showing the active pane the first time. You could use this to change options for example.</td>
+							</tr>
+							<tr>
+								<td>onBeforeSelect</td>
+								<td>function</td>
+								<td></td>
+								<td>The callback to run just before selecting a new pane. If your callback returns false, the new pane will not be selected.</td>
+							</tr>
+						</tbody>
+					</table>
 
 					<h2>Methods</h2>
+					<h4>.select(index)</h4>
+					<p>Select the index-th element (0-based).</p>
+					<pre class="prettyprint linenums">
+						var $panes = $.scojs_panes('#foo', {active: 1});
+						$panes.select(0);
+					</pre>
+
+					<h4>.prev()</h4>
+					<p>Select the previous element. If the first element is active, <code>prev()</code> selects the last one.</p>
+					<pre class="prettyprint linenums">
+						var $panes = $.scojs_panes('#foo', {active: 1});
+						$panes.select(0);
+					</pre>
+
+					<h4>.next()</h4>
+					<p>Select the next element. If the last element is active, <code>next()</code> selects the first one.</p>
+					<pre class="prettyprint linenums">
+						var $panes = $.scojs_panes('#foo');
+						$panes.next();
+					</pre>
 				</section>
 
 
