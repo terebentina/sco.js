@@ -25,7 +25,7 @@
 	<script src="assets/js/sco.message.js"></script>
 	<script src="assets/js/jquery.form.js"></script>
 	<script src="assets/js/sco.tooltip.js"></script>
-	<script src="assets/js/sco.tabcore.js"></script>
+	<script src="assets/js/sco.panes.js"></script>
 	<script src="assets/js/sco.tab.js"></script>
 	<script src="assets/js/sco.valid.js"></script>
 	<script src="assets/js/prettify.js"></script>
@@ -62,6 +62,7 @@
 					<li><a href="#tooltip"><i class="icon-chevron-right"></i> Tooltip</a></li>
 					<li><a href="#message"><i class="icon-chevron-right"></i> Message</a></li>
 					<li><a href="#valid"><i class="icon-chevron-right"></i> Valid</a></li>
+					<li><a href="#panes"><i class="icon-chevron-right"></i> Panes</a></li>
 					<li><a href="#ajax"><i class="icon-chevron-right"></i> Ajax</a></li>
 					<li><a href="#countdown"><i class="icon-chevron-right"></i> Countdown</a></li>
 				</ul>
@@ -80,7 +81,7 @@
 					rapid development but...1 size doesn't fit all. In my case it almost fit ;)</p>
 					<div class="alert alert-info">
 						<strong>Note:</strong>
-						bootstrap is using css transitions where possible and this is a great thing! My js plugins don't yet but I plan to address this problem soon ;)
+						bootstrap is using css transitions where possible and this is a great thing! Only a few of my plugins are using transitions but I am working on adding them wherever possible.
 					</div>
 
 					<h3>What you get</h3>
@@ -659,7 +660,6 @@ var collapse = $.scojs_collapse();
 collapse.toggle();</pre>
 				</section>
 
-
 				<section id="tab">
 					<div class="page-header">
 						<h1>Tab <small>sco.tab.js</small></h1>
@@ -676,7 +676,7 @@ collapse.toggle();</pre>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-example" data-easing="flip">
+						<ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-example" data-easing="">
 							<li class="active"><a href="#">Tab 1</a></li>
 							<li><a href="#">Tab 2</a></li>
 							<li><a href="#">Tab 3</a></li>
@@ -1322,6 +1322,59 @@ tooltip.do_mouseleave();</pre>
 var valid = $.scojs_valid('#signup_form', {rules: {email: ['not_empty']}});
 valid.validate();</pre>
 				</section>
+
+
+				<section id="panes">
+					<div class="page-header">
+						<h1>Panes <small>sco.panes.js</small></h1>
+					</div>
+
+					<h3>What?</h3>
+					<p>Panes is the core for tabs and carousels. Not meant to be used standalone, unless you want to provide functionality not covered by <a href="#tab">Tab</a> and <a href="#carousel">Carousel</a>.</p>
+					<p>It provides the basic functionality to switch between a collection of elements - show one of them then hide that and show some other. Its aim is to be easily extensible - add any kind of transition effect you want, add callbacks, etc.<br>
+					By default it comes with 3 transitions ( <code>fade</code>, <code>slide</code>, <code>flip</code> ) but you can add as many as you want.
+					</p>
+
+					<h3>Why?</h3>
+					<p>Tabs and carousels are basically the same thing (from a functional point of view): A collection of elements of which only one is visible at a time. You switch between the elements by clicking on tab headers or on navigation pills. Carousels are a bit more advanced
+					than this but the core functionality is the same. It made sense to have a library to provide the common functionality for both. You can even think beyond just tabs and carousels - how about a pagination module that switches between pages (e.g. &laquo; 1, 2, 3...10 &raquo;)? Or a side menu that shows various pages
+					with a nice transition between the pages? This pattern is quite used on the web.</p>
+
+					<h3>Dependencies</h3>
+					<p>If you want to use transitions you need to load bootstrap-transition.js before this.</p>
+
+					<h3>Examples</h3>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<div class="pane-wrapper" id="panes-example">
+							<div><img src="assets/img/carousel1.jpg"></div>
+							<div><img src="assets/img/carousel2.jpg"></div>
+						</div>
+						<button class="btn" id="select-pane1">Show 1</button>
+						<button class="btn" id="select-pane2">Show 2</button>
+						<script>
+							$(function() {
+								var $panes = $.scojs_panes('#panes-example', {easing: 'flip'});
+								$('#select-pane1').on('click', function() {
+									$panes.select(0);
+								});
+								$('#select-pane2').on('click', function() {
+									$panes.select(1);
+								});
+							});
+						</script>
+					</div>
+
+					<h2>Usage</h2>
+					<h3>Via data attributes (data-api)</h3>
+					<h3>As a jquery plugin</h3>
+					<h3>With access to the object</h3>
+
+					<h2>Options</h2>
+
+					<h2>Methods</h2>
+				</section>
+
+
 				<section id="ajax">
 					<div class="page-header">
 						<h1>Ajax <small>sco.ajax.js</small></h1>
