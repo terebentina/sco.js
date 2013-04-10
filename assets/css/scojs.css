@@ -219,6 +219,7 @@
 
 .pane-wrapper.flip > div {
 	position: relative;
+	width: 100%;
 	top: 0;
 	left: 0;
 	-webkit-transform: rotateY(-180deg);
@@ -237,12 +238,17 @@
 .pane-wrapper.flip > .next,
 .pane-wrapper.flip > .prev {
 	position: absolute;
-	width: 100%;
+	display: block;
 }
 
 .pane-wrapper.flip > .active.left {
 	-webkit-transform: rotateY(-180deg);
 	-moz-transform: rotateY(-180deg);
+}
+
+.pane-wrapper.flip > .active.right {
+	-webkit-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
 }
 .pane-wrapper.flip > .next.left,
 .pane-wrapper.flip > .prev.right {
