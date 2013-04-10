@@ -49,7 +49,7 @@
 		init();
 	}
 
-	Confirm.prototype = $.extend(Confirm.prototype, {
+	$.extend(Confirm.prototype, {
 		show: function() {
 			this.scomodal.show();
 		}
@@ -67,18 +67,18 @@
 				var $this = $(this)
 					,data = $this.data()
 					,title = $this.attr('title') || data.title
+					,opts = $.extend({}, $.fn[pluginName].defaults, options, data)
 					;
-				options = $.extend({}, $.fn[pluginName].defaults, options, data);
 				if (!title) {
 					title = 'this';
 				}
-				options.content = options.content.replace(':title', title);
-				if (!options.action) {
-					options.action = $this.attr('href');
-				} else if (typeof window[options.action] == 'function') {
-					options.action = window[options.action];
+				opts.content = opts.content.replace(':title', title);
+				if (!opts.action) {
+					opts.action = $this.attr('href');
+				} else if (typeof window[opts.action] == 'function') {
+					opts.action = window[opts.action];
 				}
-				obj = new Confirm(options);
+				obj = new Confirm(opts);
 				$.data(this, pluginName, obj);
 			}
 			obj.show();
@@ -96,7 +96,7 @@
 		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 	};
 
-	$(document).on('click.' + pluginName, '[data-trigger="confirm"]', function(e) {
+	$(document).on('click.' + pluginName, '[data-trigger="confirm"]', function() {
 		$(this)[pluginName]();
 		return false;
 	});

@@ -17,7 +17,7 @@
  * limitations under the License.
  * ========================================================== */
 
-/*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true */
+/*jshint laxcomma:true, sub:true, browser:true, jquery:true, devel:true, eqeqeq:false */
 
 ;(function($, undefined) {
 	"use strict";
@@ -33,7 +33,7 @@
 			this.$target = this.$trigger[this.options.mode](this.options.collapseSelector);
 		}
 		if (this.options.parent !== null) {
-			this.$parent = this.$trigger.parents(this.options.parent);
+			this.$parent = this.$trigger.closest(this.options.parent);
 		}
 	}
 
@@ -66,9 +66,9 @@
 			if (!(obj = $.data(this, pluginName))) {
 				var $this = $(this)
 					,data = $this.data()
+					,opts = $.extend({}, $.fn[pluginName].defaults, options, data)
 					;
-				options = $.extend({}, $.fn[pluginName].defaults, options, data);
-				obj = new Collapse($this, options);
+				obj = new Collapse($this, opts);
 				$.data(this, pluginName, obj);
 			}
 			obj.toggle();

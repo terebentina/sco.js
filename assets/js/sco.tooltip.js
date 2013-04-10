@@ -227,14 +227,15 @@
 			if (!(obj = $.data(this, pluginName))) {
 				var  $this = $(this)
 					,data = $this.data()
+					,opts
 					;
 				first_run = true;
 				if (typeof options === 'object') {
-					options = $.extend({}, options, data);
+					opts = $.extend({}, options, data);
 				} else {
-					options = data;
+					opts = data;
 				}
-				obj = new Tooltip($this, options);
+				obj = new Tooltip($this, opts);
 				$.data(this, pluginName, obj);
 			}
 			if (method) {
@@ -278,6 +279,6 @@
 		$(this)[pluginName]('do_mouseleave');
 	});
 	$(document).off('click.' + pluginName, '[data-dismiss="tooltip"]').on('click.' + pluginName, '[data-dismiss="tooltip"]', function(e) {
-		$(this).parents('.tooltip').trigger('close');
+		$(this).closest('.tooltip').trigger('close');
 	});
 })(jQuery);

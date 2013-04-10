@@ -17,6 +17,7 @@
     <script src="assets/js/bootstrap-scrollspy.js"></script>
     <script src="assets/js/bootstrap-affix.js"></script>
     <script src="assets/js/bootstrap-transition.js"></script>
+    <script src="assets/js/jquery.address.js"></script>
 	<script src="assets/js/sco.modal.js"></script>
 	<script src="assets/js/sco.confirm.js"></script>
 	<script src="assets/js/sco.ajax.js"></script>
@@ -89,12 +90,17 @@
 					in bootstrap. Plugins are unit tested and in use on production sites. Each plugin can be enabled and configured via <strong>data-attributes</strong> <code>data-trigger="pluginName"</code> or <strong>programatically</strong>
 					<code>var $modal = $.scojs_modal({...})</code>.
 					Each plugin has a "reason for being" (see below) - what it tries to achieve, what does differently from bootstrap, why I created it in the first place.</p>
-
 					<p>In most cases the css comes from bootstrap. I also tried to follow the bootstrap docs, formatting and conventions as much as possible so users of bootstrap would feel
 					right at home with sco.js</p>
-
 					<p>When data attributes are available to trigger a specific plugin, the attribute to use is <code>data-trigger="plugin name"</code> to not conflict with bootstrap's <code>data-toggle="plugin name"</code>.
 					This way you can use both bootstrap and sco.js freely and interchangeable.</p>
+
+					<h3>What's next</h3>
+					<ul>
+						<li>Like mentioned in the note above, one of the priorities is to get css transition support working wherever possible.</li>
+						<li>Carousel is coming too, based on panes.</li>
+						<li>Ajax support for <a href="#panes">panes</a> (and automatically for <a href="#tab">tab</a> and carousel) - you should be able to load remote content into a pane or more slides into a carousel.</li>
+					</ul>
 				</section>
 
 				<section id="modals">
@@ -660,52 +666,124 @@ var collapse = $.scojs_collapse();
 collapse.toggle();</pre>
 				</section>
 
+
 				<section id="tab">
 					<div class="page-header">
 						<h1>Tab <small>sco.tab.js</small></h1>
 					</div>
 
 					<h3>What?</h3>
-					<p>coming soon.</p>
+					<p>Tab functionality for your pages.</p>
 
 					<h3>Why?</h3>
-					<p>coming soon.</p>
+					<p>Like with the other plugins that already exist in bootstrap that I chose to rewrite, my main problem with bootstrap tabs is the complexity of the markup required and the heavy use of IDs. Sco.js tabs are simpler, have some sane defaults but the simplicity comes with a price: it doesn't support dropdown tabs or different effects for transitioning panes.
+					It's the same effect for each pane and there must be as many tab headers as panes. If you need the extra complexity, by all means, use bootstrap tabs.</p>
 
 					<h3>Dependencies</h3>
-					<p>coming soon.</p>
+					<p><a href="#panes">Sco.js Panes</a> - it's the core of the tabs and carousel. If you want history support you should also include <a target="_blank" href="http://www.asual.com/jquery/address">jQuery Address</a>. See below for how to use it.</p>
 
 					<h3>Examples</h3>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
-						<ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-example" data-easing="">
-							<li class="active"><a href="#">Tab 1</a></li>
+						<ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-example" data-active="1">
+							<li><a href="#">Tab 1</a></li>
 							<li><a href="#">Tab 2</a></li>
 							<li><a href="#">Tab 3</a></li>
 							<li><a href="#">Tab 4</a></li>
 						</ul>
 						<div class="pane-wrapper" id="tab-example">
 							<div>
-								<p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+								<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque posuere hendrerit bibendum. Maecenas vel velit quis quam suscipit eleifend scelerisque vitae nisi. Sed eget dui sem, vel pellentesque nibh. Curabitur ut ligula mauris, non suscipit felis. Phasellus venenatis, erat vitae porta mattis, nunc nunc consectetur nibh, et venenatis tellus arcu at augue. Aliquam ultricies egestas diam, at posuere lorem semper ac.</p>
 							</div>
 							<div>
-								<p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+								<p>Phasellus at neque mauris. Integer eu massa consectetur lectus posuere fermentum. Mauris vel ante eu purus tempus suscipit. Maecenas rutrum lacus eget odio tempus ac consequat mauris aliquet. Aenean vitae tortor vitae eros accumsan pulvinar eu eget massa. Suspendisse in ligula nec nulla tempus pellentesque. Pellentesque pulvinar lacus ac tortor dictum sit amet molestie dolor mollis.</p>
 							</div>
 							<div>
-								<p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+								<p>Duis facilisis ligula sed libero pharetra fermentum. Fusce at odio sapien, vitae eleifend mauris. Nullam vitae nunc non purus aliquet blandit at nec ipsum. Pellentesque at nisi consequat magna venenatis varius non eget nisi. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut facilisis vestibulum risus, id mattis erat condimentum iaculis. Nunc luctus scelerisque arcu a lacinia. Nulla quis magna mauris, id dignissim risus. Mauris neque urna, sollicitudin vitae accumsan a, tincidunt a ipsum.</p>
 							</div>
 							<div>
-								<p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+								<p>Praesent mollis scelerisque aliquam. Proin dui lacus, consequat sed pretium sed, vehicula a orci. Duis tristique eros lorem, quis consectetur sapien. Nulla facilisi. Vestibulum luctus, lorem vitae ullamcorper mattis, erat erat venenatis mi, non sodales urna tortor sit amet purus. Pellentesque ut eros a arcu consequat volutpat ac id purus. Integer feugiat accumsan justo, sed ultricies urna ultricies eu. Maecenas commodo adipiscing nulla in feugiat. Nam eu est nunc.</p>
 							</div>
 						</div>
 					</div>
+					<pre class="prettyprint linenums">
+&lt;ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-example" data-active="2">
+  &lt;li class="active">&lt;a href="#">Tab 1&lt;/a>&lt;/li>
+  &lt;li>&lt;a href="#">Tab 2&lt;/a>&lt;/li>
+  &lt;li>&lt;a href="#">Tab 3&lt;/a>&lt;/li>
+  &lt;li>&lt;a href="#">Tab 4&lt;/a>&lt;/li>
+&lt;/ul>
+&lt;div class="pane-wrapper" id="tab-example">
+  &lt;div>...&lt;/div>
+  &lt;div>...&lt;/div>
+  &lt;div>...&lt;/div>
+  &lt;div>...&lt;/div>
+&lt;/div></pre>
+
+					<p>There should be as many tab headers as children elements in .pane-wrapper (specified with the <code>data-content</code> attribute above). A click on the first tab header would select the first .pane-wrapper child, a click on the nth tab header would select the nth child.</p>
+					<p>The links in the tab headers don't need a specific href attribute, unless you want history support.</p>
+
+					<h2>Browser history support</h2>
+					<p>To enable history support for tabs make sure you load <a target="_blank" href="http://www.asual.com/jquery/address">jQuery Address</a> and that the links in your tab headers have anchor hrefs (e.g <code>&lt;a href="#foo">Tab 1&lt;/a></code>).<br>
+						However, the hrefs must <strong>NOT</strong> point to any element on the page (there should be no element with that ID on the page).
+						The history support is bidirectional:
+					</p>
+					<ul>
+						<li>when you click on a tab header that has an anchor href the hash gets added to the current url. This is the easy direction :)</li>
+						<li>when you add the hash of a tab header to the url, the tab switches to that pane</li>
+					</ul>
+					<p>If there's an element that has the same ID as one of your hrefs, the tabs will still function properly but the page will "jump" to that element, as anchors are supposed to work in browser.</p>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-history-example" data-easing="slide">
+							<li><a href="#tab1">Tab 1</a></li>
+							<li><a href="#tab2">Tab 2</a></li>
+							<li><a href="#tab3">Tab 3</a></li>
+							<li><a href="#modals">Tab with existing ID on page</a></li>
+						</ul>
+						<div class="pane-wrapper" id="tab-history-example">
+							<div>Tab 1 content</div>
+							<div>Tab 2 content</div>
+							<div>Tab 3 content</div>
+							<div>Tab 4 content</div>
+						</div>
+					</div>
+					<p>Click on the tabs above and see how the hash is added to the page url (which is normal browser behaviour) and try adding #tab1 or #tab2 or #tab3 to this page url manually and see how the tabs change. You can also click on the last tab header - the proper pane will be selected but the page will jump up to modals.</p>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
+					<p>See the examples above for how you can use this with the data-api. You need to add <code>data-trigger="tab"</code> to the element wrapping the tab headers.</p>
+					<p>The data-api usage is <strong>NOT</strong> "live", unfortunately. If you add elements to the DOM having a <code>data-trigger="tab"</code> attribute, you will have to also bind that new element yourself using javascript.</p>
+
 					<h3>As a jquery plugin</h3>
+					<pre class="prettyprint linenums">$('#mytabs').scojs_tab(options);</pre>
+					<p>If the #mytabs element has <code>data-</code> attributes and you pass options as well, the data attributes overwrite the options with the same name.</p>
+
 					<h3>With access to the object</h3>
+					<pre class="prettyprint linenums">var tab = $.scojs_tab('#mytabs', options);</pre>
 
 					<h2>Options</h2>
+					<p>Options can be passed via data attributes or JavaScript. For data attributes, append the option name to <code>data-</code>, as in <code>data-content="#foo"</code>.</p>
+					<table class="table table-bordered table-striped">
+						<thead>
+							<tr>
+								<th style="width: 100px;">Name</th>
+								<th style="width: 50px;">type</th>
+								<th style="width: 50px;">default</th>
+								<th>description</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>content</td>
+								<td>string</td>
+								<td></td>
+								<td>(required) The selector for the pane wrapper element. The pane wrapper element should have a <code>.pane-wrapper</code> class.</td>
+							</tr>
+						</tbody>
+					</table>
+					<p>See the <a href="#panes-options">panes options</a> for the rest of the options supported by tab.</p>
 
 					<h2>Methods</h2>
+					<p>See the <a href="#panes-methods">panes methods</a> for the methods supported by tab.</p>
 				</section>
 
 
@@ -728,8 +806,7 @@ collapse.toggle();</pre>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
 						<a href="#" data-trigger="tooltip" data-content="Lorem ipsum dolor">Hover me</a>
 					</div>
-<pre class="prettyprint linenums">
-&lt;a href="#" data-trigger="tooltip" data-content="Lorem ipsum dolor">Hover me&lt;/a></pre>
+					<pre class="prettyprint linenums">&lt;a href="#" data-trigger="tooltip" data-content="Lorem ipsum dolor">Hover me&lt;/a></pre>
 					<p>Scroll the page up till the example link above is at the very top of the page and hover over the link again - you will see the tooltip appearing below the link. Try the same with left/right/bottom - the tooltip will reposition itself
 					to stay on page all the time.</p>
 
@@ -1332,12 +1409,12 @@ valid.validate();</pre>
 					<h3>What?</h3>
 					<p>Panes is the core for tabs and carousels. Not meant to be used standalone, unless you want to provide functionality not covered by <a href="#tab">Tab</a> and <a href="#carousel">Carousel</a>.</p>
 					<p>It provides the basic functionality to switch between a collection of elements - show one of them then hide that and show some other. Its aim is to be easily extensible - add any kind of transition effect you want, add callbacks, etc.<br>
-					By default it comes with 3 transitions ( <code>fade</code>, <code>slide</code>, <code>flip</code> ) but you can add as many as you want.
+					By default it comes with 3 transitions ( <code>xfade</code>, <code>slide</code>, <code>flip</code> ) but you can add as many as you want.
 					</p>
 
 					<h3>Why?</h3>
 					<p>Tabs and carousels are basically the same thing (from a functional point of view): A collection of elements of which only one is visible at a time. You switch between the elements by clicking on tab headers or on navigation pills. Carousels are a bit more advanced
-					than this but the core functionality is the same. It made sense to have a library to provide the common functionality for both. You can even think beyond just tabs and carousels - how about a pagination module that switches between pages (e.g. &laquo; 1, 2, 3...10 &raquo;)? Or a side menu that shows various pages
+					than this but the core functionality is the same. It made sense to have a library to provide the common functionality for both. You can even think beyond just tabs and carousels - how about a pagination module that switches between pages (e.g. &laquo; 1 2 3...10 &raquo;)? Or a side menu that shows various pages
 					with a nice transition between the pages? This pattern is quite used on the web.</p>
 
 					<h3>Dependencies</h3>
@@ -1386,7 +1463,7 @@ valid.validate();</pre>
 					<h3>With access to the object</h3>
 					<pre class="prettyprint linenums">var $panes = $.scojs_panes(selector, options);</pre>
 
-					<h2>Options</h2>
+					<h2 id="panes-options">Options</h2>
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -1408,7 +1485,8 @@ valid.validate();</pre>
 								<td>string</td>
 								<td></td>
 								<td>The css class to add to the wrapper. You could add the class yourself in html without specifying this option to the plugin but I might implement a javascript fallback for fade/slide so it's better
-								that the plugin is aware of this. At the moment you can use <code>fade</code>, <code>slide</code> and <code>flip</code>. You can, of course, define your own css-based transition effects, in which case you'd specify here the name of your css class.</td>
+								that the plugin is aware of this. At the moment you can use <code>xfade</code>, <code>slide</code> and <code>flip</code>. You can, of course, define your own css-based transition effects, in which case you'd specify here the name of your css class.<br>
+								For example, you could use easing: 'flip-vertical', copy all styles that start with .pane-wrapper.flip in scojs.css, replace .flip with .flip-vertical there and rotateY with rotateX.</td>
 							</tr>
 							<tr>
 								<td>onInit</td>
@@ -1425,27 +1503,24 @@ valid.validate();</pre>
 						</tbody>
 					</table>
 
-					<h2>Methods</h2>
+					<h2 id="panes-methods">Methods</h2>
 					<h4>.select(index)</h4>
 					<p>Select the index-th element (0-based).</p>
 					<pre class="prettyprint linenums">
-						var $panes = $.scojs_panes('#foo', {active: 1});
-						$panes.select(0);
-					</pre>
+var $panes = $.scojs_panes('#foo', {active: 1});
+$panes.select(0);</pre>
 
 					<h4>.prev()</h4>
 					<p>Select the previous element. If the first element is active, <code>prev()</code> selects the last one.</p>
 					<pre class="prettyprint linenums">
-						var $panes = $.scojs_panes('#foo', {active: 1});
-						$panes.select(0);
-					</pre>
+var $panes = $.scojs_panes('#foo', {active: 1});
+$panes.select(0);</pre>
 
 					<h4>.next()</h4>
 					<p>Select the next element. If the last element is active, <code>next()</code> selects the first one.</p>
 					<pre class="prettyprint linenums">
-						var $panes = $.scojs_panes('#foo');
-						$panes.next();
-					</pre>
+var $panes = $.scojs_panes('#foo');
+$panes.next();</pre>
 				</section>
 
 
