@@ -40,7 +40,7 @@
 	}
 
 
-	Modal.prototype = $.extend(Modal.prototype, {
+	$.extend(Modal.prototype, {
 		show: function() {
 			var self = this
 				,$backdrop;
@@ -140,14 +140,14 @@
 		return this.each(function() {
 			var obj;
 			if (!(obj = $.data(this, pluginName))) {
-				var $this = $(this)
+				var  $this = $(this)
 					,data = $this.data()
+					,opts = $.extend({}, options, data)
 					;
-				options = $.extend({}, options, data);
 				if ($this.attr('href') !== '' && $this.attr('href') != '#') {
 					options.remote = $this.attr('href');
 				}
-				obj = new Modal(options);
+				obj = new Modal(opts);
 				$.data(this, pluginName, obj);
 			}
 			obj.show();
@@ -178,6 +178,6 @@
 		}
 	}).on('click.' + pluginName, '[data-dismiss="modal"]', function(e) {
 		e.preventDefault();
-		$(this).parents('.modal').trigger('close');
+		$(this).closest('.modal').trigger('close');
 	});
 })(jQuery);

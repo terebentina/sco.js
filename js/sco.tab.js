@@ -34,14 +34,16 @@
 
 		this.panes = $.scojs_panes(this.options.content, this.options);
 
-		var self = this;
+		var self = this
+			,auto_click = false
+			;
 		this.$tab_headers.on('click.' + pluginName, 'a', function(e) {
 			var  $this = $(this)
 				,$my_li = $this.closest('li')
 				,my_index = $my_li.index()
 				;
 
-			if (!$.address) {
+			if (!$.address || $this.attr('href') == '#') {
 				e.preventDefault();
 			}
 
@@ -54,15 +56,36 @@
 		if ($.address) {
 			$.address.externalChange(function(e) {
 				var hash = '#' + e.value.slice(1);
-				this.$tab_headers.find('a').each(function(i) {
-					if ($(this).attr('href') === hash) {
-						self.panes.select(i);
+				self.$tab_headers.find('a').each(function(i) {
+					var $this = $(this);
+					if ($this.attr('href') === hash) {
+						auto_click = true;
+						$this.trigger('click');
 						return false;
 					}
 				});
 			}).history(true);
 		}
+
+		if (!auto_click) {
+			this.$tab_headers.find('li:eq(' + this.options.active + ') a').trigger('click');
+		}
 	}
+
+	$.extend(Tab.prototype, {
+		select: function(index) {
+			this.panes.select(index);
+		}
+
+		,next: function() {
+			this.panes.next();
+		}
+
+		,prev: function() {
+			this.panes.prev();
+		}
+	});
+
 
 	$.fn[pluginName] = function(options) {
 		return this.each(function() {
@@ -70,13 +93,22 @@
 			if (!(obj = $.data(this, pluginName))) {
 				var $this = $(this)
 					,data = $this.data()
+					,opts = $.extend({}, $.fn[pluginName].defaults, options, data)
 					;
-				options = $.extend({}, $.fn[pluginName].defaults, options, data);
-				obj = new Tab($this, options);
+				obj = new Tab($this, opts);
 				$.data(this, pluginName, obj);
 			}
 		});
 	};
+
+
+	$[pluginName] = function(elem, options) {
+		if (typeof elem === 'string') {
+			elem = $(elem);
+		}
+		return new Tab(elem, options);
+	};
+
 
 	$.fn[pluginName].defaults = {
 		active: 0

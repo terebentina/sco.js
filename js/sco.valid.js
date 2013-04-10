@@ -48,7 +48,7 @@
 				var $input = self.$form.find('[name="' + field_name + '"]');
 				$input.siblings('span.message').html('');
 				if (self.options.wrapper !== null) {
-					$input.parents(self.options.wrapper).removeClass('error');
+					$input.closest(self.options.wrapper).removeClass('error');
 				}
 			});
 			this.errors = {};
@@ -119,7 +119,7 @@
 				var $input = self.$form.find('[name="' + k + '"]'),
 					$span = $input.siblings('.message');
 				if (self.options.wrapper !== null) {
-					$input.parents(self.options.wrapper).addClass('error');
+					$input.closest(self.options.wrapper).addClass('error');
 				}
 				if ($span.length === 0) {
 					$span = $('<span/>', {'class': 'message'});
@@ -315,8 +315,8 @@
 			,validator = $form.data(pluginName);
 		if ($.type(options) === 'object') {
 			if (!validator) {
-				options = $.extend({}, $.fn[pluginName].defaults, options, $form.data());
-				validator = new Valid($form, options);
+				var opts = $.extend({}, $.fn[pluginName].defaults, options, $form.data());
+				validator = new Valid($form, opts);
 				$form.data(pluginName, validator).attr('novalidate', 'novalidate');
 			}
 			$form.ajaxForm({
@@ -337,7 +337,7 @@
 							if (response.data.next === '.') {			// refresh current page
 								window.location.href = window.location.href.replace(/#.*$/, '');
 							} else if (response.data.next === 'x') {	// close the parent modal
-								$form.parents('.modal').trigger('close');
+								$form.closest('.modal').trigger('close');
 							} else {
 								window.location.href = response.data.next;
 							}
