@@ -32,7 +32,7 @@
 			return;
 		}
 
-		this.tabcore = $.scojs_tabcore(this.options.content, this.options);
+		this.panes = $.scojs_panes(this.options.content, this.options);
 
 		var self = this;
 		this.$tab_headers.on('click.' + pluginName, 'a', function(e) {
@@ -48,7 +48,7 @@
 			self.$tab_headers.find('li.active').removeClass('active');
 			$my_li.addClass('active');
 
-			self.tabcore.select(my_index);
+			self.panes.select(my_index);
 		});
 
 		if ($.address) {
@@ -56,7 +56,7 @@
 				var hash = '#' + e.value.slice(1);
 				this.$tab_headers.find('a').each(function(i) {
 					if ($(this).attr('href') === hash) {
-						self.tabcore.select(i);
+						self.panes.select(i);
 						return false;
 					}
 				});
