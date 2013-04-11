@@ -456,7 +456,22 @@ confirm.show();</pre>
 					<p>The collapse does not depend on other libraries (other than jQuery, of course).</p>
 
 					<h3>Examples</h3>
-					<p>In its most basic form, the collapser plugin is nothing more than a simple on/off toggler for another block element:</p>
+					<p>In its most basic form, the collapser plugin is nothing more than a simple on/off toggler for another block element.
+					All you need to get started is a trigger with a <code>data-trigger="collapse"</code> attribute and a div inmediately following the trigger with a class of <code>.collapsible</code>. You will probably want that div to be set to display:none eg. via the bootstrap helper class <code>.hide</code>.
+					</p>
+					<div class="bs-docs-example" style="padding-bottom: 24px;">
+						<a href="#" data-trigger="collapse">Click for default behaviour</a>
+						<div class="collapsible hide">
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam lacinia hendrerit purus, in convallis quam ultricies vel. Sed a dui tellus, ut lacinia felis. Duis eget sapien ut dui congue mattis.
+						</div>
+					</div>
+					<pre class="prettyprint linenums">
+&lt;a href="#" data-trigger="collapse">Click for default behaviour&lt;/a>
+&lt;div class="collapsible hide">
+  Lorem ipsum...
+&lt;/div></pre>
+
+					<p>More examples:</p>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
 						<ul class="nav nav-list">
 							<li>
@@ -476,16 +491,6 @@ confirm.show();</pre>
 							</li>
 						</ul>
 					</div>
-					<pre class="prettyprint linenums">
-&lt;a href="#" data-trigger="collapse">Click for default behaviour&lt;/a>
-&lt;div class="collapsible hide">
-  Lorem ipsum...
-&lt;/div>
-&lt;a href="#" data-trigger="collapse" data-target="#collapse_test">Click me too - I am using an id&lt;/a>
-&lt;div id="collapse_test" class="hide">
-  The quick...
-&lt;/div>
-&lt;a href="#" data-trigger="collapse" data-target=".hide">Toggle all at once&lt;/a></pre>
 
 					<p>Let's spice things up a bit: the accordion behaviour. In this mode, we need to tell each trigger what html element is the parent for the whole accordion:</p>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
