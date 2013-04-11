@@ -681,6 +681,9 @@ collapse.toggle();</pre>
 					<p><a href="#panes">Sco.js Panes</a> - it's the core of the tabs and carousel. If you want history support you should also include <a target="_blank" href="http://www.asual.com/jquery/address">jQuery Address</a>. See below for how to use it.</p>
 
 					<h3>Examples</h3>
+					<p>There should be as many tab headers as children elements in .pane-wrapper (specified with the <code>data-content</code> attribute above). A click on the first tab header would select the first .pane-wrapper child, a click on the nth tab header would select the nth child.</p>
+					<p>The links in the tab headers don't need a specific href attribute, unless you want history support:</p>
+
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
 						<ul class="nav nav-tabs" data-trigger="tab" data-content="#tab-example" data-active="1">
 							<li><a href="#">Tab 1</a></li>
@@ -716,9 +719,6 @@ collapse.toggle();</pre>
   &lt;div>...&lt;/div>
   &lt;div>...&lt;/div>
 &lt;/div></pre>
-
-					<p>There should be as many tab headers as children elements in .pane-wrapper (specified with the <code>data-content</code> attribute above). A click on the first tab header would select the first .pane-wrapper child, a click on the nth tab header would select the nth child.</p>
-					<p>The links in the tab headers don't need a specific href attribute, unless you want history support.</p>
 
 					<h2>Browser history support</h2>
 					<p>To enable history support for tabs make sure you load <a target="_blank" href="http://www.asual.com/jquery/address">jQuery Address</a> and that the links in your tab headers have anchor hrefs (e.g <code>&lt;a href="#foo">Tab 1&lt;/a></code>).<br>
