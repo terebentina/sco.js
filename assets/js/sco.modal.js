@@ -145,7 +145,7 @@
 					,opts = $.extend({}, options, data)
 					;
 				if ($this.attr('href') !== '' && $this.attr('href') != '#') {
-					options.remote = $this.attr('href');
+					opts.remote = $this.attr('href');
 				}
 				obj = new Modal(opts);
 				$.data(this, pluginName, obj);
