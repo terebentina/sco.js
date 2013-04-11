@@ -89,7 +89,7 @@
 					<p>All plugins in sco.js can be used on a bootstrap-enabled site but they can be used separately as well. Also, sco.js contains plugins that are not available
 					in bootstrap. Plugins are unit tested and in use on production sites. Each plugin can be enabled and configured via <strong>data-attributes</strong> <code>data-trigger="pluginName"</code> or <strong>programatically</strong>
 					<code>var $modal = $.scojs_modal({...})</code>.
-					Each plugin has a "reason for being" (see below) - what it tries to achieve, what does differently from bootstrap, why I created it in the first place.</p>
+					Each plugin has a "reason for being" (see below) - what it tries to achieve, what it does differently from bootstrap, why I created it in the first place.</p>
 					<p>In most cases the css comes from bootstrap. I also tried to follow the bootstrap docs, formatting and conventions as much as possible so users of bootstrap would feel
 					right at home with sco.js</p>
 					<p>When data attributes are available to trigger a specific plugin, the attribute to use is <code>data-trigger="plugin name"</code> to not conflict with bootstrap's <code>data-toggle="plugin name"</code>.
@@ -114,8 +114,9 @@
 					</p>
 
 					<h3>Why?</h3>
-					<p>Because bootstrap modals didn't allow remote content (they do now though). Also, because I wanted the modal HTML to be created by the plugin
-					if it didn't exist in the page already.</p>
+					<p>Because bootstrap modals didn't allow remote content when I created this. Also, I didn't want to clutter every page where I migth use a modal with the modal content / HTML markup. The Sco.js modal requires nothing more than a link on the page.</p>
+					<p>Lets say we have a site eg. a hotel, and each room has a booking form, rather than clutter up every page with the same booking form html we would put the form in a separate html file eg. "my-booking-form.html" and when calling the modal use href="my-booking-form.html" to ajax in that content and keep our main content uncluttered and seo friendly.</p>
+
 
 					<h3>Dependencies</h3>
 					<p>The modal does not depend on other libraries (other than jQuery, of course). However, we recommend you load <a target="_blank" href="http://fgnass.github.com/spin.js">spin.js</a>.
@@ -127,18 +128,9 @@
 					</div>
 					<pre class="prettyprint linenums">
 &lt;!-- Button to trigger modal -->
-&lt;a data-trigger="modal" href="lipsum.html" data-title="Modal title" class="btn">Launch demo modal&lt;/a>
+&lt;a data-trigger="modal" href="lipsum.html" data-title="Modal title" class="btn">Launch demo modal&lt;/a></pre>
 
-&lt;!-- Modal -->
-&lt;div class="modal fade in" id="modal">
-  &lt;div class="modal-header">
-    &lt;a class="close" href="#" data-dismiss="modal">×&lt;/a>
-    &lt;h3>Modal header&lt;/h3>
-  &lt;/div>
-  &lt;div class="inner">
-    remote content goes here
-  &lt;/div>
-&lt;/div></pre>
+					<p>You don't need to worry about providing any HTML structure to the modal, this is done automatically by creating the following markup. All you need to provide is the modal title and the url to the remote content. However, if you need to specify your own HTML check the <code>target</code> option (see the Options section below).</p>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
@@ -457,7 +449,7 @@ confirm.show();</pre>
 
 					<h3>Why?</h3>
 					<p>So much markup in bootstrap for their collapse component! And IDs. I hate IDs! While IDs give you a great degree of freedom in what to target (as in I want this button to collapse this far away block across the page),
-					most of the time it's now how an accordion works. You usually want to click on a menu link and expand the block under/above that link. So I made this collapse plugin to address the said issues.</p>
+					most of the time it's not how an accordion works. You usually want to click on a menu link and expand the block under/above that link. So I made this collapse plugin to address the said issues.</p>
 
 					<h3>Dependencies</h3>
 					<p>The collapse does not depend on other libraries (other than jQuery, of course).</p>
