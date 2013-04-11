@@ -114,7 +114,7 @@
 					</p>
 
 					<h3>Why?</h3>
-					<p>Because bootstrap modals didn't allow remote content when I created this. Also, I didn't want to clutter every page where I migth use a modal with the modal content / HTML markup. The Sco.js modal requires nothing more than a link on the page.</p>
+					<p>Because bootstrap modals didn't allow remote content when I created this. Also, I didn't want to clutter every page where I might use a modal with the modal content / HTML markup. The Sco.js modal requires nothing more than a link on the page.</p>
 					<p>Lets say we have a site eg. a hotel, and each room has a booking form, rather than clutter up every page with the same booking form html we would put the form in a separate html file eg. "my-booking-form.html" and when calling the modal use href="my-booking-form.html" to ajax in that content and keep our main content uncluttered and seo friendly.</p>
 
 
@@ -178,7 +178,7 @@
 								<td>target</td>
 								<td>string</td>
 								<td>#modal</td>
-								<td>The modal ID. If an HTML element with this ID already exists in the DOM, it will be used, otherwise a standard HTML modal structure will be created
+								<td>The modal ID. If an HTML element with this ID already exists in the DOM, the modal content will be placed inside that, otherwise a standard HTML modal structure will be created
 								automatically. The default structure is:
 									<pre class="prettyprint linenums">
 &lt;div class="modal fade" id="modal">
@@ -188,6 +188,7 @@
   &lt;/div>
   &lt;div class="inner">&lt;/div>
 &lt;/div></pre>
+									The modal is looking for an .inner element inside the target to place the content there so if using your own HTML markup, make sure you have an .inner element.
 								</td>
 							</tr>
 							<tr>
