@@ -1,19 +1,23 @@
 $(function () {
 
-	module('confirm object');
+	module('confirm object', {
+		teardown: function() {
+			equal($('#confirm_modal').length, 0, 'no modal remaining after test');
+			equal($('.modal-backdrop').length, 0, 'backdrop doesn\'t exist');
+		}
+	});
 
 		test('should create html on call', function() {
 			var $modal = $.scojs_confirm({
 					action: '/bla'
 					,content: 'abcdef'
 					,appendTo: '#qunit-fixture'
-				});
-			equal($('#confirm_modal.confirm_modal').length, 1, 'modal created');
-			equal($('#confirm_modal').find('.inner').text(), 'abcdef', 'modal content is properly set');
-			equal($('#confirm_modal').find('[data-action]').attr('href'), '/bla', 'proper href action');
-			equal($('#confirm_modal').css('display'), 'none', 'modal is invisible when created');
-			$modal.show();
-			equal($('#confirm_modal').css('display'), 'block', 'modal is visible after show()');
+				}).show();
+			equal($('#qunit-fixture #confirm_modal.confirm_modal').length, 1, 'modal created');
+			equal($('#qunit-fixture #confirm_modal').find('.inner').text(), 'abcdef', 'modal content is properly set');
+			equal($('#qunit-fixture #confirm_modal').find('[data-action]').attr('href'), '/bla', 'proper href action');
+			equal($('#qunit-fixture #confirm_modal').css('display'), 'block', 'modal is visible after show()');
+			$modal.destroy();
 		});
 
 		test('should disappear on cancel click', function() {
@@ -21,12 +25,12 @@ $(function () {
 					action: '/bla'
 					,content: 'abcdef'
 					,appendTo: '#qunit-fixture'
-				});
-			$modal.show();
+				}).show();
 			$('#confirm_modal').find('[data-dismiss]').trigger('click');
 			equal($('#confirm_modal').length, 1, 'modal still exists');
 			equal($('#confirm_modal').css('display'), 'none', 'modal is hidden');
 			equal($('#confirm_modal .inner').text(), '', 'modal content is cleaned');
+			$modal.destroy();
 		});
 
 		test('action as function should work', function() {
@@ -36,13 +40,13 @@ $(function () {
 					}
 					,content: 'abcdef'
 					,appendTo: '#qunit-fixture'
-				});
-			$modal.show();
+				}).show();
 			equal($('.test').length, 0, 'nothing before clicking on action');
 			equal($('#confirm_modal').find('[data-action]').attr('href'), '#', 'action href is #');
 			$('#confirm_modal').find('[data-action]').trigger('click');
 			equal($('.test').length, 1, 'action worked properly after click');
 			$('.test').remove();
+			$modal.destroy();
 		});
 
 		test('there should be just 1 action event', function() {
@@ -52,20 +56,32 @@ $(function () {
 					}
 					,content: 'abcdef'
 					,appendTo: '#qunit-fixture'
-				})
+				}).show()
 				,$modal2 = $.scojs_confirm({
 					action: function() {
 						$(document.body).append('<div class="test"/>');
 					}
 					,content: 'abcdef'
 					,appendTo: '#qunit-fixture'
-				})
+				}).show()
 				;
-			$modal1.show();
-			$modal2.show();
 			equal($('.test').length, 0, 'nothing before clicking on action');
 			$('#confirm_modal').find('[data-action]').trigger('click');
 			equal($('.test').length, 1, 'action worked properly after click');
 			$('.test').remove();
+			$modal1.destroy();
+			$modal2.destroy();
 		});
+
+	module('confirm data-api');
+
+		test('should be created on click', function() {
+			var $fixture = $('#qunit-fixture');
+			$fixture.append('<a href="#" id="link" data-trigger="confirm" data-append-to="#qunit-fixture">click me</a>');
+			$fixture.find('#link').trigger('click');
+			equal($('#confirm_modal').length, 1, '.modal created');
+			equal($('.modal-backdrop').length, 1, '.modal-backdrop created');
+			equal($('.modal .inner').text(), 'Are you sure you want to delete this?', 'modal content is properly set');
+		});
+
 });

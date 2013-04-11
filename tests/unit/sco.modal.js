@@ -1,7 +1,5 @@
 $(function () {
 
-	QUnit.config.reorder = false;
-
 	module('modal object', {
 		teardown: function() {
 			equal($('#modal').length, 0, 'no modal remaining after test');
