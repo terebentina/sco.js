@@ -161,8 +161,8 @@
 }
 
 .pane-wrapper > .active,
-.pane-wrapper > .left,
-.pane-wrapper > .right {
+.pane-wrapper > .prev,
+.pane-wrapper > .next {
 	display: block;
 }
 
@@ -171,8 +171,8 @@
 .pane-wrapper.xfade > .active.left {
 	opacity: 0;
 }
-.pane-wrapper.xfade > .next,
-.pane-wrapper.xfade > .prev,
+.pane-wrapper.xfade > .next.left,
+.pane-wrapper.xfade > .prev.right,
 .pane-wrapper.xfade > .active {
 	opacity: 1;
 }
@@ -181,18 +181,12 @@
 	position: absolute;
 }
 
-.pane-wrapper.slide > .active,
-.pane-wrapper.slide > .next,
-.pane-wrapper.slide > .prev {
-	display: block;
-}
 .pane-wrapper.slide > .active {
 	left: 0;
 }
 .pane-wrapper.slide > .next,
 .pane-wrapper.slide > .prev {
 	position: absolute;
-	top: 0;
 	width: 100%;
 }
 .pane-wrapper.slide > .next {
