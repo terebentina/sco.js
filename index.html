@@ -130,7 +130,7 @@
 &lt;!-- Button to trigger modal -->
 &lt;a data-trigger="modal" href="lipsum.html" data-title="Modal title" class="btn">Launch demo modal&lt;/a></pre>
 
-					<p>You don't need to worry about providing any HTML structure to the modal, this is done automatically for you. The default markup is listed in the <a href="#modal_options">Options</a> section. All you need to provide is the modal title and the url to the remote content. However, if you need to specify your own HTML markup check the <code>target</code> option.</p>
+					<p>You don't need to worry about providing any HTML structure to the modal, this is done automatically for you. The default markup is listed in the <a href="#modal_options">Options</a> section and the css comes from bootstrap. All you need to provide is the modal title and the url to the remote content. However, if you need to specify your own HTML markup check the <code>target</code> option.</p>
 
 					<h2>Usage</h2>
 					<h3>Via data attributes (data-api)</h3>
@@ -457,7 +457,7 @@ confirm.show();</pre>
 
 					<h3>Examples</h3>
 					<p>In its most basic form, the collapser plugin is nothing more than a simple on/off toggler for another block element.
-					All you need to get started is a trigger with a <code>data-trigger="collapse"</code> attribute and a div inmediately following the trigger with a class of <code>.collapsible</code>. You will probably want that div to be set to display:none eg. via the bootstrap helper class <code>.hide</code>.
+					All you need to get started is a trigger with a <code>data-trigger="collapse"</code> attribute and a div inmediately following the trigger with a class of <code>.collapsible</code>. You will probably want that div to be set to display:none (eg. via the bootstrap helper class <code>.hide</code> or with <code>style="display:none"</code>).
 					</p>
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
 						<a href="#" data-trigger="collapse">Click for default behaviour</a>
@@ -472,7 +472,7 @@ confirm.show();</pre>
 &lt;/div></pre>
 
 					<p>More examples:</p>
-					<div class="bs-docs-example" style="padding-bottom: 24px;">
+					<div class="bs-docs-example" style="padding-bottom: 24px;" id="second-collapse-example">
 						<ul class="nav nav-list">
 							<li>
 								<a href="#" data-trigger="collapse">Click for default behaviour</a>
@@ -487,7 +487,7 @@ confirm.show();</pre>
 								</div>
 							</li>
 							<li>
-								<a href="#" data-trigger="collapse" data-target=".hide">Toggle all at once</a>
+								<a href="#" data-trigger="collapse" data-target="#second-collapse-example .hide">Toggle all at once</a>
 							</li>
 						</ul>
 					</div>
@@ -681,7 +681,7 @@ collapse.toggle();</pre>
 					<p><a href="#panes">Sco.js Panes</a> - it's the core of the tabs and carousel. If you want history support you should also include <a target="_blank" href="http://www.asual.com/jquery/address">jQuery Address</a>. See below for how to use it.</p>
 
 					<h3>Examples</h3>
-					<p>There should be as many tab headers as children elements in .pane-wrapper (specified with the <code>data-content</code> attribute above). A click on the first tab header would select the first .pane-wrapper child, a click on the nth tab header would select the nth child.</p>
+					<p>There should be as many tab headers as children elements in .pane-wrapper (specified with the <code>data-content</code> attribute below). A click on the first tab header would select the first .pane-wrapper child, a click on the nth tab header would select the nth child.</p>
 					<p>The links in the tab headers don't need a specific href attribute, unless you want history support:</p>
 
 					<div class="bs-docs-example" style="padding-bottom: 24px;">
