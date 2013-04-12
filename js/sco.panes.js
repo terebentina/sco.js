@@ -22,15 +22,12 @@
 ;(function($, undefined) {
 	"use strict";
 
-	function Panes($wrapper, options) {
-		var defaults = {
-				active: 0
-				,easing: ''
-			}
-			,self = this
-			;
+	var pluginName = 'scojs_panes';
 
-		this.options = $.extend({}, defaults, options);
+	function Panes($wrapper, options) {
+		var self = this;
+
+		this.options = $.extend({}, $[pluginName].defaults, options);
 		var transitionEnd = ($.support.transition && this.options.easing) ? $.support.transition.end : null;
 		this.$pane_wrapper = $wrapper;
 		if (this.options.easing) {
@@ -80,6 +77,7 @@
 				}
 				this.$pane_wrapper.trigger('select', [this.options, index]);
 			}
+			return this;
 		}
 
 		,next: function() {
@@ -92,6 +90,7 @@
 				next = this.options.active + 1;
 			}
 			this.select(next);
+			return this;
 		}
 
 		,prev: function() {
@@ -102,13 +101,19 @@
 				prev = this.options.active - 1;
 			}
 			this.select(prev);
+			return this;
 		}
 	});
 
-	$.scojs_panes = function(elem, options) {
+	$[pluginName] = function(elem, options) {
 		if (typeof elem === 'string') {
 			elem = $(elem);
 		}
 		return new Panes(elem, options);
 	};
+
+	$[pluginName].defaults = {
+		active: 0
+		,easing: ''
+	}
 })(jQuery);
