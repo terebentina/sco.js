@@ -141,7 +141,7 @@
 }
 
 
-/* sco.tabcore.js */
+/* sco.panes.js */
 .pane-wrapper {
 	position: relative;
 	overflow: hidden;
@@ -161,43 +161,32 @@
 }
 
 .pane-wrapper > .active,
-.pane-wrapper > .left,
-.pane-wrapper > .right {
+.pane-wrapper > .prev,
+.pane-wrapper > .next {
 	display: block;
 }
 
-/* override bootstrap */
-.pane-wrapper.fade {
-	opacity: 1;
-}
-
-.pane-wrapper.fade > div,
-.pane-wrapper.fade > .active.right,
-.pane-wrapper.fade > .active.left {
+.pane-wrapper.xfade > div,
+.pane-wrapper.xfade > .active.right,
+.pane-wrapper.xfade > .active.left {
 	opacity: 0;
 }
-.pane-wrapper.fade > .next,
-.pane-wrapper.fade > .prev,
-.pane-wrapper.fade > .active {
+.pane-wrapper.xfade > .next.left,
+.pane-wrapper.xfade > .prev.right,
+.pane-wrapper.xfade > .active {
 	opacity: 1;
 }
-.pane-wrapper.fade > .next,
-.pane-wrapper.fade > .prev {
+.pane-wrapper.xfade > .next,
+.pane-wrapper.xfade > .prev {
 	position: absolute;
 }
 
-.pane-wrapper.slide > .active,
-.pane-wrapper.slide > .next,
-.pane-wrapper.slide > .prev {
-	display: block;
-}
 .pane-wrapper.slide > .active {
 	left: 0;
 }
 .pane-wrapper.slide > .next,
 .pane-wrapper.slide > .prev {
 	position: absolute;
-	top: 0;
 	width: 100%;
 }
 .pane-wrapper.slide > .next {
