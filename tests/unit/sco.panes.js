@@ -59,19 +59,9 @@ $(function () {
 
 	module('panes callbacks');
 
-		test('onInit() runs and can change options', function() {
-			var $fixture = $('#qunit-fixture').append('<div id="wrapper"><div>content</div><div>content</div><div>content</div></div>');
-			var $panes = $.scojs_panes('#wrapper', {
-					onInit: function() {
-						this.options.active = 1;
-					}
-				});
-			equal($panes.options.active, 1, 'yep');
-		});
-
 		test('onBeforeSelect() can block selection', function() {
-			var $fixture = $('#qunit-fixture').append('<div id="wrapper"><div>content</div><div>content</div><div>content</div></div>');
-			var $panes = $.scojs_panes('#wrapper', {
+			var  $fixture = $('#qunit-fixture').append('<div id="wrapper"><div>content</div><div>content</div><div>content</div></div>')
+				,$panes = $.scojs_panes('#wrapper', {
 					onBeforeSelect: function(idx) {
 						if (idx == 2) {
 							return false;

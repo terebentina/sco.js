@@ -24,20 +24,25 @@
 
 	var pluginName = 'scojs_tab';
 
-	function Tab($tab_headers, options) {
+	function Tab($header_wrapper, options) {
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
-		this.$tab_headers = $tab_headers;
+		this.$header_wrapper = $header_wrapper;
 
 		if (this.options.content === undefined) {
-			return;
+			this.options.content = this.$header_wrapper[this.options.mode]('.pane-wrapper');
+		}
+
+		var  self = this
+			,auto_click = false
+			;
+		if (typeof this.options.onBeforeSelect == 'function') {
+			this.options.onBeforeSelect = $.proxy(this.options.onBeforeSelect, self);
 		}
 
 		this.panes = $.scojs_panes(this.options.content, this.options);
+		this.$header_wrapper.find('> li').removeClass('active').eq(this.options.active).addClass('active');
 
-		var self = this
-			,auto_click = false
-			;
-		this.$tab_headers.on('click.' + pluginName, 'a', function(e) {
+		this.$header_wrapper.on('click.' + pluginName, 'a', function(e) {
 			var  $this = $(this)
 				,$my_li = $this.closest('li')
 				,my_index = $my_li.index()
@@ -47,42 +52,30 @@
 				e.preventDefault();
 			}
 
-			self.$tab_headers.find('li.active').removeClass('active');
-			$my_li.addClass('active');
-
-			self.panes.select(my_index);
+			if (self.panes.select(my_index)) {
+				self.$header_wrapper.find('> li.active').removeClass('active');
+				$my_li.addClass('active');
+			}
 		});
 
 		if ($.address) {
 			$.address.externalChange(function(e) {
 				var hash = '#' + e.value.slice(1);
-				self.$tab_headers.find('a').each(function() {
+				self.$header_wrapper.find('> li a').each(function() {
 					var $this = $(this);
 					if ($this.attr('href') === hash) {
-						auto_click = true;
 						$this.trigger('click');
 						return false;
 					}
 				});
 			}).history(true);
 		}
-
-		if (!auto_click) {
-			this.$tab_headers.find('li:eq(' + this.options.active + ') a').trigger('click');
-		}
 	}
 
 	$.extend(Tab.prototype, {
 		select: function(index) {
-			this.panes.select(index);
-		}
-
-		,next: function() {
-			this.panes.next();
-		}
-
-		,prev: function() {
-			this.panes.prev();
+			this.$header_wrapper.find('> li:eq(' + index + ') a').trigger('click');
+			return this;
 		}
 	});
 
@@ -112,6 +105,7 @@
 
 	$.fn[pluginName].defaults = {
 		active: 0
+		,mode: 'next'                       // "next" means panes are under headers, "prev" means panes are above headers
 		,easing: ''
 	};
 
