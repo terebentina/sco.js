@@ -28,13 +28,13 @@
 	function Modal(options) {
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$modal = $(this.options.target).attr('class', 'modal fade').hide();
+		var self = this;
 
-		var self = this
-			,init = function() {
-				if (self.options.title === '') {
-					self.options.title = '&nbsp;';
-				}
-			};
+		function init() {
+			if (self.options.title === '') {
+				self.options.title = '&nbsp;';
+			}
+		};
 
 		init();
 	}
@@ -108,6 +108,7 @@
 			}
 
 			this.$modal.show().addClass('in');
+			return this;
 		}
 
 		,close: function() {
@@ -117,12 +118,15 @@
 			if (typeof this.options.onClose === 'function') {
 				this.options.onClose.call(this, this.options);
 			}
+			return this;
 		}
 
 		,destroy: function() {
 			this.$modal.remove();
+			$(document).off('keyup.' + pluginName);
 			$('.modal-backdrop').remove();
 			this.$modal = null;
+			return this;
 		}
 
 		,escape: function() {

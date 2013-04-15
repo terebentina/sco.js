@@ -39,23 +39,26 @@
 
 	$.extend(Collapse.prototype, {
 		toggle: function() {
-			var self = this;
-
-			//self.$target.toggleClass(self.options.activeTargetClass);
-			self.$target[$.camelCase(self.options.ease + '-toggle')]().removeClass('open');
-			if (self.$parent && !self.$trigger.hasClass(self.options.activeTriggerClass)) {
-				self.$parent.find(self.options.triggerSelector + '.' + self.options.activeTriggerClass)[pluginName](self.options);
+			//this.$target.toggleClass(this.options.activeTargetClass);
+			if (this.options.ease) {
+				this.$target[$.camelCase(this.options.ease + '-toggle')]();
+			} else {
+				this.$target.toggle();
 			}
-			self.$trigger.toggleClass(self.options.activeTriggerClass);
-			if (self.options.triggerHtml !== null) {
-				self.$trigger.html(function() {
-					if (self.$trigger.hasClass(self.options.activeTriggerClass)) {
-						return self.options.triggerHtml.on;
+			if (this.$parent && !this.$trigger.hasClass(this.options.activeTriggerClass)) {
+				this.$parent.find(this.options.triggerSelector + '.' + this.options.activeTriggerClass)[pluginName](this.options);
+			}
+			this.$trigger.toggleClass(this.options.activeTriggerClass);
+			if (this.options.triggerHtml !== null) {
+				this.$trigger.html(function() {
+					if (this.$trigger.hasClass(this.options.activeTriggerClass)) {
+						return this.options.triggerHtml.on;
 					} else {
-						return self.options.triggerHtml.off;
+						return this.options.triggerHtml.off;
 					}
 				});
 			}
+			return this;
 		}
 	});
 

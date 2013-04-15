@@ -22,15 +22,12 @@
 ;(function($, undefined) {
 	"use strict";
 
-	function Panes($wrapper, options) {
-		var defaults = {
-				active: 0
-				,easing: ''
-			}
-			,self = this
-			;
+	var pluginName = 'scojs_panes';
 
-		this.options = $.extend({}, defaults, options);
+	function Panes($wrapper, options) {
+		var self = this;
+
+		this.options = $.extend({}, $[pluginName].defaults, options);
 		var transitionEnd = ($.support.transition && this.options.easing) ? $.support.transition.end : null;
 		this.$pane_wrapper = $wrapper;
 		if (this.options.easing) {
@@ -65,21 +62,18 @@
 
 		this.$panes = this.$pane_wrapper.children();
 
-		if (typeof this.options.onInit === 'function') {
-			this.options.onInit.call(this);
-		}
-
 		this.$panes.eq(this.options.active).addClass('active');
 	}
 
 	$.extend(Panes.prototype, {
 		select: function(index) {
 			if (index !== this.options.active) {
-				if (typeof this.options.onBeforeSelect == 'function' && this.options.onBeforeSelect.call(this, index) === false) {
-					return;
+				if (typeof this.options.onBeforeSelect != 'function' || this.options.onBeforeSelect.call(this, index) !== false) {
+					this.$pane_wrapper.trigger('select', [this.options, index]);
+					return true;
 				}
-				this.$pane_wrapper.trigger('select', [this.options, index]);
 			}
+			return false;
 		}
 
 		,next: function() {
@@ -91,7 +85,7 @@
 			} else {
 				next = this.options.active + 1;
 			}
-			this.select(next);
+			return this.select(next);
 		}
 
 		,prev: function() {
@@ -101,14 +95,19 @@
 			} else {
 				prev = this.options.active - 1;
 			}
-			this.select(prev);
+			return this.select(prev);
 		}
 	});
 
-	$.scojs_panes = function(elem, options) {
+	$[pluginName] = function(elem, options) {
 		if (typeof elem === 'string') {
 			elem = $(elem);
 		}
 		return new Panes(elem, options);
 	};
+
+	$[pluginName].defaults = {
+		active: 0
+		,easing: ''
+	}
 })(jQuery);

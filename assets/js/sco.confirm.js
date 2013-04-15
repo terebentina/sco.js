@@ -25,37 +25,39 @@
 	var pluginName = 'scojs_confirm';
 
 	function Confirm(options) {
-		var self = this;
+		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 
-		var init = function() {
-			self.options = $.extend({}, $.fn[pluginName].defaults, options);
-
-			var $modal = $(self.options.target);
-			if (!$modal.length) {
-				$modal = $('<div class="modal" id="' + self.options.target.substr(1) + '"><div class="modal-body inner"/><div class="modal-footer"><a class="btn cancel" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-danger" data-action="1">yes</a></div></div>').appendTo(self.options.appendTo).hide();
-				if (typeof self.options.action == 'function') {
-					$modal.find('[data-action]').attr('href', '#').on('click.' + pluginName, function(e) {
-						e.preventDefault();
-						self.options.action.call(self);
-						self.close();
-					});
-				} else if (typeof self.options.action == 'string') {
-					$modal.find('[data-action]').attr('href', self.options.action);
-				}
+		var $modal = $(this.options.target);
+		if (!$modal.length) {
+			$modal = $('<div class="modal" id="' + this.options.target.substr(1) + '"><div class="modal-body inner"/><div class="modal-footer"><a class="btn cancel" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-danger" data-action="1">yes</a></div></div>').appendTo(this.options.appendTo).hide();
+			if (typeof this.options.action == 'function') {
+				var self = this;
+				$modal.find('[data-action]').attr('href', '#').on('click.' + pluginName, function(e) {
+					e.preventDefault();
+					self.options.action.call(self);
+					self.close();
+				});
+			} else if (typeof this.options.action == 'string') {
+				$modal.find('[data-action]').attr('href', this.options.action);
 			}
-			self.scomodal = $.scojs_modal(self.options);
-		};
-
-		init();
+		}
+		this.scomodal = $.scojs_modal(this.options);
 	}
 
 	$.extend(Confirm.prototype, {
 		show: function() {
 			this.scomodal.show();
+			return this;
 		}
 
 		,close: function() {
 			this.scomodal.close();
+			return this;
+		}
+
+		,destroy: function() {
+			this.scomodal.destroy();
+			return this;
 		}
 	});
 
