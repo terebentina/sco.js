@@ -16,7 +16,7 @@ $(function () {
 			equal($('#qunit-fixture #confirm_modal.confirm_modal').length, 1, 'modal created');
 			equal($('#qunit-fixture #confirm_modal').find('.inner').text(), 'abcdef', 'modal content is properly set');
 			equal($('#qunit-fixture #confirm_modal').find('[data-action]').attr('href'), '/bla', 'proper href action');
-			equal($('#qunit-fixture #confirm_modal').css('display'), 'block', 'modal is visible after show()');
+			ok($('#qunit-fixture #confirm_modal').is(':visible'), 'modal is visible after show()');
 			$modal.destroy();
 		});
 
@@ -28,7 +28,7 @@ $(function () {
 				}).show();
 			$('#confirm_modal').find('[data-dismiss]').trigger('click');
 			equal($('#confirm_modal').length, 1, 'modal still exists');
-			equal($('#confirm_modal').css('display'), 'none', 'modal is hidden');
+			ok(!$('#confirm_modal').is(':visible'), 'modal is hidden');
 			equal($('#confirm_modal .inner').text(), '', 'modal content is cleaned');
 			$modal.destroy();
 		});

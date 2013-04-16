@@ -15,7 +15,7 @@ $(function () {
 			equal($('#qunit-fixture').find('.modal').length, 1, '.modal created');
 			equal($('#qunit-fixture').find('.modal-backdrop').length, 1, '.modal-backdrop created');
 			equal($('#qunit-fixture').find('.modal .inner').text(), 'abcd', 'modal content is properly set');
-			equal($('#qunit-fixture #modal').css('display'), 'block', 'modal is visible');
+			ok($('#qunit-fixture #modal').is(':visible'), 'modal is visible');
 			$modal.destroy();
 		});
 
@@ -25,7 +25,7 @@ $(function () {
 				,appendTo: '#qunit-fixture'
 			}).show().close();
 			equal($('#qunit-fixture #modal').length, 1, '#modal still exists');
-			equal($('#qunit-fixture #modal').css('display'), 'none', '#modal is hidden');
+			ok(!$('#qunit-fixture #modal').is(':visible'), '#modal is hidden');
 			equal($('#qunit-fixture .modal-backdrop').length, 0, 'backdrop is removed');
 			equal($('#qunit-fixture').find('.modal .inner').text(), '', 'modal content is cleaned');
 			$modal.destroy();
@@ -37,7 +37,7 @@ $(function () {
 					,appendTo: '#qunit-fixture'
 				}).show();
 			$('#qunit-fixture #modal .close').trigger('click');
-			equal($('#qunit-fixture #modal').css('display'), 'none', '#modal is hidden');
+			ok(!$('#qunit-fixture #modal').is(':visible'), '#modal is hidden');
 			equal($('#qunit-fixture #modal').length, 1, '#modal still exists');
 			equal($('#qunit-fixture .modal-backdrop').length, 0, 'backdrop is removed');
 			equal($('#qunit-fixture').find('.modal .inner').text(), '', 'modal content is cleaned');
@@ -63,9 +63,9 @@ $(function () {
 			stop();
 			setTimeout(function() {
 				equal($('.modal .inner').html(), '<strong>abcd</strong>', 'modal content is properly set');
-				equal($('#modal').css('display'), 'block', 'modal is visible');
+				ok($('#modal').is(':visible'), 'modal is visible');
 				$('#link2').data('scojs_modal').close();
-				equal($('#modal').css('display'), 'none', 'modal is invisible after close()');
+				ok(!$('#modal').is(':visible'), 'modal is invisible after close()');
 				start();
 			}, 1000);
 		});

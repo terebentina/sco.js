@@ -5,7 +5,7 @@ $(function () {
 		test('should create tooltip html on init', function() {
 			var $tooltip = $.scojs_tooltip(null, {content: 'abcd', appendTo: '#qunit-fixture'});
 			equal($('#qunit-fixture .tooltip').length, 1, 'tooltip is added');
-			equal($('#qunit-fixture .tooltip').css('display'), 'none', 'tooltip is invisible');
+			ok(!$('#qunit-fixture .tooltip').is(':visible'), 'tooltip is invisible');
 			equal($('#qunit-fixture .tooltip span').text(), 'abcd', 'tooltip content is properly set');
 		});
 
@@ -37,7 +37,7 @@ $(function () {
 				,$tooltip = $.scojs_tooltip('#qunit-fixture a', {contentAttr: 'tooltip', appendTo: '#qunit-fixture'}).show();
 			equal($('#qunit-fixture .tooltip').css('display'), 'block', 'tooltip is visible after show');
 			$tooltip.hide();
-			equal($('#qunit-fixture .tooltip').css('display'), 'none', 'tooltip is invisible after hide');
+			ok(!$('#qunit-fixture .tooltip').is(':visible'), 'tooltip is invisible after hide');
 		});
 
 
@@ -56,7 +56,7 @@ $(function () {
 			equal($('#qunit-fixture .tooltip').css('display'), 'block', 'tooltip is visible immediately after mouse leave');
 			stop();
 			setTimeout(function() {
-				equal($('#qunit-fixture .tooltip').css('display'), 'none', 'tooltip is invisible 1 second after mouse leave');
+				ok(!$('#qunit-fixture .tooltip').is(':visible'), 'tooltip is invisible 1 second after mouse leave');
 				start();
 			}, 1000);
 		});
@@ -70,11 +70,9 @@ $(function () {
 				equal($('#qunit-fixture .tooltip').css('display'), 'block', 'tooltip is visible');
 				$fixture.find('.tooltip').trigger('mouseleave');
 				setTimeout(function() {
-					equal($('#qunit-fixture .tooltip').css('display'), 'none', 'tooltip is invisible');
+					ok(!$('#qunit-fixture .tooltip').is(':visible'), 'tooltip is invisible');
 					start();
 				}, 500);
 			}, 1000);
 		});
-
-
 });
