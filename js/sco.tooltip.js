@@ -28,16 +28,15 @@
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$trigger = this.$target = $trigger;
 		this.leaveTimeout = null;
-		this.options.triggerTitle = null;
 
-		this.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo(self.options.appendTo).hide();
+		this.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo(this.options.appendTo).hide();
 		if (this.options.contentElem !== undefined && this.options.contentElem !== null) {
 			this.options.content = $(this.options.contentElem).html();
 		} else if (this.options.contentAttr !== undefined && this.options.contentAttr !== null) {
 			this.options.content = this.$trigger.attr(this.options.contentAttr);
-			if (this.options.contentAttr == 'title') {
-				this.options.triggerTitle = this.options.content;
-			}
+		}
+		if (this.$trigger && this.$trigger.attr('title')) {
+			this.$trigger.data('originalTitle', this.$trigger.attr('title'));
 		}
 		this.$tooltip.find('span').html(this.options.content);
 		if (this.options.cssclass != '') {
@@ -139,7 +138,7 @@
 				if (do_mirror) {
 					this.options.position = newpos;
 					this.show(false);
-					return;
+					return this;
 				}
 			}
 
@@ -170,15 +169,14 @@
 				this.$tooltip.find('.pointer').css('margin-top', '+=' + pointer_top);
 			}
 
-			if (this.options.triggerTitle) {
-				this.$trigger.attr('title', '');
-			}
+			this.$trigger.removeAttr('title');
 			this.$tooltip.show();
+			return this;
 		}
 
 		,hide: function() {
-			if (this.options.triggerTitle) {
-				this.$trigger.attr('title', this.options.triggerTitle);
+			if (this.$trigger.data('originalTitle')) {
+				this.$trigger.attr('title', this.$trigger.data('originalTitle'));
 			}
 			if (typeof this.options.on_close == 'function') {
 				this.options.on_close.call(this);
