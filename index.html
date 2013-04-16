@@ -105,11 +105,14 @@
 					<p>When data attributes are available to trigger a specific plugin, the attribute to use is <code>data-trigger="plugin name"</code> to not conflict with bootstrap's <code>data-toggle="plugin name"</code>.
 					This way you can use both bootstrap and sco.js freely and interchangeable.</p>
 
-					<h3>What's next</h3>
+					<h3>What's next?</h3>
 					<ul>
 						<li>Like mentioned in the note above, one of the priorities is to get css transition support working wherever possible.</li>
 						<li>Carousel is coming too, based on panes.</li>
 						<li>Ajax support for <a href="#panes">panes</a> (and automatically for <a href="#tab">tab</a> and carousel) - you should be able to load remote content into a pane or more slides into a carousel.</li>
+						<li>Add predelay to <a href="#tooltip">tooltip</a> - for when you might want the tooltip to appear after a bit of delay.</li>
+						<li>ARIA support for <a href="#valid">form validation</a>.</li>
+						<li>If enough interest, I will update the form validation to make use of <code>data-*</code> attributes and make it more extensible, otherwise this is a low priority for now.</li>
 						<li>Other suggestions?</li>
 					</ul>
 				</section>
@@ -881,19 +884,19 @@ $tab.select(1);</pre>
 								<td>content</td>
 								<td>string</td>
 								<td></td>
-								<td>The content that should be shown in the tooltip.</td>
+								<td>The content that should be shown in the tooltip. <br><code>content</code>, <code>contentAttr</code>, <code>contentElem</code> are mutually exclusive, use only one of them.</td>
 							</tr>
 							<tr>
 								<td>contentAttr</td>
 								<td>string</td>
 								<td></td>
-								<td>Get the content from the trigger attribute specified by this option.</td>
+								<td>Get the content from the trigger attribute specified by this option. <br><code>content</code>, <code>contentAttr</code>, <code>contentElem</code> are mutually exclusive, use only one of them.</td>
 							</tr>
 							<tr>
 								<td>contentElem</td>
 								<td>string</td>
 								<td></td>
-								<td>Get the content from some other element on the page (this is the selector for that element) <code>$('.tooltip').scojs_tooltip({contentElem: '#foo'})</code>.</td>
+								<td>Get the content from some other element on the page (this is the selector for that element) <code>$('.tooltip').scojs_tooltip({contentElem: '#foo'})</code>. <br><code>content</code>, <code>contentAttr</code>, <code>contentElem</code> are mutually exclusive, use only one of them.</td>
 							</tr>
 							<tr>
 								<td>hoverable</td>
@@ -911,7 +914,7 @@ $tab.select(1);</pre>
 								<td>cssclass</td>
 								<td>string</td>
 								<td></td>
-								<td>If set, this class is added to the tooltip.</td>
+								<td>If set, this class is added to the tooltip so you can have your own, custom, tooltip style (<code>.tooltip.myclass</code>).</td>
 							</tr>
 							<tr>
 								<td>position</td>
@@ -952,7 +955,7 @@ $tab.select(1);</pre>
 									When this is set it should be a selector for some other element on the page. The tooltip will be shown over that element instead of over the trigger.
 									<br>Example:
 									<div>
-										<a href="#" data-trigger="tooltip" data-target="#tooltip_target2" data-content="wow, this is cool!">I am the trigger, hover me</a>
+										<a href="#" data-trigger="tooltip" data-target="#tooltip_target2" title="haha" data-content="wow, this is cool!">I am the trigger, hover me</a>
 										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<a href="#" id="tooltip_target2">I am the target, hover won't help</a>
 									</div>
@@ -999,7 +1002,7 @@ var tooltip = $.scojs_tooltip('#trigger', {
   ,delay: 1000
 });
 tooltip.show();
-tooltip.do_mouseleave();</pre>
+tooltip.do_mouseleave();  // hides after 1000 seconds</pre>
 				</section>
 
 
@@ -1086,7 +1089,8 @@ tooltip.do_mouseleave();</pre>
 
 					<h3>What?</h3>
 					<p>Valid is a javascript form validation plugin. Basically, you give it a set of rules for a form's fields and it'll either submit the form if all rules pass or show error messages if not.</p>
-					<p>Valid is the most complex and most opinionated plugin of all sco.js plugins. It also makes extensive use of other plugins (from sco.js and 3rd party) so make sure you load its dependencies before using it.</p>
+					<p>Valid is the most complex and most opinionated plugin of all sco.js plugins. It also makes extensive use of other plugins (from sco.js and 3rd party) so make sure you load its dependencies before using it.
+					It is loosely based on the <a target="_blank" href="http://bassistance.de/jquery-plugins/jquery-plugin-validation">jQuery form validation</a> plugin.</p>
 
 					<h3>Why?</h3>
 					<p>There are a couple of good form validators out there. I built this one because:</p>
@@ -1183,6 +1187,45 @@ tooltip.do_mouseleave();</pre>
 								<td>The messages to display for each field in case of errors with that field. Could be useful for translating the messages into other languages. If you don't specify custom messages for your fields, the default ones will be used.
 								See below for the default messages and message format.</td>
 							</tr>
+							<tr>
+								<td>onSuccess</td>
+								<td>function</td>
+								<td></td>
+								<td>
+									The function to run when the backend sends a response with <code>status == 'success'</code>. The function receives the response, the validator object and the form as arguments. Returning <code>false</code> from this function will prevent the default onSuccess action.
+									<pre>
+$('#form').scojs_valid({
+   rules: {...}
+  ,onSuccess: function(response, validator, $form) {...}
+});</pre>
+								</td>
+							</tr>
+							<tr>
+								<td>onError</td>
+								<td>function</td>
+								<td></td>
+								<td>
+									The function to run when the backend sends a response with <code>status == 'error'</code>. The function receives the response, the validator object and the form as arguments. Returning <code>false</code> from this function will prevent the default onError action.
+									<pre>
+$('#form').scojs_valid({
+   rules: {...}
+  ,onError: function(response, validator, $form) {...}
+});</pre>
+								</td>
+							</tr>
+							<tr>
+								<td>onFail</td>
+								<td>function</td>
+								<td></td>
+								<td>
+									The function to run when the backend sends a response with <code>status == 'fail'</code>. The function receives the response, the validator object and the form as arguments. Returning <code>false</code> from this function will prevent the default onFail action.
+									<pre>
+$('#form').scojs_valid({
+   rules: {...}
+  ,onFail: function(response, validator, $form) {...}
+});</pre>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 
@@ -1255,7 +1298,7 @@ tooltip.do_mouseleave();</pre>
 								<td>credit_card</td>
 								<td>string</td>
 								<td>'credit_card'</td>
-								<td>The field must be a valid credit card.</td>
+								<td>If the field is not empty, it must be a valid credit card. Note that an empty field will pass this rule! If you want the field to be required, use the <code>not_empty</code> rule.</td>
 							</tr>
 							<tr>
 								<td>alpha</td>
@@ -1285,13 +1328,13 @@ tooltip.do_mouseleave();</pre>
 								<td>numeric</td>
 								<td>string</td>
 								<td>'numeric'</td>
-								<td>The field must contain a numeric value (can have thousands separators, decimal separator and a sign). For example -123,456.50</td>
+								<td>If the field is not empty, it must be a valid number (negative and decimal numbers allowed). For example -123456.50</td>
 							</tr>
 							<tr>
 								<td>decimal</td>
 								<td>string</td>
 								<td>'decimal'</td>
-								<td>The field must contain a number, with optional sign and decimal separator.</td>
+								<td>Alias for <code>numeric</code>.</td>
 							</tr>
 							<tr>
 								<td>matches</td>

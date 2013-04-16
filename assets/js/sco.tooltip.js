@@ -26,125 +26,119 @@
 
 	function Tooltip($trigger, options) {
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
-		this.$tooltip = null;
 		this.$trigger = this.$target = $trigger;
-		this.leave_timeout = null;
-		this.options.trigger_title = null;
-		var self = this;
+		this.leaveTimeout = null;
 
-		function init() {
-			self.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo(self.options.appendTo).hide();
-			if (self.options.contentElem !== undefined && self.options.contentElem !== null) {
-				self.options.content = $(self.options.contentElem).html();
-			} else if (self.options.contentAttr !== undefined && self.options.contentAttr !== null) {
-				self.options.content = self.$trigger.attr(self.options.contentAttr);
-				if (self.options.contentAttr == 'title') {
-					self.options.trigger_title = self.options.content;
-				}
-			}
-			self.$tooltip.find('span').html(self.options.content);
-			if (self.options.cssclass != '') {
-				self.$tooltip.addClass(self.options.cssclass);
-			}
-			if (self.options.target !== undefined) {
-				self.$target = $(self.options.target);
-			}
-			if (self.options.hoverable) {
-				self.$tooltip.on('mouseenter.' + pluginName, $.proxy(self.do_mouseenter, self))
-							 .on('mouseleave.' + pluginName, $.proxy(self.do_mouseleave, self))
-							 .on('close.' + pluginName, $.proxy(self.hide, self));
-			}
+		this.$tooltip = $('<div class="tooltip"><span></span><div class="pointer"></div></div>').appendTo(this.options.appendTo).hide();
+		if (this.options.contentElem !== undefined && this.options.contentElem !== null) {
+			this.options.content = $(this.options.contentElem).html();
+		} else if (this.options.contentAttr !== undefined && this.options.contentAttr !== null) {
+			this.options.content = this.$trigger.attr(this.options.contentAttr);
 		}
-
-		init();
+		if (this.$trigger && this.$trigger.attr('title')) {
+			this.$trigger.data('originalTitle', this.$trigger.attr('title'));
+		}
+		this.$tooltip.find('span').html(this.options.content);
+		if (this.options.cssclass != '') {
+			this.$tooltip.addClass(this.options.cssclass);
+		}
+		if (this.options.target !== undefined) {
+			this.$target = $(this.options.target);
+		}
+		if (this.options.hoverable) {
+			var self = this;
+			this.$tooltip.on('mouseenter.' + pluginName, $.proxy(this.do_mouseenter, self))
+						 .on('mouseleave.' + pluginName, $.proxy(this.do_mouseleave, self))
+						 .on('close.' + pluginName, $.proxy(this.hide, self));
+		}
 	}
 
 
 	$.extend(Tooltip.prototype, {
-		show: function(allow_mirror) {
-			if (allow_mirror === undefined) {
-				allow_mirror = true;
+		show: function(allowMirror) {
+			if (allowMirror === undefined) {
+				allowMirror = true;
 			}
 			this.$tooltip.removeClass('pos_w pos_e pos_n pos_s pos_nw pos_ne pos_se pos_sw pos_center').addClass('pos_' + this.options.position);
-			var  target_box = this.$target.offset()
-				,tooltip_box = {left: 0, top: 0, width: Math.floor(this.$tooltip.outerWidth()), height: Math.floor(this.$tooltip.outerHeight())}
-				,pointer_box = {left: 0, top: 0, width: Math.floor(this.$tooltip.find('.pointer').outerWidth()), height: Math.floor(this.$tooltip.find('.pointer').outerHeight())}
-				,doc_box = {left: $(document).scrollLeft(), top: $(document).scrollTop(), width: $(window).width(), height: $(window).height()}
+			var  targetBox = this.$target.offset()
+				,tooltipBox = {left: 0, top: 0, width: Math.floor(this.$tooltip.outerWidth()), height: Math.floor(this.$tooltip.outerHeight())}
+				,pointerBox = {left: 0, top: 0, width: Math.floor(this.$tooltip.find('.pointer').outerWidth()), height: Math.floor(this.$tooltip.find('.pointer').outerHeight())}
+				,docBox = {left: $(document).scrollLeft(), top: $(document).scrollTop(), width: $(window).width(), height: $(window).height()}
 				;
-			target_box.left = Math.floor(target_box.left);
-			target_box.top = Math.floor(target_box.top);
-			target_box.width = Math.floor(this.$target.outerWidth());
-			target_box.height = Math.floor(this.$target.outerHeight());
+			targetBox.left = Math.floor(targetBox.left);
+			targetBox.top = Math.floor(targetBox.top);
+			targetBox.width = Math.floor(this.$target.outerWidth());
+			targetBox.height = Math.floor(this.$target.outerHeight());
 
 			if (this.options.position === 'w') {
-				tooltip_box.left = target_box.left - tooltip_box.width - pointer_box.width;
-				tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
-				pointer_box.left = tooltip_box.width;
-				pointer_box.top = Math.floor(target_box.height / 2);
+				tooltipBox.left = targetBox.left - tooltipBox.width - pointerBox.width;
+				tooltipBox.top = targetBox.top + Math.floor((targetBox.height - tooltipBox.height) / 2);
+				pointerBox.left = tooltipBox.width;
+				pointerBox.top = Math.floor(targetBox.height / 2);
 			} else if (this.options.position === 'e') {
-				tooltip_box.left = target_box.left + target_box.width + pointer_box.width;
-				tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
-				pointer_box.left = -pointer_box.width;
-				pointer_box.top = Math.floor(tooltip_box.height / 2);
+				tooltipBox.left = targetBox.left + targetBox.width + pointerBox.width;
+				tooltipBox.top = targetBox.top + Math.floor((targetBox.height - tooltipBox.height) / 2);
+				pointerBox.left = -pointerBox.width;
+				pointerBox.top = Math.floor(tooltipBox.height / 2);
 			} else if (this.options.position === 'n') {
-				tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width) / 2);
-				tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
-				pointer_box.left = Math.floor(tooltip_box.width / 2);
-				pointer_box.top = tooltip_box.height;
+				tooltipBox.left = targetBox.left - Math.floor((tooltipBox.width - targetBox.width) / 2);
+				tooltipBox.top = targetBox.top - tooltipBox.height - pointerBox.height;
+				pointerBox.left = Math.floor(tooltipBox.width / 2);
+				pointerBox.top = tooltipBox.height;
 			} else if (this.options.position === 's') {
-				tooltip_box.left = target_box.left - Math.floor((tooltip_box.width - target_box.width) / 2);
-				tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
-				pointer_box.left = Math.floor(tooltip_box.width / 2);
-				pointer_box.top = -pointer_box.height;
+				tooltipBox.left = targetBox.left - Math.floor((tooltipBox.width - targetBox.width) / 2);
+				tooltipBox.top = targetBox.top + targetBox.height + pointerBox.height;
+				pointerBox.left = Math.floor(tooltipBox.width / 2);
+				pointerBox.top = -pointerBox.height;
 			} else if (this.options.position === 'nw') {
-				tooltip_box.left = target_box.left - tooltip_box.width + pointer_box.width;	// +pointer_box.width because pointer is under
-				tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
-				pointer_box.left = tooltip_box.width - pointer_box.width;
-				pointer_box.top = tooltip_box.height;
+				tooltipBox.left = targetBox.left - tooltipBox.width + pointerBox.width;	// +pointerBox.width because pointer is under
+				tooltipBox.top = targetBox.top - tooltipBox.height - pointerBox.height;
+				pointerBox.left = tooltipBox.width - pointerBox.width;
+				pointerBox.top = tooltipBox.height;
 			} else if (this.options.position === 'ne') {
-				tooltip_box.left = target_box.left + target_box.width - pointer_box.width;
-				tooltip_box.top = target_box.top - tooltip_box.height - pointer_box.height;
-				pointer_box.left = 1;
-				pointer_box.top = tooltip_box.height;
+				tooltipBox.left = targetBox.left + targetBox.width - pointerBox.width;
+				tooltipBox.top = targetBox.top - tooltipBox.height - pointerBox.height;
+				pointerBox.left = 1;
+				pointerBox.top = tooltipBox.height;
 			} else if (this.options.position === 'se') {
-				tooltip_box.left = target_box.left + target_box.width - pointer_box.width;
-				tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
-				pointer_box.left = 1;
-				pointer_box.top = -pointer_box.height;
+				tooltipBox.left = targetBox.left + targetBox.width - pointerBox.width;
+				tooltipBox.top = targetBox.top + targetBox.height + pointerBox.height;
+				pointerBox.left = 1;
+				pointerBox.top = -pointerBox.height;
 			} else if (this.options.position === 'sw') {
-				tooltip_box.left = target_box.left - tooltip_box.width + pointer_box.width;
-				tooltip_box.top = target_box.top + target_box.height + pointer_box.height;
-				pointer_box.left = tooltip_box.width - pointer_box.width;
-				pointer_box.top = -pointer_box.height;
+				tooltipBox.left = targetBox.left - tooltipBox.width + pointerBox.width;
+				tooltipBox.top = targetBox.top + targetBox.height + pointerBox.height;
+				pointerBox.left = tooltipBox.width - pointerBox.width;
+				pointerBox.top = -pointerBox.height;
 			} else if (this.options.position === 'center') {
-				tooltip_box.left = target_box.left + Math.floor((target_box.width - tooltip_box.width) / 2);
-				tooltip_box.top = target_box.top + Math.floor((target_box.height - tooltip_box.height) / 2);
-				allow_mirror = false;
+				tooltipBox.left = targetBox.left + Math.floor((targetBox.width - tooltipBox.width) / 2);
+				tooltipBox.top = targetBox.top + Math.floor((targetBox.height - tooltipBox.height) / 2);
+				allowMirror = false;
 				this.$tooltip.find('.pointer').hide();
 			}
 
 			// if the tooltip is out of bounds we first mirror its position
-			if (allow_mirror) {
+			if (allowMirror) {
 				var  newpos = this.options.position
 					,do_mirror = false;
-				if (tooltip_box.left < doc_box.left) {
+				if (tooltipBox.left < docBox.left) {
 					newpos = newpos.replace('w', 'e');
 					do_mirror = true;
-				} else if (tooltip_box.left + tooltip_box.width > doc_box.left + doc_box.width) {
+				} else if (tooltipBox.left + tooltipBox.width > docBox.left + docBox.width) {
 					newpos = newpos.replace('e', 'w');
 					do_mirror = true;
 				}
-				if (tooltip_box.top < doc_box.top) {
+				if (tooltipBox.top < docBox.top) {
 					newpos = newpos.replace('n', 's');
 					do_mirror = true;
-				} else if (tooltip_box.top + tooltip_box.height > doc_box.top + doc_box.height) {
+				} else if (tooltipBox.top + tooltipBox.height > docBox.top + docBox.height) {
 					newpos = newpos.replace('s', 'n');
 					do_mirror = true;
 				}
 				if (do_mirror) {
 					this.options.position = newpos;
 					this.show(false);
-					return;
+					return this;
 				}
 			}
 
@@ -152,22 +146,22 @@
 			// this part is for slightly moving the tooltip if it's still out of bounds
 			var pointer_left = null,
 				pointer_top = null;
-			if (tooltip_box.left < doc_box.left) {
-				pointer_left = tooltip_box.left - doc_box.left - pointer_box.width / 2;
-				tooltip_box.left = doc_box.left;
-			} else if (tooltip_box.left + tooltip_box.width > doc_box.left + doc_box.width) {
-				pointer_left = tooltip_box.left - doc_box.left - doc_box.width + tooltip_box.width - pointer_box.width / 2;
-				tooltip_box.left = doc_box.left + doc_box.width - tooltip_box.width;
+			if (tooltipBox.left < docBox.left) {
+				pointer_left = tooltipBox.left - docBox.left - pointerBox.width / 2;
+				tooltipBox.left = docBox.left;
+			} else if (tooltipBox.left + tooltipBox.width > docBox.left + docBox.width) {
+				pointer_left = tooltipBox.left - docBox.left - docBox.width + tooltipBox.width - pointerBox.width / 2;
+				tooltipBox.left = docBox.left + docBox.width - tooltipBox.width;
 			}
-			if (tooltip_box.top < doc_box.top) {
-				pointer_top = tooltip_box.top - doc_box.top - pointer_box.height / 2;
-				tooltip_box.top = doc_box.top;
-			} else if (tooltip_box.top + tooltip_box.height > doc_box.top + doc_box.height) {
-				pointer_top = tooltip_box.top - doc_box.top - doc_box.height + tooltip_box.height - pointer_box.height / 2;
-				tooltip_box.top = doc_box.top + doc_box.height - tooltip_box.height;
+			if (tooltipBox.top < docBox.top) {
+				pointer_top = tooltipBox.top - docBox.top - pointerBox.height / 2;
+				tooltipBox.top = docBox.top;
+			} else if (tooltipBox.top + tooltipBox.height > docBox.top + docBox.height) {
+				pointer_top = tooltipBox.top - docBox.top - docBox.height + tooltipBox.height - pointerBox.height / 2;
+				tooltipBox.top = docBox.top + docBox.height - tooltipBox.height;
 			}
 
-			this.$tooltip.css({left: tooltip_box.left, top: tooltip_box.top});
+			this.$tooltip.css({left: tooltipBox.left, top: tooltipBox.top});
 			if (pointer_left !== null) {
 				this.$tooltip.find('.pointer').css('margin-left', pointer_left);
 			}
@@ -175,15 +169,14 @@
 				this.$tooltip.find('.pointer').css('margin-top', '+=' + pointer_top);
 			}
 
-			if (this.options.trigger_title) {
-				this.$trigger.attr('title', '');
-			}
+			this.$trigger.removeAttr('title');
 			this.$tooltip.show();
+			return this;
 		}
 
 		,hide: function() {
-			if (this.options.trigger_title) {
-				this.$trigger.attr('title', this.options.trigger_title);
+			if (this.$trigger.data('originalTitle')) {
+				this.$trigger.attr('title', this.$trigger.data('originalTitle'));
 			}
 			if (typeof this.options.on_close == 'function') {
 				this.options.on_close.call(this);
@@ -192,23 +185,23 @@
 		}
 
 		,do_mouseenter: function() {
-			if (this.leave_timeout !== null) {
-				clearTimeout(this.leave_timeout);
-				this.leave_timeout = null;
+			if (this.leaveTimeout !== null) {
+				clearTimeout(this.leaveTimeout);
+				this.leaveTimeout = null;
 			}
 			this.show();
 		}
 
 		,do_mouseleave: function() {
 			var self = this;
-			if (this.leave_timeout !== null) {
-				clearTimeout(this.leave_timeout);
-				this.leave_timeout = null;
+			if (this.leaveTimeout !== null) {
+				clearTimeout(this.leaveTimeout);
+				this.leaveTimeout = null;
 			}
 			if (this.options.autoclose) {
-				this.leave_timeout = setTimeout(function() {
-					clearTimeout(self.leave_timeout);
-					self.leave_timeout = null;
+				this.leaveTimeout = setTimeout(function() {
+					clearTimeout(self.leaveTimeout);
+					self.leaveTimeout = null;
 					self.hide();
 				}, this.options.delay);
 			}
@@ -216,7 +209,7 @@
 	});
 
 	$.fn[pluginName] = function(options) {
-		var method = null
+		var  method = null
 			,first_run = false
 			;
 		if (typeof options == 'string') {

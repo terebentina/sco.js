@@ -229,12 +229,13 @@
 			},
 
 			numeric: function(field, value) {
-				var regex = /^-?(?:\d+|\d{1,3}(?:,\d{3})+)(?:\.\d+)?$/;
+				var regex = /^([\+\-]?[0-9]+(\.[0-9]+)?)?$/;
 				return regex.test(value);
 			},
 
+			// same as numeric
 			decimal: function(field, value) {
-				var regex = /^\-?[0-9]*\.?[0-9]+$/;
+				var regex = /^([\+\-]?[0-9]+(\.[0-9]+)?)?$/;
 				return regex.test(value);
 			},
 
@@ -326,24 +327,27 @@
 				,dataType: 'json'
 				,success: function(response, status, xhr, $form) {
 					if (response.status === 'fail') {
-						validator.show(response.data.errors);
+						if (typeof options.onFail !== 'function' || options.onFail.call(this, response, validator, $form) !== false) {
+							validator.show(response.data.errors);
+						}
 					} else if (response.status === 'error') {
-						$.scojs_message(response.message, $.scojs_message.TYPE_ERROR);
+						if (typeof options.onError !== 'function' || options.onError.call(this, response, validator, $form) !== false) {
+							$.scojs_message(response.message, $.scojs_message.TYPE_ERROR);
+						}
 					} else if (response.status === 'success') {
-						if (typeof response.data.run === 'function') {
-							response.data.run.call(this, $form);
-						}
-						if (response.data.next) {
-							if (response.data.next === '.') {			// refresh current page
-								window.location.href = window.location.href.replace(/#.*$/, '');
-							} else if (response.data.next === 'x') {	// close the parent modal
-								$form.closest('.modal').trigger('close');
-							} else {
-								window.location.href = response.data.next;
+						if (typeof options.onSuccess !== 'function' || options.onSuccess.call(this, response, validator, $form) !== false) {
+							if (response.data.next) {
+								if (response.data.next === '.') {			// refresh current page
+									window.location.href = window.location.href.replace(/#.*$/, '');
+								} else if (response.data.next === 'x') {	// close the parent modal
+									$form.closest('.modal').trigger('close');
+								} else {
+									window.location.href = response.data.next;
+								}
 							}
-						}
-						if (response.data.message) {
-							$.scojs_message(response.data.message, $.scojs_message.TYPE_OK);
+							if (response.data.message) {
+								$.scojs_message(response.data.message, $.scojs_message.TYPE_OK);
+							}
 						}
 					}
 				}
@@ -358,7 +362,7 @@
 				return validator;
 			}
 		} else {
-			return validator;
+			return validator ? validator : this;
 		}
 	};
 
@@ -372,7 +376,7 @@
 
 
 	$.fn[pluginName].defaults = {
-		 wrapper: 'label'	// the html tag that wraps the field and which defines a "row" of the form
+		wrapper: 'label'	// the html tag that wraps the field and which defines a "row" of the form
 		,rules: {}			// array of rules to check the form against. Each value should be either a string with the name of the method to use as rule or a hash like {method: <method params>}
 		,messages: {}		// custom error messages like {username: {not_empty: 'hey you forgot to enter your username', min_length: 'come on, more than 2 chars, ok?'}, password: {....}}
 	};
