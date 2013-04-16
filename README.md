@@ -1,11 +1,23 @@
-sco.js
-======
+# [Sco.js v1.0.0](http://terebentina.github.io/sco.js)
 
-A collection of js utlis for the web. Inspired by the twitter bootstrap js components but going beyond.
+A collection of jQuery plugins for the web. Inspired by Twitter Bootstrap js components, Sco.js plugins can be used as replacement for the bootstrap js. You can find a different approach for some of the bootstrap js as well as
+other plugins that don't exist in bootstrap. Sco.js uses much less HTML markup than bootstrap and provides sane and intuitive defaults for its options so that you can get started in no time.
+It was created an maintained by <a href="http://twitter.com/dancaragea">@dancaragea</a>.
+
+For extensive documentation and examples, check out http://terebentina.github.io/sco.js
+
+## Quick start
+
+* [Download the latest release](https://github.com/terebentina/sco.js/zipball/master).
+* Clone the repo: `git clone git://github.com/terebentina/sco.js.git`.
+* Install with Twitter's [Bower](http://twitter.github.com/bower): `bower install sco.js`.
+
+## Versioning
+
+Sco.js is versioned using the [Semantic Versioning](http://semver.org) guidelines.
 
 
-Copyright and license
----------------------
+## Copyright and license
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this work except in compliance with the License. You may obtain a copy of the License in the LICENSE file, or at:
 
