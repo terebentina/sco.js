@@ -227,14 +227,10 @@ section {
 @media handheld, only screen and (max-width: 767px) {
 
 	.sidenav {
+		position: static;
 		width: auto;
+		top: 0;
 		margin-bottom: 20px;
 		margin-top: 50px;
 	}
-
-    .sidenav.affix {
-      position: static;
-      width: auto;
-      top: 0;
-    }
 }
