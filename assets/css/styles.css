@@ -224,18 +224,18 @@ section {
 	width: 375px;
 }
 
+@media (max-width: 980px) {
+	.sidenav {
+		width: 166px;
+	}
+}
+
 @media handheld, only screen and (max-width: 767px) {
-	.sidenav.affix {
+	.sidenav {
 		position: static;
 		width: auto;
 		top: 0;
 		margin-bottom: 20px;
 		margin-top: 50px;
-	}
-}
-
-@media (max-width: 980px) {
-	.sidenav {
-		width: 166px;
 	}
 }
