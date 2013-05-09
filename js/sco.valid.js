@@ -321,7 +321,12 @@
 				$form.data(pluginName, validator).attr('novalidate', 'novalidate');
 			}
 			$form.ajaxForm({
-				beforeSubmit: function() {
+				beforeSerialize: function() {
+					if (typeof validator.options.onBeforeValidate === 'function') {
+						validator.options.onBeforeValidate.call(validator);
+					}
+				}
+				,beforeSubmit: function() {
 					return validator.validate();
 				}
 				,dataType: 'json'
