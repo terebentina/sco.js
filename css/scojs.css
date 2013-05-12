@@ -125,21 +125,6 @@
 	bottom: -13px;
 }
 
-.tooltip.teaser {
-	background: #fff;
-	font-size: 100%;
-	border: 1px solid #999;
-	width: 30em;
-	max-height: 200px;
-	color: #000;
-}
-
-.tooltip.teaser .plant img {
-	height: 100px;
-	max-width: 9em;
-	margin-right: 5px;
-}
-
 
 /* sco.panes.js */
 .pane-wrapper {
