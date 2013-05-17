@@ -1,7 +1,0 @@
-{
-	"name": "sco.js",
-	"version": "1.0.0",
-	"dependencies": {
-		"jquery": ">=1.7.0"
-	}
-}
