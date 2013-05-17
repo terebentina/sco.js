@@ -60,6 +60,9 @@
 			str += ' ' + left.m + data.strings.m;
 			started = true;
 		}
+		if (left.s > 0) {
+			started = true;
+		}
 		if (started) {
 			str += ' ' + left.s + data.strings.s;
 			started = true;
