@@ -127,6 +127,10 @@
 				}
 				$span.html(v);
 			});
+
+			if (typeof self.options.onFail === 'function') {
+				self.options.onFail.call(this, 'fail', self.$form.data(pluginName), self.$form);
+			}
 		},
 
 
@@ -321,12 +325,10 @@
 				$form.data(pluginName, validator).attr('novalidate', 'novalidate');
 			}
 			$form.ajaxForm({
-				beforeSerialize: function() {
-					if (typeof validator.options.onBeforeValidate === 'function') {
-						validator.options.onBeforeValidate.call(validator);
+				beforeSubmit: function() {
+					if (options.onBeforeValidate !== void 0 && options.onBeforeValidate !== 'function'){
+						options.onBeforeValidate.call(this, validator, $form);
 					}
-				}
-				,beforeSubmit: function() {
 					return validator.validate();
 				}
 				,dataType: 'json'
