@@ -50,11 +50,12 @@
 			}
 			this.$trigger.toggleClass(this.options.activeTriggerClass);
 			if (this.options.triggerHtml !== null) {
+				var self = this;
 				this.$trigger.html(function() {
-					if (this.$trigger.hasClass(this.options.activeTriggerClass)) {
-						return this.options.triggerHtml.on;
+					if (self.$trigger.hasClass(self.options.activeTriggerClass)) {
+						return self.options.triggerHtml.on;
 					} else {
-						return this.options.triggerHtml.off;
+						return self.options.triggerHtml.off;
 					}
 				});
 			}
