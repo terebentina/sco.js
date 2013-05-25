@@ -1233,6 +1233,19 @@ $('#form').scojs_valid({
 });</pre>
 								</td>
 							</tr>
+							<tr>
+								<td>onBeforeValidate</td>
+								<td>function</td>
+								<td></td>
+								<td>
+									The function to run before trying any kind of validation on the form. This gives you the chance to alter form fields based on custom logic. It's very useful for WYSIWYG editors that need to be told to update the original textarea before trying to actually validate the form.
+									<pre>
+$('#form').scojs_valid({
+   rules: {...}
+  ,onBeforeValidate: function() {...}
+});</pre>
+								</td>
+							</tr>
 						</tbody>
 					</table>
 
