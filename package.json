@@ -1,0 +1,8 @@
+{
+	"name": "sco.js",
+	"version": "1.0.1",
+    "description": "Javascript extensions for Twitter Bootstrap. Rewrites bootstrap tabs, collapse, modal, tooltip components for easier usage and provides more plugins for your coding pleasure",
+	"dependencies": {
+		"jquery": ">=1.7.0"
+	}
+}
