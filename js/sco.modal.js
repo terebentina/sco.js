@@ -73,7 +73,16 @@
 			if (this.options.top !== undefined) {
 				this.$modal.css({'top': this.options.top});
 			}
-
+			
+			if (this.options.fixed !== undefined) {
+				this.$modal.addClass('modal-fixed');
+				if (this.options.top !== undefined) {
+					this.$modal.css({'top': $(window).scrollTop() + this.options.top});
+				} else {
+					this.$modal.css({'top': $(window).scrollTop() + 50});
+				}
+			}
+			
 			if (this.options.keyboard) {
 				this.escape();
 			}

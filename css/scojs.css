@@ -1,3 +1,11 @@
+/* sco.modal.js */
+.modal-fixed {
+	position: absolute;
+}
+.modal-fixed .modal-body {
+	overflow: hidden;
+	max-height: none;
+}
 /* sco.message.js */
 #page_message {
 	-webkit-background-size: 40px 40px;
