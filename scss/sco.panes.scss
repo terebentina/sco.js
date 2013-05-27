@@ -1,0 +1,117 @@
+@import "compass/css3";
+@import "animation";
+@import "variables";
+
+%hd-accelerate {
+  @include transform(translateZ(0));
+  @include perspective(1000);
+  @include backface-visibility;
+}
+
+.pane-wrapper > div {
+  display: none;
+}
+
+.pane-wrapper > .active,
+.pane-wrapper > .prev,
+.pane-wrapper > .next {
+  display: block;
+}
+
+// Fade
+.pane-wrapper.xfade > div {
+  @include transition(opacity $fade_speed $fade_effect);
+}
+
+.pane-wrapper.xfade > div,
+.pane-wrapper.xfade > .active.right,
+.pane-wrapper.xfade > .active.left {
+  opacity: 0;
+}
+
+.pane-wrapper.xfade > .next.left,
+.pane-wrapper.xfade > .prev.right,
+.pane-wrapper.xfade > .active {
+  opacity: 1;
+}
+
+// Slide
+.pane-wrapper.slide > div {
+  @extend %hd-accelerate;
+  @include transition(transform $slide_speed $slide_effect);  
+}
+
+.pane-wrapper.slide > .active {
+  @include transform(translateX(0));
+}
+
+.pane-wrapper.slide > .next {
+  @include transform(translateX(100%));
+}
+
+.pane-wrapper.slide > .prev {
+  @include transform(translateX(-100%));
+}
+
+.pane-wrapper.slide > .next.left,
+.pane-wrapper.slide > .prev.right {
+  @include transform(translateX(0));
+}
+
+.pane-wrapper.slide > .active.left {
+  @include transform(translateX(-100%));
+}
+
+.pane-wrapper.slide > .active.right {
+  @include transform(translateX(100%));
+}
+
+
+// Flip
+.pane-wrapper.flip {
+  position: relative;
+}
+
+.pane-wrapper.flip > div,
+.pane-wrapper.flipX > div{
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  @extend %hd-accelerate;
+  @include transition(transform $flip_speed $flip_effect);  
+  @include transform(preserve-3d);
+}
+
+// .flip only
+.pane-wrapper.flip > div,
+.pane-wrapper.flip > .active.left{
+  @include transform(rotateY(-180deg));
+}
+
+.pane-wrapper.flip > .active,
+.pane-wrapper.flip > .next.left,
+.pane-wrapper.flip > .prev.right{
+  @include transform(rotateY(0deg));
+}
+
+.pane-wrapper.flip > .active.right {
+  @include transform(rotateY(180deg));
+}
+
+// .flipX only
+.pane-wrapper.flipX > div,
+.pane-wrapper.flipX > .active.left{
+  @include transform(rotateX(-180deg));
+}
+
+.pane-wrapper.flipX > .active,
+.pane-wrapper.flipX > .next.left,
+.pane-wrapper.flipX > .prev.right{
+  @include transform(rotateX(0deg));
+}
+
+.pane-wrapper.flipX > .active.right {
+  @include transform(rotateX(180deg));
+}
