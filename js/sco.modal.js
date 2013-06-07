@@ -74,8 +74,8 @@
 				this.$modal.css({'top': this.options.top});
 			}
 			
-			if (this.options.fixed !== undefined) {
-				this.$modal.addClass('modal-fixed');
+			if (this.options.sticky !== undefined) {
+				this.$modal.addClass('modal-sticky');
 				if (this.options.top !== undefined) {
 					this.$modal.css({'top': $(window).scrollTop() + this.options.top});
 				} else {

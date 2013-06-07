@@ -1,8 +1,8 @@
 /* sco.modal.js */
-.modal-fixed {
+.modal-sticky {
 	position: absolute;
 }
-.modal-fixed .modal-body {
+.modal-sticky .modal-body {
 	overflow: hidden;
 	max-height: none;
 }
