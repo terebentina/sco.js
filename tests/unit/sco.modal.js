@@ -44,6 +44,27 @@ $(function () {
 			$modal.destroy();
 		});
 
+		test('cssclass should be removed between different modals using the same modal block', function() {
+			var $modal = $.scojs_modal({
+					content: 'abcd'
+					,cssclass: 'test'
+					,appendTo: '#qunit-fixture'
+				}).show();
+			ok($('#qunit-fixture #modal').hasClass('test'), 'class exists');
+			$('#qunit-fixture #modal .close').trigger('click');
+			ok(!$('#qunit-fixture #modal').hasClass('test'), 'class doesn\'t exists after close');
+			var $modal = $.scojs_modal({
+					content: 'abcd'
+					,cssclass: 'foo'
+					,appendTo: '#qunit-fixture'
+				}).show();
+			ok(!$('#qunit-fixture #modal').hasClass('test'), 'old class doesn\'t exists in the new modal');
+			ok($('#qunit-fixture #modal').hasClass('foo'), 'new class exists');
+			$('#qunit-fixture #modal .close').trigger('click');
+			ok(!$('#qunit-fixture #modal').hasClass('foo'), 'class doesn\'t exists after close');
+			$modal.destroy();
+		});
+
 
 	module('modal data-api');
 
