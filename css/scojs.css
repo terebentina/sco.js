@@ -12,7 +12,7 @@
 	text-align: center;
 	left: 0;
 	top: 0;
-	/* place over all elements, also over popups */
+	/* place over all elements, also over modals */
 	z-index: 10001;
 	width: 100%;
 	border: 1px solid;
