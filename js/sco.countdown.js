@@ -29,6 +29,7 @@
 			,started = false
 			,left = {d: 0, h: 0, m: 0, s: 0}
 			,js_current = Math.round((new Date()).getTime() / 1000)
+      ,stopAtHours = function() { return data.granular && left.d; }
 			;
 
 		left.s = until - js_current;
@@ -51,6 +52,11 @@
 			str += ' ' + left.h + data.strings.h;
 			started = true;
 		}
+    if (stopAtHours()) {
+      $elem.html(str);
+      return setTimeout(function() {doit($elem, data, until);}, left.s * 1000)
+    }
+
 		if (Math.floor(left.s / 60) > 0) {
 			left.m = Math.floor(left.s / 60);
 			left.s = left.s % 60;
@@ -95,6 +101,7 @@
 	};
 
 	$.fn[pluginName].defaults = {
-		strings: {d: 'd', h: 'h', m: 'm', s: 's'}
+		strings: {d: 'd', h: 'h', m: 'm', s: 's'},
+    granular: false
 	};
 })(jQuery);
