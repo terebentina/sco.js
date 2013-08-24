@@ -33,11 +33,11 @@
       ,keepGoing = function() { return left[data.granularity] == null }
       ,getRefreshTime = function() {
         if (data.granularity === 'd')
-          return Math.floor(secondsLeft / 86400) || 1;
+          return Math.floor(secondsLeft % 86400) || 1;
         if (data.granularity === 'h')
-          return Math.floor(secondsLeft / 3600) || 1;
+          return Math.floor(secondsLeft % 3600) || 1;
         if (data.granularity === 'm')
-          return Math.floor(secondsLeft / 60) || 1;
+          return Math.floor(secondsLeft % 60) || 1;
 
         return 1;
       };
