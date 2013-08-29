@@ -1,17 +1,1 @@
 
-*.komodoproject
-/.komodotools
-.sass-cache
-config.rb
-.DS_Store
-sco-message-error.html
-
-sco-message-ok.html
-
-sco-panes-fade.html
-
-sco-panes-flip.html
-
-sco-panes-slide.html
-
-sco-tooltip.html
