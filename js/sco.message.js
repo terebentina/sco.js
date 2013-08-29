@@ -30,6 +30,11 @@
 		if (!$selector.length) {
 			$selector = $('<div/>', {id: $[pluginName].options.id}).appendTo($[pluginName].options.appendTo);
 		}
+		if ($[pluginName].options.animate) {
+			$selector.addClass('page_mess_animate');
+		} else {
+			$selector.removeClass('page_mess_animate');
+		}
 		$selector.html(message);
 		if (type === undefined || type == $[pluginName].TYPE_ERROR) {
 			$selector.removeClass($[pluginName].options.okClass).addClass($[pluginName].options.errClass);
@@ -44,9 +49,10 @@
 
 	$.extend($[pluginName], {
 		options: {
-			id: 'page_message'
+			 id: 'page_message'
 			,okClass: 'page_mess_ok'
 			,errClass: 'page_mess_error'
+			,animate: true
 			,delay: 4000
 			,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 		},

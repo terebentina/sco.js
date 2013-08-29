@@ -90,8 +90,9 @@
 					.append($('<a/>', { 'class' : 'cropZoomIn' }).on('click.' + pluginName, $.proxy(this.zoomIn, this)))
 					.append($('<a/>', { 'class' : 'cropZoomOut' }).on('click.' + pluginName, $.proxy(this.zoomOut, this)));
 		}
-		this.$frame.append(controls);
-
+		if (controls !== false) {
+			this.$frame.append(controls);
+		}
 	}
 
 	$.extend(Crop.prototype, {

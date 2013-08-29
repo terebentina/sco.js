@@ -1,4 +1,4 @@
-# [Sco.js v1.0.2](http://terebentina.github.io/sco.js)
+# [Sco.js v1.1.0](http://terebentina.github.io/sco.js)
 
 A collection of jQuery plugins for the web. Inspired by Twitter Bootstrap js components, Sco.js plugins can be used as replacement for the bootstrap js. You can find a different approach for some of the bootstrap js as well as
 other plugins that don't exist in bootstrap. Sco.js uses much less HTML markup than bootstrap and provides sane and intuitive defaults for its options so that you can get started in no time.
@@ -10,8 +10,9 @@ For extensive documentation and examples, check out http://terebentina.github.io
 
 You can get started by choosing one of the following options:
 
-* [Download the latest release](https://github.com/terebentina/sco.js/zipball/master).
+* [Download from GitHub](https://github.com/terebentina/sco.js/zipball/master) or pick the latest stable tag.
 * Clone the repo: `git clone git://github.com/terebentina/sco.js.git`.
+* Get the latest version with Bower: `bower install sco.js --save`.
 
 ## Versioning
 
