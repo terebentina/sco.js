@@ -113,6 +113,9 @@
 
 		,close: function() {
 			this.$modal.hide().off('.' + pluginName).find('.inner').html('');
+			if (this.options.cssclass !== undefined) {
+				this.$modal.removeClass(this.options.cssclass);
+			}
 			$(document).off('keyup.' + pluginName);
 			$('.modal-backdrop').remove();
 			if (typeof this.options.onClose === 'function') {
