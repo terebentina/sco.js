@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>sco.panes.js - Fade</title>
+    <link href="css/sco.panes.css" rel="stylesheet">
+
+    <style>
+
+        body {
+            font-family: arial;
+            position: relative;
+        }
+        
+        .container {
+            width: 700px;
+            margin: 0 auto;
+        }
+
+        ul {
+            border-bottom: 1px solid #423b35;
+            margin: 0;
+            padding: 0;
+        }
+        
+        ul:before,
+        ul:after {
+            content: '';
+            display: table;
+            line-height: 0;
+        }
+        
+        ul:after {
+            clear: both;
+        }
+
+        ul:hover li {
+            border-bottom-color: transparent;
+        }
+
+        li {
+            list-style: none;
+            float: left;
+            position: relative;
+            bottom: -2px;
+            margin: 0;
+        }
+
+        li:not(.active) a {
+            color: #423b35;
+        }
+
+        li.active {
+            border-bottom: 3px solid #00b2f1;
+        }
+
+        ul li:hover {
+            border-bottom: 3px solid #00b2f1;
+        }
+
+        a {
+            color: #00b2f1;
+            display: block;
+            padding: 10px 30px;
+            line-height: 32px;
+            text-decoration: none;
+        }
+        
+        .pane-wrapper {
+            margin-top: 40px;
+        }
+        
+    
+
+
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ul data-trigger="tab" data-easing="xfade">
+            <li><a href="#">Tab one</a></li>
+            <li><a href="#">Tab two</a></li>
+            <li><a href="#">Tab three</a></li>
+        </ul>
+        
+        <div class="pane-wrapper">
+            <div>
+                <h3>This is the content for tab one</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus risus mollis nisi aliquet blandit placerat felis fringilla. Praesent leo ipsum, accumsan id molestie et, porttitor vel augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquam ante vitae mi consectetur tincidunt. Curabitur magna arcu, molestie quis volutpat vel, hendrerit sed sapien. Cras dictum risus et odio pellentesque fermentum. Ut dignissim libero id est lobortis at sodales massa rhoncus. Quisque sem turpis, malesuada sit amet dapibus quis, facilisis non lectus. Vestibulum mollis quam quis mauris malesuada dictum. Proin nunc sem, euismod sit amet elementum vitae, sodales eu dolor. Curabitur ornare, mauris et lacinia malesuada, libero ligula cursus orci, sollicitudin dictum tortor ipsum non nibh. Aliquam scelerisque nisi non sapien aliquet fringilla. Suspendisse potenti.</p>
+            </div>
+            <div>
+                <h3>This is the content for tab two</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus risus mollis nisi aliquet blandit placerat felis fringilla. Praesent leo ipsum, accumsan id molestie et, porttitor vel augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquam ante vitae mi consectetur tincidunt. Curabitur magna arcu, molestie quis volutpat vel, hendrerit sed sapien. Cras dictum risus et odio pellentesque fermentum. Ut dignissim libero id est lobortis at sodales massa rhoncus. Quisque sem turpis, malesuada sit amet dapibus quis, facilisis non lectus. Vestibulum mollis quam quis mauris malesuada dictum. Proin nunc sem, euismod sit amet elementum vitae, sodales eu dolor. Curabitur ornare, mauris et lacinia malesuada, libero ligula cursus orci, sollicitudin dictum tortor ipsum non nibh. Aliquam scelerisque nisi non sapien aliquet fringilla. Suspendisse potenti.</p>
+            </div>
+            <div>
+                <h3>This is the content for tab three</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed faucibus risus mollis nisi aliquet blandit placerat felis fringilla. Praesent leo ipsum, accumsan id molestie et, porttitor vel augue. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut aliquam ante vitae mi consectetur tincidunt. Curabitur magna arcu, molestie quis volutpat vel, hendrerit sed sapien. Cras dictum risus et odio pellentesque fermentum. Ut dignissim libero id est lobortis at sodales massa rhoncus. Quisque sem turpis, malesuada sit amet dapibus quis, facilisis non lectus. Vestibulum mollis quam quis mauris malesuada dictum. Proin nunc sem, euismod sit amet elementum vitae, sodales eu dolor. Curabitur ornare, mauris et lacinia malesuada, libero ligula cursus orci, sollicitudin dictum tortor ipsum non nibh. Aliquam scelerisque nisi non sapien aliquet fringilla. Suspendisse potenti.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="tests/vendor/jquery-1.9.1.min.js"></script>
+    <script src="js/sco.panes.js"></script>
+    <script src="js/sco.tab.js"></script>
+    
+</body>
+</html>
