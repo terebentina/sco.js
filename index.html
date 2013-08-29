@@ -1061,8 +1061,10 @@ tooltip.do_mouseleave();  // hides after 1000 seconds</pre>
 					<h2>Usage</h2>
 					<h3>As a jquery plugin</h3>
 					<pre class="prettyprint linenums">$.scojs_message(message, type);</pre>
+					<p>Where <code>message</code> is the message you want displayed and <code>type</code> should be one of <code>$.scojs_message.TYPE_OK</code> or <code>$.scojs_message.TYPE_ERROR</code> to indicate an error or success message.</p>
 
 					<h2>Options</h2>
+					<p>Since this is a "singleton" or "static" plugin, options can be changed globally by changing <code>$.scojs_message.&lt;option&gt;</code> </p>
 					<table class="table table-bordered table-striped">
 						<thead>
 							<tr>
@@ -1074,15 +1076,40 @@ tooltip.do_mouseleave();  // hides after 1000 seconds</pre>
 						</thead>
 						<tbody>
 							<tr>
-								<td>type</td>
-								<td></td>
-								<td></td>
-								<td>The type of the message. Can be one of:
-									<ul>
-										<li>$.scojs_message.TYPE_OK</li>
-										<li>$.scojs_message.TYPE_ERROR</li>
-									</ul>
-								</td>
+								<td>id</td>
+								<td>string</td>
+								<td>page_message</td>
+								<td>The id of the html element that will be used to display the flash message (Note: shouldn't include #). The element is created by the plugin if one doesn't exist.</td>
+							</tr>
+							<tr>
+								<td>okClass</td>
+								<td>string</td>
+								<td>page_mess_ok</td>
+								<td>The css class to be added for the success message.</td>
+							</tr>
+							<tr>
+								<td>errClass</td>
+								<td>string</td>
+								<td>page_mess_error</td>
+								<td>The css class to be added for the error message.</td>
+							</tr>
+							<tr>
+								<td>animate</td>
+								<td>bool</td>
+								<td>true</td>
+								<td>Should the background of the message be animated or not? (some faint stripes moving). Basically it appends the <code>page_mess_animate</code> class or not, depending on the truthiness of this option. Animation is done with CSS3 transitions.</td>
+							</tr>
+							<tr>
+								<td>delay</td>
+								<td>integer</td>
+								<td>4000</td>
+								<td>For how long to display the message before sliding it off screen.</td>
+							</tr>
+							<tr>
+								<td>appendTo</td>
+								<td>string</td>
+								<td>body</td>
+								<td>By default, the new div for the message is appended to the body element. Use this option to append it to some other element.</td>
 							</tr>
 						</tbody>
 					</table>
