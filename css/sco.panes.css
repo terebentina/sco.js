@@ -1,0 +1,179 @@
+.pane-wrapper.slide > div, .pane-wrapper.flip > div,
+.pane-wrapper.flipX > div {
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-perspective: 1000;
+  -moz-perspective: 1000;
+  -ms-perspective: 1000;
+  -o-perspective: 1000;
+  perspective: 1000;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  -o-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.pane-wrapper > div {
+  display: none;
+}
+
+.pane-wrapper > .active,
+.pane-wrapper > .prev,
+.pane-wrapper > .next {
+  display: block;
+}
+
+.pane-wrapper.xfade > div {
+  -webkit-transition: opacity 0.6s ease;
+  -moz-transition: opacity 0.6s ease;
+  -o-transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease;
+}
+
+.pane-wrapper.xfade > div,
+.pane-wrapper.xfade > .active.right,
+.pane-wrapper.xfade > .active.left {
+  opacity: 0;
+}
+
+.pane-wrapper.xfade > .next.left,
+.pane-wrapper.xfade > .prev.right,
+.pane-wrapper.xfade > .active {
+  opacity: 1;
+}
+
+.pane-wrapper.slide > div {
+  -webkit-transition: -webkit-transform 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+  -moz-transition: -moz-transform 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+  -o-transition: -o-transform 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+  transition: transform 0.6s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.pane-wrapper.slide > .active {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+
+.pane-wrapper.slide > .next {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+}
+
+.pane-wrapper.slide > .prev {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+
+.pane-wrapper.slide > .next.left,
+.pane-wrapper.slide > .prev.right {
+  -webkit-transform: translateX(0);
+  -moz-transform: translateX(0);
+  -ms-transform: translateX(0);
+  -o-transform: translateX(0);
+  transform: translateX(0);
+}
+
+.pane-wrapper.slide > .active.left {
+  -webkit-transform: translateX(-100%);
+  -moz-transform: translateX(-100%);
+  -ms-transform: translateX(-100%);
+  -o-transform: translateX(-100%);
+  transform: translateX(-100%);
+}
+
+.pane-wrapper.slide > .active.right {
+  -webkit-transform: translateX(100%);
+  -moz-transform: translateX(100%);
+  -ms-transform: translateX(100%);
+  -o-transform: translateX(100%);
+  transform: translateX(100%);
+}
+
+.pane-wrapper.flip {
+  position: relative;
+}
+
+.pane-wrapper.flip > div,
+.pane-wrapper.flipX > div {
+  display: block;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+  -webkit-transition: -webkit-transform 0.6s ease;
+  -moz-transition: -moz-transform 0.6s ease;
+  -o-transition: -o-transform 0.6s ease;
+  transition: transform 0.6s ease;
+  -webkit-transform: preserve-3d;
+  -moz-transform: preserve-3d;
+  -ms-transform: preserve-3d;
+  -o-transform: preserve-3d;
+  transform: preserve-3d;
+}
+
+.pane-wrapper.flip > div,
+.pane-wrapper.flip > .active.left {
+  -webkit-transform: rotateY(-180deg);
+  -moz-transform: rotateY(-180deg);
+  -ms-transform: rotateY(-180deg);
+  -o-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+
+.pane-wrapper.flip > .active,
+.pane-wrapper.flip > .next.left,
+.pane-wrapper.flip > .prev.right {
+  -webkit-transform: rotateY(0deg);
+  -moz-transform: rotateY(0deg);
+  -ms-transform: rotateY(0deg);
+  -o-transform: rotateY(0deg);
+  transform: rotateY(0deg);
+}
+
+.pane-wrapper.flip > .active.right {
+  -webkit-transform: rotateY(180deg);
+  -moz-transform: rotateY(180deg);
+  -ms-transform: rotateY(180deg);
+  -o-transform: rotateY(180deg);
+  transform: rotateY(180deg);
+}
+
+.pane-wrapper.flipX > div,
+.pane-wrapper.flipX > .active.left {
+  -webkit-transform: rotateX(-180deg);
+  -moz-transform: rotateX(-180deg);
+  -ms-transform: rotateX(-180deg);
+  -o-transform: rotateX(-180deg);
+  transform: rotateX(-180deg);
+}
+
+.pane-wrapper.flipX > .active,
+.pane-wrapper.flipX > .next.left,
+.pane-wrapper.flipX > .prev.right {
+  -webkit-transform: rotateX(0deg);
+  -moz-transform: rotateX(0deg);
+  -ms-transform: rotateX(0deg);
+  -o-transform: rotateX(0deg);
+  transform: rotateX(0deg);
+}
+
+.pane-wrapper.flipX > .active.right {
+  -webkit-transform: rotateX(180deg);
+  -moz-transform: rotateX(180deg);
+  -ms-transform: rotateX(180deg);
+  -o-transform: rotateX(180deg);
+  transform: rotateX(180deg);
+}
