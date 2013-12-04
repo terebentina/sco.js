@@ -34,7 +34,7 @@
 			this.$pane_wrapper.addClass(this.options.easing);
 		}
 
-		this.$pane_wrapper.on('select', function(e, options, index) {
+		this.$pane_wrapper.on('select.' + pluginName, function(e, options, index) {
 			var  direction = 'left'
 				,type = 'next'
 				;
@@ -69,7 +69,7 @@
 		select: function(index) {
 			if (index !== this.options.active) {
 				if (typeof this.options.onBeforeSelect != 'function' || this.options.onBeforeSelect.call(this, index) !== false) {
-					this.$pane_wrapper.trigger('select', [this.options, index]);
+					this.$pane_wrapper.trigger('select.' + pluginName, [this.options, index]);
 					return true;
 				}
 			}
