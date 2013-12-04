@@ -35,6 +35,9 @@
 		}
 
 		this.$pane_wrapper.on('select.' + pluginName, function(e, options, index) {
+			if (!e.namespace || e.namespace != pluginName) {
+				return;
+			}
 			var  direction = 'left'
 				,type = 'next'
 				;
@@ -43,7 +46,7 @@
 				type = 'prev';
 			}
 
-			function onEnd(e) {
+			function onEnd() {
 				self.$panes.eq(options.active).removeClass('active ' + direction);
 				self.options.active = index;
 				self.$panes.eq(index).removeClass([type, direction].join(' ')).addClass('active');
