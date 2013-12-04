@@ -34,7 +34,7 @@
 			if (self.options.title === '') {
 				self.options.title = '&nbsp;';
 			}
-		};
+		}
 
 		init();
 	}
@@ -45,40 +45,24 @@
 			var self = this
 				,$backdrop;
 
-			if (!this.options.nobackdrop) {
+			if (!this.options.noBackdrop) {
 				$backdrop = $('.modal-backdrop');
 			}
 			if (!this.$modal.length) {
-				this.$modal = $('<div class="modal fade" id="' + this.options.target.substr(1) + '"><div class="modal-header"><a class="close" href="#" data-dismiss="modal">×</a><h3>&nbsp;</h3></div><div class="inner"/></div>').appendTo(this.options.appendTo).hide();
+				this.$modal = $('<div class="modal fade" id="' + this.options.target.substr(1) + '" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button><h4 class="modal-title">&nbsp;</h4></div><div class="inner"/></div></div></div>').appendTo(this.options.appendTo).hide();
 			}
 
-			this.$modal.find('.modal-header h3').html(this.options.title);
+			this.$modal.find('.modal-header h4').html(this.options.title);
 
-			if (this.options.cssclass !== undefined) {
-				this.$modal.attr('class', 'modal fade ' + this.options.cssclass);
-			}
-
-			if (this.options.width !== undefined) {
-				this.$modal.width(this.options.width);
-			}
-
-			if (this.options.left !== undefined) {
-				this.$modal.css({'left': this.options.left});
-			}
-
-			if (this.options.height !== undefined) {
-				this.$modal.height(this.options.height);
-			}
-
-			if (this.options.top !== undefined) {
-				this.$modal.css({'top': this.options.top});
+			if (this.options.cssClass !== undefined) {
+				this.$modal.attr('class', 'modal fade ' + this.options.cssClass);
 			}
 
 			if (this.options.keyboard) {
 				this.escape();
 			}
 
-			if (!this.options.nobackdrop) {
+			if (!this.options.noBackdrop) {
 				if (!$backdrop.length) {
 					$backdrop = $('<div class="modal-backdrop fade" />').appendTo(this.options.appendTo);
 				}
@@ -107,6 +91,7 @@
 				this.$modal.find('.inner').html(this.options.content);
 			}
 
+			$('body').addClass('modal-open');
 			this.$modal.show().addClass('in');
 			return this;
 		}
@@ -118,6 +103,7 @@
 			}
 			$(document).off('keyup.' + pluginName);
 			$('.modal-backdrop').remove();
+			$('body').removeClass('modal-open');
 			if (typeof this.options.onClose === 'function') {
 				this.options.onClose.call(this, this.options);
 			}
@@ -174,15 +160,13 @@
 		,appendTo: 'body'	// where should the modal be appended to (default to document.body). Added for unit tests, not really needed in real life.
 		,cache: false		// should we cache the output of the ajax calls so that next time they're shown from cache?
 		,keyboard: false
-		,nobackdrop: false
+		,noBackdrop: false
 	};
 
 
 	$(document).on('click.' + pluginName, '[data-trigger="modal"]', function() {
 		$(this)[pluginName]();
-		if ($(this).is('a')) {
-			return false;
-		}
+		return !$(this).is('a');
 	}).on('click.' + pluginName, '[data-dismiss="modal"]', function(e) {
 		e.preventDefault();
 		$(this).closest('.modal').trigger('close');
