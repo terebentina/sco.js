@@ -307,68 +307,71 @@
 	 * main function to use on a form (like $('#form).scojs_valid({...})). Performs validation of the form, sets the error messages on form inputs and returns
 	 * true/false depending on whether the form passed validation or not
 	 *
-	 * @param hash/string options the hash of rules and messages to validate the form against (and messages to show if failed validation) or the string "option"
+	 * @param {hash|string} options the hash of rules and messages to validate the form against (and messages to show if failed validation) or the string "option"
 	 * @param {string} key the option key to retrieve or set. If the third param of the function is available then act as a setter, otherwise as a getter.
 	 * @param {mixed} value the value to set on the key
 	 */
 	$.fn[pluginName] = function(options, key, value) {
-		var  $form = this.eq(0)
-			,validator = $form.data(pluginName);
-		if ($.type(options) === 'object') {
-			if (!validator) {
-				var opts = $.extend({}, $.fn[pluginName].defaults, options, $form.data());
-				validator = new Valid($form, opts);
-				$form.data(pluginName, validator).attr('novalidate', 'novalidate');
-			}
-			$form.ajaxForm({
-				beforeSerialize: function() {
-					if (typeof validator.options.onBeforeValidate === 'function') {
-						validator.options.onBeforeValidate.call(validator);
+		return this.each(function(idx, form) {
+			var $form = $(form)
+				,validator = $form.data(pluginName)
+				;
+			if ($.type(options) === 'object') {
+				if (!validator) {
+					var opts = $.extend({}, $.fn[pluginName].defaults, options, $form.data());
+					validator = new Valid($form, opts);
+					$form.data(pluginName, validator).attr('novalidate', 'novalidate');
+				}
+				$form.ajaxForm({
+					beforeSerialize: function() {
+						if (typeof validator.options.onBeforeValidate === 'function') {
+							validator.options.onBeforeValidate.call(validator);
+						}
 					}
-				}
-				,beforeSubmit: function() {
-					return validator.validate();
-				}
-				,dataType: 'json'
-				,success: function(response, status, xhr, $form) {
-					if (response.status === 'fail') {
-						if (typeof options.onFail !== 'function' || options.onFail.call(this, response, validator, $form) !== false) {
-							validator.show(response.data.errors);
-						}
-					} else if (response.status === 'error') {
-						if (typeof options.onError !== 'function' || options.onError.call(this, response, validator, $form) !== false) {
-							$.scojs_message(response.message, $.scojs_message.TYPE_ERROR);
-						}
-					} else if (response.status === 'success') {
-						if (typeof options.onSuccess !== 'function' || options.onSuccess.call(this, response, validator, $form) !== false) {
-							if (response.data.next) {
-								if (response.data.next === '.') {			// refresh current page
-									window.location.href = window.location.href.replace(/#.*$/, '');
-								} else if (response.data.next === 'x') {	// close the parent modal
-									$form.closest('.modal').trigger('close');
-								} else {
-									window.location.href = response.data.next;
+					,beforeSubmit: function() {
+						return validator.validate();
+					}
+					,dataType: 'json'
+					,success: function(response, status, xhr, $form) {
+						if (response.status === 'fail') {
+							if (typeof options.onFail !== 'function' || options.onFail.call(this, response, validator, $form) !== false) {
+								validator.show(response.data.errors);
+							}
+						} else if (response.status === 'error') {
+							if (typeof options.onError !== 'function' || options.onError.call(this, response, validator, $form) !== false) {
+								$.scojs_message(response.message, $.scojs_message.TYPE_ERROR);
+							}
+						} else if (response.status === 'success') {
+							if (typeof options.onSuccess !== 'function' || options.onSuccess.call(this, response, validator, $form) !== false) {
+								if (response.data.next) {
+									if (response.data.next === '.') {			// refresh current page
+										window.location.href = window.location.href.replace(/#.*$/, '');
+									} else if (response.data.next === 'x') {	// close the parent modal
+										$form.closest('.modal').trigger('close');
+									} else {
+										window.location.href = response.data.next;
+									}
+								}
+								if (response.data.message) {
+									$.scojs_message(response.data.message, $.scojs_message.TYPE_OK);
 								}
 							}
-							if (response.data.message) {
-								$.scojs_message(response.data.message, $.scojs_message.TYPE_OK);
-							}
 						}
 					}
+				});
+				// allow chaining
+				return this;
+			} else if (options === 'option') {
+				if ($.type(value) === 'undefined') {
+					return validator.options[key];
+				} else {
+					validator.options[key] = value;
+					return validator;
 				}
-			});
-			// allow chaining
-			return this;
-		} else if (options === 'option') {
-			if ($.type(value) === 'undefined') {
-				return validator.options[key];
 			} else {
-				validator.options[key] = value;
-				return validator;
+				return validator ? validator : this;
 			}
-		} else {
-			return validator ? validator : this;
-		}
+		});
 	};
 
 
