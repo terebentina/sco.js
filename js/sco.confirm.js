@@ -29,7 +29,7 @@
 
 		var $modal = $(this.options.target);
 		if (!$modal.length) {
-			$modal = $('<div class="modal" id="' + this.options.target.substr(1) + '"><div class="modal-body inner"/><div class="modal-footer"><a class="btn cancel" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-danger" data-action="1">yes</a></div></div>').appendTo(this.options.appendTo).hide();
+			$modal = $('<div class="modal fade" id="' + this.options.target.substr(1) + '" tabindex="-1" role="dialog" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-body inner"/><div class="modal-footer"><a class="btn cancel" href="#" data-dismiss="modal">cancel</a> <a href="#" class="btn btn-danger" data-action="1">yes</a></div></div></div></div>').appendTo(this.options.appendTo).hide();
 			if (typeof this.options.action == 'function') {
 				var self = this;
 				$modal.find('[data-action]').attr('href', '#').on('click.' + pluginName, function(e) {
