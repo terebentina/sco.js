@@ -48,7 +48,7 @@
 				var $input = self.$form.find('[name="' + field_name + '"]');
 				$input.siblings('span.message').html('');
 				if (self.options.wrapper !== null) {
-					$input.closest(self.options.wrapper).removeClass('error');
+					$input.closest(self.options.wrapper).removeClass('has-error');
 				}
 			});
 			this.errors = {};
@@ -119,7 +119,7 @@
 				var $input = self.$form.find('[name="' + k + '"]'),
 					$span = $input.siblings('.message');
 				if (self.options.wrapper !== null) {
-					$input.closest(self.options.wrapper).addClass('error');
+					$input.closest(self.options.wrapper).addClass('has-error');
 				}
 				if ($span.length === 0) {
 					$span = $('<span/>', {'class': 'message'});
