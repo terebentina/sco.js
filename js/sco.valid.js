@@ -46,7 +46,7 @@
 			// remove any possible displayed errors from previous runs
 			$.each(this.errors, function(field_name, error) {
 				var $input = self.$form.find('[name="' + field_name + '"]');
-				$input.siblings('span.message').html('');
+				$input.siblings('span.help-block').html('');
 				if (self.options.wrapper !== null) {
 					$input.closest(self.options.wrapper).removeClass('has-error');
 				}
@@ -117,12 +117,12 @@
 			var self = this;
 			$.each(errors, function(k, v) {
 				var $input = self.$form.find('[name="' + k + '"]'),
-					$span = $input.siblings('.message');
+					$span = $input.siblings('.help-block');
 				if (self.options.wrapper !== null) {
 					$input.closest(self.options.wrapper).addClass('has-error');
 				}
 				if ($span.length === 0) {
-					$span = $('<span/>', {'class': 'message'});
+					$span = $('<span/>', {'class': 'help-block'});
 					$input.after($span);
 				}
 				$span.html(v);
