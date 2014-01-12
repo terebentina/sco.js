@@ -148,6 +148,14 @@
 				return $.trim(value).length <= max_len;
 			},
 
+			min_value: function(field, value, minVal) {
+				return parseFloat(value) >= minVal;
+			},
+
+			max_value: function(field, value, maxVal) {
+				return parseFloat(value) <= maxVal;
+			},
+
 			regex: function(field, value, regexp) {
 				return regexp.test(value);
 			},
@@ -249,6 +257,8 @@
 			not_empty: 'This field is required.'
 			,min_length: 'Please enter at least :value characters.'
 			,max_length: 'Please enter no more than :value characters.'
+			,min_value: 'Please enter a number higher than :value.'
+			,max_value: 'Please enter a number smaller than :value.'
 			,regex: ''
 			,email: 'Please enter a valid email address.'
 			,url: 'Please enter a valid URL.'
