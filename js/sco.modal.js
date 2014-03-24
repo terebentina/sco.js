@@ -73,6 +73,10 @@
 			this.$modal.off('close.' + pluginName).on('close.' + pluginName, function() {
 				self.close.call(self);
 			});
+			if (this.options.isImage && this.options.remote !== undefined) {
+				this.options.content = '<img src="' + this.options.remote + '">';
+				delete this.options.remote;
+			}
 			if (this.options.remote !== undefined && this.options.remote != '' && this.options.remote !== '#') {
 				var spinner;
 				if (typeof Spinner == 'function') {
@@ -161,6 +165,7 @@
 		,cache: false		// should we cache the output of the ajax calls so that next time they're shown from cache?
 		,keyboard: false
 		,noBackdrop: false
+		,isImage: false		// if this is true then the remote url points to an image so we should wrap the url in an <img src="remote"> tag
 	};
 
 
