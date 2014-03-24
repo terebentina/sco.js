@@ -29,7 +29,7 @@
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$modal = $(this.options.target).attr('class', 'modal fade').hide();
 		var self = this;
-
+		console.log('this.options', this.options);
 		function init() {
 			if (self.options.title === '') {
 				self.options.title = '&nbsp;';
@@ -62,6 +62,26 @@
 				this.escape();
 			}
 
+			// a certain dimension has been asked for. Check if it's larger than the screen and adjust accordingly
+			if (this.options.width && this.options.height) {
+				var windowDims = [$(window).width(), $(window).height()]
+					,dims = [this.options.width, this.options.height]
+					,tmp
+					;
+				if (dims[0] > windowDims[0]) {
+					tmp = dims[0];
+					dims[0] = windowDims[0];
+					dims[1] = dims[1] * (dims[0] / tmp);
+				}
+				if (dims[1] > windowDims[1] - 100) {
+					tmp = dims[1];
+					dims[1] = windowDims[1] - 100;
+					dims[0] = dims[0] * (dims[1] / tmp);
+				}
+
+				this.$modal.find('.modal-dialog').css({width: dims[0], height: dims[1]});
+			}
+
 			if (!this.options.noBackdrop) {
 				if (!$backdrop.length) {
 					$backdrop = $('<div class="modal-backdrop fade" />').appendTo(this.options.appendTo);
@@ -74,7 +94,7 @@
 				self.close.call(self);
 			});
 			if (this.options.isImage && this.options.remote !== undefined) {
-				this.options.content = '<img src="' + this.options.remote + '">';
+				this.options.content = '<img class="remote" src="' + this.options.remote + '">';
 				delete this.options.remote;
 			}
 			if (this.options.remote !== undefined && this.options.remote != '' && this.options.remote !== '#') {
