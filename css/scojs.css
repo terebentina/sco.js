@@ -290,3 +290,11 @@
 	-webkit-transform: rotateY(0deg);
 	-moz-transform: rotateY(0deg);
 }
+
+
+
+/* sco.modal.js */
+
+.modal .modal-content img.remote {
+	width: 100%;
+}

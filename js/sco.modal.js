@@ -80,6 +80,8 @@
 				}
 
 				this.$modal.find('.modal-dialog').css({width: dims[0], height: dims[1]});
+			} else {
+				this.$modal.find('.modal-dialog').css({width: '', height: ''});
 			}
 
 			if (!this.options.noBackdrop) {
