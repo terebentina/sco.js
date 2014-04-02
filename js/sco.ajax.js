@@ -27,6 +27,7 @@
 
 	$(document).on('click.' + pluginName, '[data-trigger="ajax"]', function() {
 		var $this = $(this)
+			,self = this
 			,data = $this.data()
 			,$target
 			,spinner
@@ -41,7 +42,11 @@
 					spinner.stop();
 				}
 			});
-			return false;
+		} else if (typeof data['onAfterLoad'] == 'function') {
+			$.get($this.attr('href'), function(response) {
+				data['onAfterLoad'].call(self, response);
+			});
 		}
+		return false;
 	});
 })(jQuery);
