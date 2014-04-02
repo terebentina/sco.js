@@ -2,7 +2,7 @@
  * sco.modal.js
  * http://github.com/terebentina/sco.js
  * ==========================================================
- * Copyright 2013 Dan Caragea.
+ * Copyright 2014 Dan Caragea.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
 		this.$modal = $(this.options.target).attr('class', 'modal fade').hide();
 		var self = this;
-		console.log('this.options', this.options);
 		function init() {
 			if (self.options.title === '') {
 				self.options.title = '&nbsp;';
