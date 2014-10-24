@@ -3,6 +3,6 @@
 	"version": "2.0.0",
 	"description": "Javascript extensions for Twitter Bootstrap 3. Rewrites bootstrap tabs, collapse, modal, tooltip components for easier usage and provides more plugins for your coding pleasure",
 	"dependencies": {
-		"jquery": ">=>= 1.9.0"
+		"jquery": ">=1.9.0"
 	}
 }
