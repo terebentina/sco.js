@@ -6,6 +6,10 @@ It was created and is maintained by <a href="http://twitter.com/dancaragea">@dan
 
 For extensive documentation and examples, check out http://terebentina.github.io/sco.js
 
+## Looking for maintainers
+
+The default branch was created for bootstrap 2. There's a bs3 branch where I adapted some of the tools to work with bootstrap 3 but it's not complete. Bootstrap 4 is now close to release. I moved away from jQuery lately and I don't have time to maintain this. I am happy for any PR requests and maintainers to take over. Let me know if you're interested.
+
 ## Quick start
 
 You can get started by choosing one of the following options:
