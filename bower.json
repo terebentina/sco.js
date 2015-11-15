@@ -1,0 +1,43 @@
+{
+  "name": "sco.js",
+  "version": "1.0.2",
+  "homepage": "https://github.com/terebentina/sco.js",
+  "authors": [
+    {
+      "name": "Dan Caragea",
+      "homepage": "https://github.com/terebentina"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/terebentina/sco.js"
+  },
+  "description": "Javascript extensions for Twitter Bootstrap. Rewrites bootstrap tabs, collapse, modal, tooltip components for easier usage and provides more plugins for your coding pleasure",
+  "keywords": [
+    "tab",
+    "collapse",
+    "accordion",
+    "modal",
+    "confirmation",
+    "tooltip",
+    "flash",
+    "message",
+    "form",
+    "validation",
+    "countdown"
+  ],
+  "license": "Apache License Version 2.0",
+  "main": [
+    "js/sco.message.js",
+    "css/scojs.css"
+  ],
+  "ignore": [
+    ".gitignore",
+    "bower_components",
+    "tests",
+    "package.json"
+  ],
+  "dependencies": {
+    "jquery": ">=1.7.0"
+  }
+}
