@@ -4,7 +4,7 @@ A collection of jQuery plugins for the web. Inspired by Twitter Bootstrap js com
 other plugins that don't exist in bootstrap. Sco.js uses much less HTML markup than bootstrap and provides sane and intuitive defaults for its options so that you can get started in no time.
 It was created and is maintained by <a href="http://twitter.com/dancaragea">@dancaragea</a>.
 
-For extensive documentation and examples, check out http://terebentina.github.io/sco.js
+For extensive documentation and examples, check out http://projects.5mins.me/sco.js
 
 ## Looking for maintainers
 
