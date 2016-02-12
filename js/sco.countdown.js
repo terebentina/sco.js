@@ -26,50 +26,58 @@
 
 	function doit($elem, data, until) {
 		var str = ''
-			,started = false
-			,left = {d: 0, h: 0, m: 0, s: 0}
+			,started = true
+			,left = {}
+      ,secondsLeft = 0
 			,js_current = Math.round((new Date()).getTime() / 1000)
-			;
+      ,keepGoing = function() { return left[data.granularity] == null }
+      ,getRefreshTime = function() {
+        if (data.granularity === 'd')
+          return left.d ? (secondsLeft % 86400 || 1) : 1;
+        if (data.granularity === 'h')
+          return left.h ? (secondsLeft % 3600 || 1) : 1;
+        if (data.granularity === 'm')
+          return left.m ? (secondsLeft % 60 || 1) : 1;
 
-		left.s = until - js_current;
+        return 1;
+      };
 
-		if (left.s < 0) {
+		secondsLeft = until - js_current;
+
+		if (secondsLeft < 0) {
 			return;
 		}
-		if (Math.floor(left.s / 86400) > 0) {
-			left.d = Math.floor(left.s / 86400);
-			left.s = left.s % 86400;
+
+		if (Math.floor(secondsLeft / 86400) > 0) {
+			left.d = Math.floor(secondsLeft / 86400);
+			secondsLeft = secondsLeft % 86400;
 			str += left.d + data.strings.d;
-			started = true;
+			started = keepGoing()
 		}
-		if (Math.floor(left.s / 3600) > 0) {
-			left.h = Math.floor(left.s / 3600);
-			left.s = left.s % 3600;
-			started = true;
-		}
-		if (started) {
+
+		if (started && Math.floor(secondsLeft / 3600) > 0) {
+			left.h = Math.floor(secondsLeft / 3600);
+			secondsLeft = secondsLeft % 3600;
 			str += ' ' + left.h + data.strings.h;
-			started = true;
+			started = keepGoing();
+
 		}
-		if (Math.floor(left.s / 60) > 0) {
-			left.m = Math.floor(left.s / 60);
-			left.s = left.s % 60;
-			started = true;
-		}
-		if (started) {
+
+		if (started && Math.floor(secondsLeft / 60) > 0) {
+			left.m = Math.floor(secondsLeft / 60);
+			secondsLeft = secondsLeft % 60;
 			str += ' ' + left.m + data.strings.m;
-			started = true;
+			started = keepGoing();
 		}
-		if (left.s > 0) {
-			started = true;
-		}
-		if (started) {
+
+		if (started && secondsLeft > 0) {
+      left.s = secondsLeft;
 			str += ' ' + left.s + data.strings.s;
-			started = true;
 		}
 
 		$elem.html(str);
-		setTimeout(function() {doit($elem, data, until);}, 500);
+    var refreshMs = getRefreshTime() * 500;
+		setTimeout(function() {doit($elem, data, until);}, refreshMs)
 	}
 
 	$.fn[pluginName] = function(options) {
@@ -95,6 +103,7 @@
 	};
 
 	$.fn[pluginName].defaults = {
-		strings: {d: 'd', h: 'h', m: 'm', s: 's'}
+		strings: {d: 'd', h: 'h', m: 'm', s: 's'},
+    granularity: 's'
 	};
 })(jQuery);
