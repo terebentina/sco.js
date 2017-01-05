@@ -1,3 +1,11 @@
+/* sco.modal.js */
+.modal-sticky {
+	position: absolute;
+}
+.modal-sticky .modal-body {
+	overflow: hidden;
+	max-height: none;
+}
 /* sco.message.js */
 #page_message {
   display: none;
